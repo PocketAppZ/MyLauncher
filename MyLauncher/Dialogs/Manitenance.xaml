@@ -1,0 +1,332 @@
+﻿<UserControl
+    x:Class="MyLauncher.Dialogs.Maintenance"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+    xmlns:local="clr-namespace:MyLauncher"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    TextElement.FontSize="14"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto">
+
+    <!--#region Resources-->
+    <UserControl.Resources>
+        <local:NConverter x:Key="nconv" />
+    </UserControl.Resources>
+    <!--#endregion-->
+
+    <Border
+        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+        BorderThickness="1"
+        CornerRadius="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <!--#region ColorZone with close button-->
+            <materialDesign:ColorZone
+                Grid.Row="0"
+                Height="33"
+                Mode="PrimaryMid">
+                <Grid>
+                    <TextBlock
+                        x:Name="tbHeader"
+                        Margin="5,2"
+                        Style="{StaticResource PageHeader}"
+                        Text="LIST MAINTENANCE" />
+                    <Button
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Click="Button_Click"
+                        Foreground="{Binding ElementName=tbHeader, Path=Foreground}"
+                        IsCancel="True"
+                        IsTabStop="False"
+                        Style="{StaticResource MaterialDesignFlatButton}">
+                        <Button.CommandParameter>
+                            <system:Boolean>
+                                False
+                            </system:Boolean>
+                        </Button.CommandParameter>
+                        <Button.Content>
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="Close" />
+                        </Button.Content>
+                    </Button>
+                </Grid>
+            </materialDesign:ColorZone>
+            <!--#endregion-->
+
+            <Grid Grid.Row="1">
+                <!--#region Grid row and column definitions-->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5" />
+                    <RowDefinition />
+                    <RowDefinition Height="5" />
+                </Grid.RowDefinitions>
+                <!--#endregion-->
+
+                <!--#region List box on the left side-->
+                <materialDesign:Card
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    MinWidth="100"
+                    Margin="5"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                    MouseEnter="Card_MouseEnter"
+                    MouseLeave="Card_MouseLeave"
+                    UniformCornerRadius="7">
+                    <ListBox
+                        x:Name="listbox1"
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                        AllowDrop="True">
+                        <ListBox.Resources>
+                            <Style
+                                BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"
+                                TargetType="ScrollBar" />
+                        </ListBox.Resources>
+                        <ListBox.ItemContainerStyle>
+                            <Style
+                                BasedOn="{StaticResource {x:Type ListBoxItem}}"
+                                TargetType="ListBoxItem">
+                                <Setter Property="IsTabStop" Value="False" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    Text="{Binding Title, Converter={StaticResource nconv}}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </materialDesign:Card>
+                <!--#endregion-->
+
+                <!--#region GridSplitter-->
+                <GridSplitter
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Width="3"
+                    Margin="0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    BorderThickness="2"
+                    IsTabStop="False"
+                    Style="{StaticResource MaterialDesignGridSplitter}" />
+                <!--#endregion-->
+
+                <!--#region Text boxes and buttons on the right side-->
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="3">
+                    <Grid.DataContext>
+                        <Binding
+                            ElementName="listbox1"
+                            Path="SelectedItem" />
+                    </Grid.DataContext>
+
+                    <Grid>
+                        <!--#region Row definitions-->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100" />
+                            <RowDefinition Height="100" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <!--#endregion-->
+
+                        <!--#region Title-->
+                        <materialDesign:Card
+                            Grid.Row="0"
+                            Height="90"
+                            Margin="5,0"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                            MouseEnter="Card_MouseEnter"
+                            MouseLeave="Card_MouseLeave"
+                            UniformCornerRadius="7">
+                            <Grid>
+                                <materialDesign:ColorZone
+                                    Height="33"
+                                    Margin="0,0,1,0"
+                                    Padding="0,0,0,3"
+                                    CornerRadius="7,7,0,0"
+                                    Mode="PrimaryMid"
+                                    SnapsToDevicePixels="True">
+                                    <TextBlock
+                                        Margin="10,5"
+                                        FontSize="16"
+                                        FontWeight="DemiBold"
+                                        Text="Title" />
+                                </materialDesign:ColorZone>
+                                <TextBox
+                                    x:Name="tb1"
+                                    Height="40"
+                                    Margin="10,5,10,10"
+                                    VerticalAlignment="Bottom"
+                                    VerticalContentAlignment="Bottom"
+                                    materialDesign:HintAssist.Hint="The text you want to see in the list"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    PreviewKeyDown="Textbox_KeyDown"
+                                    Style="{StaticResource MaterialDesignTextBox}"
+                                    TabIndex="0"
+                                    Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </materialDesign:Card>
+                        <!--#endregion-->
+
+                        <!--#region Path-->
+                        <materialDesign:Card
+                            Grid.Row="1"
+                            Height="90"
+                            Margin="5,0"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                            MouseEnter="Card_MouseEnter"
+                            MouseLeave="Card_MouseLeave"
+                            UniformCornerRadius="7">
+                            <Grid>
+                                <materialDesign:ColorZone
+                                    Height="33"
+                                    Margin="0,0,1,0"
+                                    Padding="0,0,0,3"
+                                    CornerRadius="7,7,0,0"
+                                    Mode="PrimaryMid"
+                                    SnapsToDevicePixels="True">
+                                    <Grid>
+                                        <TextBlock
+                                            x:Name="x31"
+                                            Margin="10,5"
+                                            FontSize="16"
+                                            FontWeight="DemiBold"
+                                            Text="Path or URL" />
+                                        <Button
+                                            Margin="0"
+                                            HorizontalAlignment="Right"
+                                            Click="BtnFilePicker_Click"
+                                            Style="{StaticResource MaterialDesignFlatLightButton}"
+                                            ToolTip="Browse for file">
+                                            <materialDesign:PackIcon
+                                                Width="24"
+                                                Height="24"
+                                                Foreground="{Binding ElementName=x31, Path=Foreground}"
+                                                Kind="FolderOpenOutline" />
+                                        </Button>
+                                        <materialDesign:PopupBox
+                                            Margin="0,0,50,0"
+                                            HorizontalAlignment="Right"
+                                            PlacementMode="LeftAndAlignBottomEdges">
+                                            <materialDesign:PopupBox.Style>
+                                                <Style
+                                                    BasedOn="{StaticResource MaterialDesignPopupBox}"
+                                                    TargetType="materialDesign:PopupBox">
+                                                    <Setter Property="ToggleContent" Value="{StaticResource SpecialIcon}" />
+                                                </Style>
+                                            </materialDesign:PopupBox.Style>
+                                            <Grid
+                                                Width="150"
+                                                Margin="0">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock
+                                                        Text="Speical Apps"
+                                                        TextAlignment="Center" />
+                                                    <Separator />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Calendar"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Solitaire"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Weather"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </materialDesign:PopupBox>
+                                    </Grid>
+                                </materialDesign:ColorZone>
+                                <TextBox
+                                    x:Name="tb2"
+                                    Height="40"
+                                    Margin="10,5,10,10"
+                                    VerticalAlignment="Bottom"
+                                    VerticalContentAlignment="Bottom"
+                                    materialDesign:HintAssist.Hint="Enter the complete path to the document, application, or URL"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    PreviewKeyDown="Textbox_KeyDown"
+                                    Style="{StaticResource MaterialDesignTextBox}"
+                                    TabIndex="0"
+                                    Text="{Binding FilePathOrURI, UpdateSourceTrigger=LostFocus}" />
+                            </Grid>
+                        </materialDesign:Card>
+                        <!--#endregion-->
+
+                        <!--#region Buttons at bottom-->
+                        <Grid Grid.Row="2">
+                            <WrapPanel
+                                Margin="0,10"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Button
+                                    Width="140"
+                                    Margin="10"
+                                    Click="Save_Click"
+                                    Content="Save"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    TabIndex="4"
+                                    ToolTip="Save any changes" />
+                                <Button
+                                    Width="140"
+                                    Margin="10"
+                                    Click="New_Click"
+                                    Content="New Item"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    TabIndex="5"
+                                    ToolTip="Add a new item to the bottom of the list" />
+                                <Button
+                                    Width="140"
+                                    Margin="10"
+                                    Click="Delete_Click"
+                                    Content="Delete Item"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    TabIndex="6"
+                                    ToolTip="Delete the currently selected list item" />
+                                <Button
+                                    x:Name="btnDiscard"
+                                    Width="140"
+                                    Margin="10"
+                                    Click="Discard_Click"
+                                    Content="Discard Changes"
+                                    IsEnabled="False"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    TabIndex="6"
+                                    ToolTip="Discard any changes and reload the list" />
+                            </WrapPanel>
+                        </Grid>
+                        <!--#endregion-->
+                    </Grid>
+                </Grid>
+                <!--#endregion-->
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>
