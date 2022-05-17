@@ -1,6 +1,6 @@
 ## My Launcher
 
-[![GitHub](https://img.shields.io/github/license/Timthreetwelve/MyLauncher?style=plastic)](https://github.com/Timthreetwelve/MyLauncher/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/github/license/timthreetwelve/MyLauncher?style=plastic)](https://github.com/Timthreetwelve/MyLauncher/blob/main/LICENSE.txt)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/Timthreetwelve/MyLauncher?style=plastic)](https://github.com/Timthreetwelve/MyLauncher/releases/latest) 
 [![GitHub Release Date](https://img.shields.io/github/release-date/timthreetwelve/MyLauncher?style=plastic&color=orange)](https://github.com/Timthreetwelve/MyLauncher/releases/latest) 
 [![GitHub all releases](https://img.shields.io/github/downloads/Timthreetwelve/MyLauncher/total?style=plastic)](https://github.com/Timthreetwelve/MyLauncher/releases) 
