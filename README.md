@@ -7,3 +7,6 @@
 [![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/timthreetwelve/MyLauncher/latest?style=plastic)](https://github.com/Timthreetwelve/MyLauncher/commits/main)
 [![GitHub last commit](https://img.shields.io/github/last-commit/timthreetwelve/MyLauncher?style=plastic)](https://github.com/Timthreetwelve/MyLauncher/commits/main)
 
+My Launcher is a simple application launcher that I built for my mother.
+
+👓 Watch this space for a better description and screenshot.
