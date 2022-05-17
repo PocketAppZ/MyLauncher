@@ -34,7 +34,7 @@
     <materialDesign:DialogHost
         CloseOnClickAway="True"
         DialogTheme="Inherit"
-        Identifier="MainDialogHost">
+        Identifier="MainDialogHost" >
 
         <Grid x:Name="MainGrid">
             <!--#region Row definitions-->
@@ -62,6 +62,7 @@
                                 Width="30"
                                 Height="30"
                                 Margin="5,2"
+                                Cursor="Hand"
                                 IsChecked="{Binding IsLeftDrawerOpen, ElementName=NavDrawer}"
                                 Style="{DynamicResource MaterialDesignHamburgerToggleButton}"
                                 ToolTip="Click to navigate" />
@@ -118,6 +119,7 @@
                         Margin="0,16,0,16"
                         HorizontalAlignment="Left"
                         FontSize="18"
+                        Cursor="Hand"
                         SelectionChanged="NavListBox_SelectionChanged"
                         Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
                         <ListBoxItem>
@@ -231,6 +233,7 @@
                                     <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
                                     <Setter Property="BorderThickness" Value="2" />
                                     <Setter Property="Margin" Value="10,5,10,5" />
+                                    <Setter Property="Cursor" Value="Hand" />
                                     <EventSetter
                                         Event="MouseUp"
                                         Handler="ListBoxItem_MouseClick" />
