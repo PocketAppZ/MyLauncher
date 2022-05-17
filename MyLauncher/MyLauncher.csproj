@@ -16,9 +16,6 @@
 
   <ItemGroup>
     <Content Include="Images\ML.ico" />
-    <Content Include="MyLauncher.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

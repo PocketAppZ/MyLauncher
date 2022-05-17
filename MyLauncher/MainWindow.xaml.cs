@@ -12,10 +12,6 @@ public partial class MainWindow : Window
     private readonly Stopwatch stopwatch = new();
     #endregion Stopwatch
 
-    #region MainWindow Instance
-    internal static MainWindow Instance { get; private set; }
-    #endregion MainWindow Instance
-
     #region Properties
     public static bool CleanLaunch { get; set; } = true;
     #endregion Properties
@@ -41,8 +37,6 @@ public partial class MainWindow : Window
         stopwatch.Start();
 
         UserSettings.Init(UserSettings.AppFolder, UserSettings.DefaultFilename, true);
-
-        Instance = this;
     }
 
     public void ReadSettings()
@@ -208,6 +202,12 @@ public partial class MainWindow : Window
                     item.FileIcon = IconToImageSource(temp);
                     log.Debug($"{item.FilePathOrURI} is Solitaire app");
                 }
+                else if (docPath.Equals("bingweather:", StringComparison.OrdinalIgnoreCase))
+                {
+                    Icon temp = Properties.Resources.weather;
+                    item.FileIcon = IconToImageSource(temp);
+                    log.Debug($"{item.FilePathOrURI} is weather app");
+                }
                 else if (IsValidUrl(docPath))
                 {
                     Icon temp = Properties.Resources.globe;
@@ -258,10 +258,18 @@ public partial class MainWindow : Window
         }
 
         EntryClass entry = (EntryClass)lbDocs.SelectedItem;
-        LaunchApp(entry);
+        if (LaunchApp(entry))
+        {
+            if (UserSettings.Setting.ExitOnOpen)
+            {
+                Thread.Sleep(250);
+                Close();
+            }
+        }
+        lbDocs.SelectedIndex = -1;
     }
 
-    private static async void LaunchApp(EntryClass item)
+    private static bool LaunchApp(EntryClass item)
     {
         using Process launch = new();
         try
@@ -270,18 +278,15 @@ public partial class MainWindow : Window
             launch.StartInfo.UseShellExecute = true;
             _ = launch.Start();
             log.Info($"Opening \"{item.Title}\"");
+            return true;
         }
         catch (Exception ex)
         {
             CleanLaunch = false;
             log.Error(ex, "Open failed for \"{0}\" - \"{1}\"", item.Title, item.FilePathOrURI);
             SystemSounds.Exclamation.Play();
-            ErrorDialog error = new()
-            {
-                Message = $"Error launching \"{item.Title}\" {item.FilePathOrURI}" +
-                $"\n\n{ex.Message}"
-            };
-            _ = await DialogHost.Show(error, "MainDialogHost");
+            _ = new MDCustMsgBox($"Error launching \"{item.Title}\" {item.FilePathOrURI}\n\n{ex.Message}", "ERROR", ButtonType.Ok).ShowDialog();
+            return false;
         }
     }
     #endregion Launch app or uri
@@ -439,9 +444,9 @@ public partial class MainWindow : Window
             case MySize.Default:
                 return 1.0;
             case MySize.Larger:
-                return 1.05;
-            case MySize.Largest:
                 return 1.1;
+            case MySize.Largest:
+                return 1.2;
             default:
                 return 1.0;
         }
@@ -581,9 +586,13 @@ public partial class MainWindow : Window
 
     #region Read the JSON file
     public static void ReadJson()
-
     {
         string jsonfile = GetJsonFile();
+
+        if (!File.Exists(jsonfile))
+        {
+            CreateNewJson(jsonfile);
+        }
 
         log.Debug($"Reading JSON file: {jsonfile}");
         try
@@ -626,6 +635,15 @@ public partial class MainWindow : Window
         }
     }
     #endregion Read the JSON file
+
+    #region Create starter JSON file
+    private static void CreateNewJson(string file)
+    {
+        const string json = /*lang=json,strict*/ "[{\"Title\": \"Calculator\",\"FilePathOrURI\": \"calc.exe\"}]";
+        log.Debug($"Creating new JSON file with one entry - {file}");
+        File.WriteAllText(file, json);
+    }
+    #endregion Create starter JSON file
 
     #region Mouse enter/leave shadow effect
     private void Card_MouseEnter(object sender, MouseEventArgs e)

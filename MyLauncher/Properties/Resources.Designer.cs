@@ -129,5 +129,15 @@ namespace MyLauncher.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon weather {
+            get {
+                object obj = ResourceManager.GetObject("weather", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

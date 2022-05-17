@@ -72,7 +72,7 @@
                                 VerticalAlignment="Center"
                                 FontSize="20"
                                 FontWeight="DemiBold"
-                                Text="My Apps" />
+                                Text="Click on any App Below to Open it" />
                         </StackPanel>
 
                         <materialDesign:PopupBox
@@ -126,7 +126,7 @@
                                     <materialDesign:PackIcon Kind="RocketLaunch" />
                                     <TextBlock
                                         Margin="7,0"
-                                        Text="Launcher" />
+                                        Text="My Launcher" />
                                 </StackPanel>
                             </ListBoxItem.Content>
                         </ListBoxItem>
@@ -136,7 +136,7 @@
                                     <materialDesign:PackIcon Kind="Wrench" />
                                     <TextBlock
                                         Margin="7,0"
-                                        Text="Maintenance" />
+                                        Text="List Maintenance" />
                                 </StackPanel>
                             </ListBoxItem.Content>
                         </ListBoxItem>
@@ -147,7 +147,7 @@
                                     <materialDesign:PackIcon Kind="Cog" />
                                     <TextBlock
                                         Margin="7,0"
-                                        Text="Settings" />
+                                        Text="App Settings" />
                                 </StackPanel>
                             </ListBoxItem.Content>
                         </ListBoxItem>
@@ -157,7 +157,7 @@
                                     <materialDesign:PackIcon Kind="AboutCircle" />
                                     <TextBlock
                                         Margin="7,0"
-                                        Text="About" />
+                                        Text="About My Launcher" />
                                 </StackPanel>
                             </ListBoxItem.Content>
                         </ListBoxItem>

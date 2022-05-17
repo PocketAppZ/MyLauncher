@@ -249,6 +249,10 @@
                                                     <Separator />
                                                     <Button
                                                         Click="BtnSpecial_Click"
+                                                        Content="Calculator"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
                                                         Content="Calendar"
                                                         Style="{StaticResource MaterialDesignFlatLightButton}" />
                                                     <Button
@@ -297,7 +301,7 @@
                                 <Button
                                     Width="140"
                                     Margin="10"
-                                    Click="New_Click"
+                                    Click="NewItem_Click"
                                     Content="New Item"
                                     Style="{StaticResource MaterialDesignRaisedButton}"
                                     TabIndex="5"

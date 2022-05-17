@@ -41,7 +41,7 @@
         #endregion Load the list box
 
         #region Check for "untitled" entries in the list box
-        private async Task<bool> CheckForUntitledAsync()
+        private bool CheckForUntitled()
         {
             // Loop through the list backwards checking for null titles
             for (int i = listbox1.Items.Count - 1; i >= 0; i--)
@@ -51,11 +51,8 @@
                 if (string.IsNullOrEmpty(x.Title))
                 {
                     log.Error("New item prohibited, \"untitled\" entry in list");
-                    //ErrorDialog error = new()
-                    //{
-                    //    Message = "Please update or delete the untitled entry before adding another new entry."
-                    //};
-                    //_ = await DialogHost.Show(error, "MainDialogHost").ConfigureAwait(true);
+                    _ = new MDCustMsgBox("Please update or delete the untitled entry before adding another new entry.",
+                        "ERROR", ButtonType.Ok).ShowDialog();
                     return false;
                 }
             }
@@ -186,9 +183,9 @@
             DeleteItem();
         }
 
-        private async void New_Click(object sender, RoutedEventArgs e)
+        private void NewItem_Click(object sender, RoutedEventArgs e)
         {
-            if (await CheckForUntitledAsync())
+            if (CheckForUntitled())
             {
                 NewItem();
             }
@@ -199,6 +196,7 @@
             MainWindow.ReadJson();
             LoadListBox();
             listbox1.Items.Refresh();
+            EntriesChanged = false;
             btnDiscard.IsEnabled = false;
         }
         #endregion Button events
@@ -238,7 +236,7 @@
             {
                 SaveJson();
                 MainWindow.GetIcons();
-                MainWindow.Instance.lbDocs.Items.Refresh();
+                (Application.Current.MainWindow as MainWindow)?.lbDocs.Items.Refresh();
                 SnackbarMsg.ClearAndQueueMessage("List saved", 1000);
             }
             else
@@ -253,19 +251,21 @@
             Button btn = sender as Button;
             switch (btn.Content.ToString())
             {
-                case "Weather":
-                    newitem.Title = "Weather";
-                    newitem.FilePathOrURI = "bingweather:";
+                case "Calculator":
+                    newitem.Title = "Calculator";
+                    newitem.FilePathOrURI = "calc.exe";
                     break;
-
                 case "Calendar":
                     newitem.Title = "Calendar";
                     newitem.FilePathOrURI = "outlookcal:";
                     break;
-
                 case "Solitaire":
                     newitem.Title = "Solitaire Collection";
                     newitem.FilePathOrURI = "xboxliveapp-1297287741:";
+                    break;
+                case "Weather":
+                    newitem.Title = "Weather";
+                    newitem.FilePathOrURI = "bingweather:";
                     break;
             }
             if (tb1.Text != string.Empty)
@@ -273,7 +273,6 @@
                 EntryClass.Entries.Add(newitem);
                 listbox1.SelectedIndex = listbox1.Items.Count - 1;
                 EntriesChanged = true;
-                // .Items.Refresh();
             }
         }
     }
