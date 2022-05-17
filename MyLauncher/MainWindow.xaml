@@ -32,7 +32,7 @@
     <!--#endregion-->
 
     <materialDesign:DialogHost
-        CloseOnClickAway="True"
+        CloseOnClickAway="False"
         DialogTheme="Inherit"
         Identifier="MainDialogHost" >
 
