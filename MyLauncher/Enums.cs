@@ -23,8 +23,9 @@ internal enum MySize
     Smallest = 0,
     Smaller = 1,
     Default = 2,
-    Larger = 3,
-    Largest = 4
+    Large = 3,
+    Larger = 4,
+    Largest = 5
 }
 
 internal enum AccentColor

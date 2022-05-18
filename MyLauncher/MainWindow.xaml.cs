@@ -51,7 +51,15 @@ public partial class MainWindow : Window
         Title = $"{AppInfo.AppName} - {AppInfo.TitleVersion}";
 
         // Startup message in the temp file
-        log.Info($"{AppInfo.AppName} {AppInfo.AppVersion} is starting up");
+        log.Info($"{AppInfo.AppName} ({AppInfo.AppProduct}) {AppInfo.AppVersion} is starting up");
+        log.Debug($"{AppInfo.AppName} Build date: {BuildInfo.BuildDateString} UTC");
+        log.Debug($"{AppInfo.AppName} Commit ID: {BuildInfo.CommitIDString}");
+
+        // Log the .NET version, app framework and OS platform
+        string version = Environment.Version.ToString();
+        log.Debug($".NET version: {AppInfo.RuntimeVersion.Replace(".NET", "")}  ({version})");
+        log.Debug($"Framework Version: {AppInfo.Framework}");
+        log.Debug($"Operating System: {AppInfo.OsPlatform}");
 
         // Window position
         Top = UserSettings.Setting.WindowTop;
@@ -59,12 +67,6 @@ public partial class MainWindow : Window
         Height = UserSettings.Setting.WindowHeight;
         Width = UserSettings.Setting.WindowWidth;
         Topmost = UserSettings.Setting.KeepOnTop;
-
-        // Log the .NET version, app framework and OS platform
-        string version = Environment.Version.ToString();
-        log.Debug($".NET version: {AppInfo.RuntimeVersion.Replace(".NET", "")}  ({version})");
-        log.Debug(AppInfo.Framework);
-        log.Debug(AppInfo.OsPlatform);
 
         // Light or dark
         SetBaseTheme((ThemeType)UserSettings.Setting.DarkMode);
@@ -443,10 +445,12 @@ public partial class MainWindow : Window
                 return 0.95;
             case MySize.Default:
                 return 1.0;
+            case MySize.Large:
+                return 1.05;
             case MySize.Larger:
-                return 1.1;
+                return 1.15;
             case MySize.Largest:
-                return 1.2;
+                return 1.3;
             default:
                 return 1.0;
         }

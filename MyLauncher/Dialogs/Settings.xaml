@@ -105,6 +105,7 @@
                                 <ComboBoxItem Content="{x:Static local:MySize.Smallest}" />
                                 <ComboBoxItem Content="{x:Static local:MySize.Smaller}" />
                                 <ComboBoxItem Content="{x:Static local:MySize.Default}" />
+                                <ComboBoxItem Content="{x:Static local:MySize.Large}" />
                                 <ComboBoxItem Content="{x:Static local:MySize.Larger}" />
                                 <ComboBoxItem Content="{x:Static local:MySize.Largest}" />
                             </ComboBox.Items>
