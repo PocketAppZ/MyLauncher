@@ -237,6 +237,8 @@
                 SaveJson();
                 MainWindow.GetIcons();
                 (Application.Current.MainWindow as MainWindow)?.lbDocs.Items.Refresh();
+                (Application.Current.MainWindow as MainWindow)?.lbDocs.InvalidateArrange();
+                (Application.Current.MainWindow as MainWindow)?.lbDocs.UpdateLayout();
                 SnackbarMsg.ClearAndQueueMessage("List saved", 1000);
             }
             else
