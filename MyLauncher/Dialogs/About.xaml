@@ -93,13 +93,19 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Text="{x:Static local:AppInfo.AppName}" />
-                <TextBlock
+                <StackPanel
                     Grid.Row="0"
                     Grid.Column="1"
-                    Padding="0,0,10,0"
-                    Text="An App Launcher for Mom"
-                    TextTrimming="CharacterEllipsis" />
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Padding="0,0,10,0"
+                        Text="An App Launcher for Mom"
+                        TextTrimming="CharacterEllipsis" />
+                    <materialDesign:PackIcon
 
+                        Foreground="Red"
+                        Kind="Heart" />
+                </StackPanel>
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="0"
@@ -156,9 +162,9 @@
                     Grid.Row="6"
                     Grid.Column="1">
                     <Hyperlink
-                        NavigateUri="https://github.com/Timthreetwelve"
+                        NavigateUri="https://github.com/Timthreetwelve/MyLauncher"
                         RequestNavigate="OnNavigate">
-                        <TextBlock Text="https://github.com/Timthreetwelve" />
+                        <TextBlock Text="https://github.com/Timthreetwelve/MyLauncher" />
                     </Hyperlink>
                 </TextBlock>
 
