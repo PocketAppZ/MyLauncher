@@ -55,6 +55,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public bool PlaySound
+    {
+        get => playSound;
+        set
+        {
+            playSound = value;
+            OnPropertyChanged();
+        }
+    }
+
     public int PrimaryColor
     {
         get => primaryColor;
@@ -155,6 +165,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool exitOnOpen = false;
     private bool includeDebug = false;
     private bool keepOnTop = false;
+    private bool playSound = true;
     private int primaryColor = (int)AccentColor.Blue;
     private bool showFileIcons = true;
     private string titleText = "Your text here";
