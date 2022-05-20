@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:MyLauncher"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:system="clr-namespace:System;assembly=mscorlib" d:DataContext="{d:DesignInstance Type=local:UserSettings}"
     TextElement.FontSize="14"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -250,6 +250,31 @@
                 </Grid>
             </materialDesign:Card>
             <!--#endregion-->
+
+            <materialDesign:Card
+                Grid.Row="3"
+                Width="500"
+                Height="100"
+                Margin="5,10"
+                Padding="10"
+                HorizontalAlignment="Left"
+                materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                MouseEnter="Card_MouseEnter"
+                MouseLeave="Card_MouseLeave"
+                UniformCornerRadius="7">
+                <StackPanel Orientation="Vertical">
+                <TextBlock Text="Title Text" Margin="10,5" FontWeight="DemiBold"/>
+                <TextBox
+                    Height="40"
+                    Margin="10,0,10,10"
+                    VerticalAlignment="Bottom"
+                    VerticalContentAlignment="Bottom"
+                    materialDesign:HintAssist.Hint="The text that is displayed at the top of the main page. "
+                    Style="{StaticResource MaterialDesignTextBox}"
+                    TabIndex="0"
+                    Text="{Binding TitleText, Source={x:Static local:UserSettings.Setting}, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </materialDesign:Card>
         </Grid>
     </Border>
 </UserControl>

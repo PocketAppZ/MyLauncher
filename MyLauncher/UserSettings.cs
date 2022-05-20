@@ -65,6 +65,17 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public string TitleText
+    {
+        get => titleText;
+        set
+        {
+            titleText = value.Trim();
+            OnPropertyChanged();
+        }
+    }
+
+
     public int UISize
     {
         get => uiSize;
@@ -135,6 +146,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool keepOnTop = false;
     private int primaryColor = (int)AccentColor.Blue;
     private bool showFileIcons = true;
+    private string titleText = "Your text here";
     private int uiSize = (int)MySize.Default;
     private double windowHeight = 500;
     private double windowLeft = 100;
