@@ -260,6 +260,11 @@ public partial class MainWindow : Window
         {
             return;
         }
+        if (e.ChangedButton == MouseButton.Right && !UserSettings.Setting.AllowRightButton)
+        {
+            lbDocs.SelectedItem = null;
+            return;
+        }
 
         EntryClass entry = (EntryClass)lbDocs.SelectedItem;
         if (LaunchApp(entry))

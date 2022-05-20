@@ -6,7 +6,8 @@
     xmlns:local="clr-namespace:MyLauncher"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:system="clr-namespace:System;assembly=mscorlib" d:DataContext="{d:DesignInstance Type=local:UserSettings}"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    d:DataContext="{d:DesignInstance Type=local:UserSettings}"
     TextElement.FontSize="14"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -195,6 +196,7 @@
                         <RowDefinition Height="31" />
                         <RowDefinition Height="31" />
                         <RowDefinition Height="31" />
+                        <RowDefinition Height="31" />
                     </Grid.RowDefinitions>
                     <StackPanel
                         Grid.Row="0"
@@ -224,6 +226,19 @@
 
                     <StackPanel
                         Grid.Row="2"
+                        Grid.Column="0"
+                        Orientation="Horizontal">
+                        <ToggleButton
+                            HorizontalAlignment="Left"
+                            IsChecked="{Binding AllowRightButton, Source={x:Static local:UserSettings.Setting}}"
+                            Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+                        <Label
+                            Margin="10,-1,0,0"
+                            Content="Right mouse button can be used to launch" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="3"
                         Grid.Column="1"
                         Orientation="Horizontal">
                         <ToggleButton
@@ -263,16 +278,19 @@
                 MouseLeave="Card_MouseLeave"
                 UniformCornerRadius="7">
                 <StackPanel Orientation="Vertical">
-                <TextBlock Text="Title Text" Margin="10,5" FontWeight="DemiBold"/>
-                <TextBox
-                    Height="40"
-                    Margin="10,0,10,10"
-                    VerticalAlignment="Bottom"
-                    VerticalContentAlignment="Bottom"
-                    materialDesign:HintAssist.Hint="The text that is displayed at the top of the main page. "
-                    Style="{StaticResource MaterialDesignTextBox}"
-                    TabIndex="0"
-                    Text="{Binding TitleText, Source={x:Static local:UserSettings.Setting}, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                        Margin="10,5"
+                        FontWeight="DemiBold"
+                        Text="Title Text" />
+                    <TextBox
+                        Height="40"
+                        Margin="10,0,10,10"
+                        VerticalAlignment="Bottom"
+                        VerticalContentAlignment="Bottom"
+                        materialDesign:HintAssist.Hint="The text that is displayed at the top of the main page. "
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        TabIndex="0"
+                        Text="{Binding TitleText, Source={x:Static local:UserSettings.Setting}, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </materialDesign:Card>
         </Grid>
