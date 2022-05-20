@@ -5,6 +5,16 @@ namespace MyLauncher;
 public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChanged
 {
     #region Properties
+    public bool AllowRightButton
+    {
+        get => allowRightButton;
+        set
+        {
+            allowRightButton = value;
+            OnPropertyChanged();
+        }
+    }
+
     public int DarkMode
     {
         get => darkmode;
@@ -140,6 +150,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     #endregion Properties
 
     #region Private backing fields
+    private bool allowRightButton = true;
     private int darkmode = (int)ThemeType.Light;
     private bool exitOnOpen = false;
     private bool includeDebug = false;
