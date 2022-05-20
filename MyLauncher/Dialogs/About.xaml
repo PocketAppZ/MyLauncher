@@ -102,7 +102,6 @@
                         Text="An App Launcher for Mom"
                         TextTrimming="CharacterEllipsis" />
                     <materialDesign:PackIcon
-
                         Foreground="Red"
                         Kind="Heart" />
                 </StackPanel>

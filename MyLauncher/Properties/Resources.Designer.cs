@@ -73,26 +73,6 @@ namespace MyLauncher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon calendar {
-            get {
-                object obj = ResourceManager.GetObject("calendar", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon cards {
-            get {
-                object obj = ResourceManager.GetObject("cards", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
         public static System.Drawing.Icon exe {
             get {
                 object obj = ResourceManager.GetObject("exe", resourceCulture);
@@ -121,21 +101,20 @@ namespace MyLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        public static System.Drawing.Icon question {
+        public static System.IO.UnmanagedMemoryStream Pop {
             get {
-                object obj = ResourceManager.GetObject("question", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetStream("Pop", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon weather {
+        public static System.Drawing.Icon question {
             get {
-                object obj = ResourceManager.GetObject("weather", resourceCulture);
+                object obj = ResourceManager.GetObject("question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

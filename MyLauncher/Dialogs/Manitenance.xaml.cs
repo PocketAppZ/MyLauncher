@@ -63,13 +63,10 @@
         #region Add New item
         private void NewItem()
         {
-            //tb1.Text = string.Empty;
-            //tb2.Text = string.Empty;
             EntryClass newitem = new() { Title = string.Empty };
             EntryClass.Entries.Add(newitem);
-            //listbox1.SelectedItem = EntryClass.Entries.Last();
             listbox1.SelectedIndex = listbox1.Items.Count - 1;
-            //listbox1.ScrollIntoView(listbox1.SelectedItem);
+            listbox1.ScrollIntoView(listbox1.SelectedItem);
             _ = tb1.Focus();
             SnackbarMsg.ClearAndQueueMessage("New \"untitled\" item was created.", 5000);
         }
@@ -106,7 +103,8 @@
                     {
                         Title = item.Title,
                         FilePathOrURI = item.FilePathOrURI,
-                        FileIcon = item.FileIcon
+                        FileIcon = item.FileIcon,
+                        IconSource = item.IconSource
                     };
                     tempCollection.Add(ec);
                 }
@@ -172,12 +170,6 @@
         #endregion File picker button (for Path)
 
         #region Button events
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            SaveJson();
-            btnDiscard.IsEnabled = false;
-        }
-
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             DeleteItem();
@@ -194,6 +186,7 @@
         private void Discard_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.ReadJson();
+            (Application.Current.MainWindow as MainWindow)?.ResetListBox();
             LoadListBox();
             listbox1.Items.Refresh();
             EntriesChanged = false;
@@ -229,16 +222,13 @@
         }
         #endregion Mouse Enter/Leave Card (to change shadow)
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             DialogHost.Close("MainDialogHost");
             if (EntriesChanged)
             {
                 SaveJson();
-                MainWindow.GetIcons();
-                (Application.Current.MainWindow as MainWindow)?.lbDocs.Items.Refresh();
-                (Application.Current.MainWindow as MainWindow)?.lbDocs.InvalidateArrange();
-                (Application.Current.MainWindow as MainWindow)?.lbDocs.UpdateLayout();
+                (Application.Current.MainWindow as MainWindow)?.ResetListBox();
                 SnackbarMsg.ClearAndQueueMessage("List saved", 1000);
             }
             else

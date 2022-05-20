@@ -73,7 +73,7 @@
                                 VerticalAlignment="Center"
                                 FontSize="20"
                                 FontWeight="DemiBold"
-                                Text="Click on any App Below to Open it" />
+                                Text="{Binding TitleText, Source={x:Static local:UserSettings.Setting}}" />
                         </StackPanel>
 
                         <materialDesign:PopupBox

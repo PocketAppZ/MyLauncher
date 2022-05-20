@@ -12,10 +12,6 @@ public partial class MainWindow : Window
     private readonly Stopwatch stopwatch = new();
     #endregion Stopwatch
 
-    #region Properties
-    public static bool CleanLaunch { get; set; } = true;
-    #endregion Properties
-
     public MainWindow()
     {
         InitializeSettings();
@@ -160,6 +156,22 @@ public partial class MainWindow : Window
         {
             if (!string.IsNullOrEmpty(item.FilePathOrURI))
             {
+                if (item.IconSource != string.Empty)
+                {
+                    string png = Path.Combine(AppInfo.AppDirectory, "Icons", item.IconSource);
+                    if (File.Exists(png))
+                    {
+                        log.Debug($"Using image file {item.IconSource} for \"{item.Title}\"");
+                        BitmapImage b = new();
+                        b.BeginInit();
+                        b.UriSource = new Uri(png);
+                        b.EndInit();
+                        item.FileIcon = b;
+                        continue;
+                    }
+                    log.Debug($"Could not find file {png} to use for \"{item.Title}\"");
+                }
+
                 string docPath = item.FilePathOrURI.TrimEnd('\\');
                 if (File.Exists(docPath))
                 {
@@ -192,24 +204,6 @@ public partial class MainWindow : Window
                         log.Debug($"{item.FilePathOrURI} was not found on the Path");
                     }
                 }
-                else if (docPath.Equals("outlookcal:", StringComparison.OrdinalIgnoreCase))
-                {
-                    Icon temp = Properties.Resources.calendar;
-                    item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"{item.FilePathOrURI} is Calendar app");
-                }
-                else if (docPath.Equals("xboxliveapp-1297287741:", StringComparison.OrdinalIgnoreCase))
-                {
-                    Icon temp = Properties.Resources.cards;
-                    item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"{item.FilePathOrURI} is Solitaire app");
-                }
-                else if (docPath.Equals("bingweather:", StringComparison.OrdinalIgnoreCase))
-                {
-                    Icon temp = Properties.Resources.weather;
-                    item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"{item.FilePathOrURI} is weather app");
-                }
                 else if (IsValidUrl(docPath))
                 {
                     Icon temp = Properties.Resources.globe;
@@ -220,14 +214,14 @@ public partial class MainWindow : Window
                 {
                     Icon temp = Properties.Resources.question;
                     item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"{item.FilePathOrURI} is something else");
+                    log.Debug($"{item.FilePathOrURI} is undetermined");
                 }
             }
             else
             {
                 Icon temp = Properties.Resources.question;
                 item.FileIcon = IconToImageSource(temp);
-                log.Debug("Document path is empty or null");
+                log.Debug("Path is empty or null");
             }
         }
     }
@@ -250,6 +244,14 @@ public partial class MainWindow : Window
     }
 
     #endregion Get file icons
+
+    public void ResetListBox()
+    {
+        EntryClass.Entries.Clear();
+        ReadJson();
+        GetIcons();
+        lbDocs.ItemsSource = EntryClass.Entries;
+    }
 
     #region Launch app or URI
     private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
@@ -284,7 +286,6 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            CleanLaunch = false;
             log.Error(ex, "Open failed for \"{0}\" - \"{1}\"", item.Title, item.FilePathOrURI);
             SystemSounds.Exclamation.Play();
             _ = new MDCustMsgBox($"Error launching \"{item.Title}\" {item.FilePathOrURI}\n\n{ex.Message}", "ERROR", ButtonType.Ok).ShowDialog();
@@ -552,7 +553,7 @@ public partial class MainWindow : Window
     public void EverythingLarger()
     {
         int size = UserSettings.Setting.UISize;
-        if (size < 4)
+        if (size < 5)
         {
             size++;
             UserSettings.Setting.UISize = size;
