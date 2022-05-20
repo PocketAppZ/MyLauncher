@@ -287,6 +287,14 @@ public partial class MainWindow : Window
             launch.StartInfo.UseShellExecute = true;
             _ = launch.Start();
             log.Info($"Opening \"{item.Title}\"");
+            if (UserSettings.Setting.PlaySound)
+            {
+                using SoundPlayer soundPlayer = new()
+                {
+                    Stream = Properties.Resources.Pop
+                };
+                soundPlayer.Play();
+            }
             return true;
         }
         catch (Exception ex)
