@@ -10,6 +10,7 @@
         #endregion NLog
 
         public static bool EntriesChanged { get; set; }
+        public static object PrevEntry { get; set; }
 
         public Maintenance()
         {
@@ -23,6 +24,7 @@
         #region List changed event
         private void Entries_ListChanged(object sender, ListChangedEventArgs e)
         {
+            Debug.WriteLine(e.ListChangedType.ToString());
             EntriesChanged = true;
             btnDiscard.IsEnabled = true;
         }
@@ -101,10 +103,11 @@
                 {
                     EntryClass ec = new()
                     {
-                        Title = item.Title,
-                        FilePathOrURI = item.FilePathOrURI,
+                        Title = item.Title.Trim(),
+                        FilePathOrURI = item.FilePathOrURI.Trim(),
                         FileIcon = item.FileIcon,
-                        IconSource = item.IconSource
+                        Arguments = item.Arguments,
+                        IconSource = item.IconSource.Trim(),
                     };
                     tempCollection.Add(ec);
                 }
@@ -185,7 +188,7 @@
 
         private void Discard_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.ReadJson();
+            (Application.Current.MainWindow as MainWindow)?.ReadJson();
             (Application.Current.MainWindow as MainWindow)?.ResetListBox();
             LoadListBox();
             listbox1.Items.Refresh();
@@ -245,19 +248,28 @@
             {
                 case "Calculator":
                     newitem.Title = "Calculator";
-                    newitem.FilePathOrURI = "calc.exe";
+                    newitem.FilePathOrURI = "calculator:";
+                    newitem.IconSource = "calc.png";
                     break;
                 case "Calendar":
                     newitem.Title = "Calendar";
                     newitem.FilePathOrURI = "outlookcal:";
+                    newitem.IconSource = "calendar.png";
+                    break;
+                case "Mail":
+                    newitem.Title = "Mail";
+                    newitem.FilePathOrURI = "outlookmail:";
+                    newitem.IconSource = "mail.png";
                     break;
                 case "Solitaire":
                     newitem.Title = "Solitaire Collection";
                     newitem.FilePathOrURI = "xboxliveapp-1297287741:";
+                    newitem.IconSource = "cards.png";
                     break;
                 case "Weather":
                     newitem.Title = "Weather";
                     newitem.FilePathOrURI = "bingweather:";
+                    newitem.IconSource = "weather.png";
                     break;
             }
             if (tb1.Text != string.Empty)
@@ -266,6 +278,45 @@
                 listbox1.SelectedIndex = listbox1.Items.Count - 1;
                 EntriesChanged = true;
             }
+        }
+
+        private void IconFile_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlgOpen = new()
+            {
+                Title = "Choose an Image File",
+                InitialDirectory = Path.Combine(AppInfo.AppDirectory, "Icons"),
+                Filter = "Image Files|*.png;*.ico;*.bmp;*.jpg;*.jpeg",
+                Multiselect = false,
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+            bool? result = dlgOpen.ShowDialog();
+            if (result == true && File.Exists(dlgOpen.FileName))
+            {
+                if (Path.GetDirectoryName(dlgOpen.FileName) == dlgOpen.InitialDirectory)
+                {
+                    tb3.Text = Path.GetFileName(dlgOpen.FileName);
+                    EntryClass entry = (EntryClass)listbox1.SelectedItem;
+                    entry.IconSource = tb3.Text;
+                }
+                else
+                {
+                    tb3.Text = dlgOpen.FileName;
+                    EntryClass entry = (EntryClass)listbox1.SelectedItem;
+                    entry.IconSource = tb3.Text;
+                }
+            }
+        }
+
+        private void Listbox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listbox1.SelectedItem == null)
+            {
+                listbox1.SelectedItem = PrevEntry;
+                return;
+            }
+            PrevEntry = listbox1.SelectedItem;
         }
     }
 }

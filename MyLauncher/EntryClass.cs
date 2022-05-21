@@ -1,4 +1,4 @@
-﻿// Copyright (c) TIm Kennedy. All Rights Reserved. Licensed under the MIT License.
+﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
 
@@ -35,6 +35,19 @@ public class EntryClass : INotifyPropertyChanged
         }
     }
 
+    public string Arguments
+    {
+        get => arguments;
+        set
+        {
+            if (arguments != null)
+            {
+                arguments = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public string IconSource
     {
         get => iconSource;
@@ -48,14 +61,28 @@ public class EntryClass : INotifyPropertyChanged
         }
     }
 
+    //Ignore the image as we don't want to save it in the JSON file
     [JsonIgnore]
-    public ImageSource FileIcon { get; set; }
+    public ImageSource FileIcon
+    {
+        get => fileIcon;
+        set
+        {
+            if (value != null)
+            {
+                fileIcon = value;
+                OnPropertyChanged();
+            }
+        }
+    }
     #endregion Properties
 
     #region Private backing fields
     private string title;
     private string filePathOrURI;
+    private string arguments = string.Empty;
     private string iconSource = string.Empty;
+    private ImageSource fileIcon;
     #endregion Private backing fields
 
     #region Handle property change

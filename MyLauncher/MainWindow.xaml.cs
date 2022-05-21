@@ -20,11 +20,7 @@ public partial class MainWindow : Window
 
         ReadSettings();
 
-        ReadJson();
-
-        GetIcons();
-
-        lbDocs.ItemsSource = EntryClass.Entries;
+        ResetListBox();
     }
 
     #region Settings
@@ -149,6 +145,68 @@ public partial class MainWindow : Window
     }
     #endregion Navigation
 
+    #region Clear and repopulate the listbox
+    public void ResetListBox()
+    {
+        EntryClass.Entries?.Clear();
+        ReadJson();
+        GetIcons();
+    }
+    #endregion Clear and repopulate the listbox
+
+    #region Read the JSON file
+    public void ReadJson()
+    {
+        string jsonfile = GetJsonFile();
+
+        if (!File.Exists(jsonfile))
+        {
+            CreateNewJson(jsonfile);
+        }
+
+        log.Debug($"Reading JSON file: {jsonfile}");
+        try
+        {
+            string json = File.ReadAllText(jsonfile);
+            EntryClass.Entries = JsonSerializer.Deserialize<BindingList<EntryClass>>(json);
+            listboxEntries.ItemsSource = EntryClass.Entries;
+        }
+        catch (Exception ex) when (ex is DirectoryNotFoundException || ex is FileNotFoundException)
+        {
+            log.Error(ex, "File or Directory not found {0}", jsonfile);
+            SystemSounds.Exclamation.Play();
+            _ = new MDCustMsgBox($"File or Directory not found:\n\n{ex.Message}\n\nUnable to continue.",
+                "My Launcher Error", ButtonType.Ok).ShowDialog();
+            Environment.Exit(1);
+        }
+        catch (Exception ex)
+        {
+            log.Error(ex, "Error reading file: {0}", jsonfile);
+            SystemSounds.Exclamation.Play();
+            _ = new MDCustMsgBox($"Error reading file:\n\n{ex.Message}",
+                "My Launcher Error", ButtonType.Ok).ShowDialog();
+        }
+
+        if (EntryClass.Entries == null)
+        {
+            log.Error("File {0} is empty or is invalid", jsonfile);
+            SystemSounds.Exclamation.Play();
+            _ = new MDCustMsgBox($"File {jsonfile} is empty or is invalid\n\nUnable to continue.",
+                "My Launcher Error", ButtonType.Ok).ShowDialog();
+            Environment.Exit(2);
+        }
+
+        if (EntryClass.Entries.Count == 1)
+        {
+            log.Info($"Read {EntryClass.Entries.Count} entry from {jsonfile}");
+        }
+        else
+        {
+            log.Info($"Read {EntryClass.Entries.Count} entries from {jsonfile}");
+        }
+    }
+    #endregion Read the JSON file
+
     #region Get file icons
     public static void GetIcons()
     {
@@ -156,40 +214,40 @@ public partial class MainWindow : Window
         {
             if (!string.IsNullOrEmpty(item.FilePathOrURI))
             {
-                if (item.IconSource != string.Empty)
+                if (!string.IsNullOrEmpty(item.IconSource))
                 {
-                    string png = Path.Combine(AppInfo.AppDirectory, "Icons", item.IconSource);
-                    if (File.Exists(png))
+                    string image = Path.Combine(AppInfo.AppDirectory, "Icons", item.IconSource);
+                    if (File.Exists(image))
                     {
                         log.Debug($"Using image file {item.IconSource} for \"{item.Title}\"");
-                        BitmapImage b = new();
-                        b.BeginInit();
-                        b.UriSource = new Uri(png);
-                        b.EndInit();
-                        item.FileIcon = b;
+                        BitmapImage bmi = new();
+                        bmi.BeginInit();
+                        bmi.UriSource = new Uri(image);
+                        bmi.EndInit();
+                        item.FileIcon = bmi;
                         continue;
                     }
-                    log.Debug($"Could not find file {png} to use for \"{item.Title}\"");
+                    log.Debug($"Could not find file {image} to use for \"{item.Title}\"");
                 }
 
-                string docPath = item.FilePathOrURI.TrimEnd('\\');
-                if (File.Exists(docPath))
+                string filePath = item.FilePathOrURI.TrimEnd('\\');
+                if (File.Exists(filePath))
                 {
-                    Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(docPath);
+                    Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
                     item.FileIcon = IconToImageSource(temp);
                     log.Debug($"{item.FilePathOrURI} is a file");
                 }
                 // expand environmental variables for folders
-                else if (Directory.Exists(Environment.ExpandEnvironmentVariables(docPath)))
+                else if (Directory.Exists(Environment.ExpandEnvironmentVariables(filePath)))
                 {
                     Icon temp = Properties.Resources.folder;
                     item.FileIcon = IconToImageSource(temp);
                     log.Debug($"{item.FilePathOrURI} is a directory");
                 }
                 // if complete path wasn't supplied check the path
-                else if (docPath.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                else if (filePath.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
                 {
-                    StringBuilder sb = new(docPath, 2048);
+                    StringBuilder sb = new(filePath, 2048);
                     bool found = NativeMethods.PathFindOnPath(sb, new string[] { null });
                     if (found)
                     {
@@ -204,7 +262,7 @@ public partial class MainWindow : Window
                         log.Debug($"{item.FilePathOrURI} was not found on the Path");
                     }
                 }
-                else if (IsValidUrl(docPath))
+                else if (IsValidUrl(filePath))
                 {
                     Icon temp = Properties.Resources.globe;
                     item.FileIcon = IconToImageSource(temp);
@@ -245,28 +303,20 @@ public partial class MainWindow : Window
 
     #endregion Get file icons
 
-    public void ResetListBox()
-    {
-        EntryClass.Entries.Clear();
-        ReadJson();
-        GetIcons();
-        lbDocs.ItemsSource = EntryClass.Entries;
-    }
-
     #region Launch app or URI
     private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
     {
-        if (((ListBoxItem)sender).Content is not EntryClass || lbDocs.SelectedItem == null)
+        if (((ListBoxItem)sender).Content is not EntryClass || listboxEntries.SelectedItem == null)
         {
             return;
         }
         if (e.ChangedButton == MouseButton.Right && !UserSettings.Setting.AllowRightButton)
         {
-            lbDocs.SelectedItem = null;
+            listboxEntries.SelectedItem = null;
             return;
         }
 
-        EntryClass entry = (EntryClass)lbDocs.SelectedItem;
+        EntryClass entry = (EntryClass)listboxEntries.SelectedItem;
         if (LaunchApp(entry))
         {
             if (UserSettings.Setting.ExitOnOpen)
@@ -275,7 +325,7 @@ public partial class MainWindow : Window
                 Close();
             }
         }
-        lbDocs.SelectedIndex = -1;
+        listboxEntries.SelectedIndex = -1;
     }
 
     private static bool LaunchApp(EntryClass item)
@@ -284,9 +334,11 @@ public partial class MainWindow : Window
         try
         {
             launch.StartInfo.FileName = Environment.ExpandEnvironmentVariables(item.FilePathOrURI);
+            launch.StartInfo.Arguments = Environment.ExpandEnvironmentVariables(item.Arguments);
             launch.StartInfo.UseShellExecute = true;
             _ = launch.Start();
             log.Info($"Opening \"{item.Title}\"");
+            SnackbarMsg.QueueMessage($"{item.Title} launched");
             if (UserSettings.Setting.PlaySound)
             {
                 using SoundPlayer soundPlayer = new()
@@ -296,6 +348,13 @@ public partial class MainWindow : Window
                 soundPlayer.Play();
             }
             return true;
+        }
+        catch (Win32Exception w) when (w.NativeErrorCode == 2)
+        {
+            log.Error(w, "Open failed for \"{0}\" - \"{1}\"", item.Title, item.FilePathOrURI);
+            SystemSounds.Exclamation.Play();
+            _ = new MDCustMsgBox($"Error launching \"{item.Title}\"\n\nFile Not Found: {item.FilePathOrURI}", "ERROR", ButtonType.Ok).ShowDialog();
+            return false;
         }
         catch (Exception ex)
         {
@@ -601,58 +660,6 @@ public partial class MainWindow : Window
         return Path.Combine(AppInfo.AppDirectory, "MyLauncher.json");
     }
     #endregion Get the menu JSON file name
-
-    #region Read the JSON file
-    public static void ReadJson()
-    {
-        string jsonfile = GetJsonFile();
-
-        if (!File.Exists(jsonfile))
-        {
-            CreateNewJson(jsonfile);
-        }
-
-        log.Debug($"Reading JSON file: {jsonfile}");
-        try
-        {
-            string json = File.ReadAllText(jsonfile);
-            EntryClass.Entries = JsonSerializer.Deserialize<BindingList<EntryClass>>(json);
-        }
-        catch (Exception ex) when (ex is DirectoryNotFoundException || ex is FileNotFoundException)
-        {
-            log.Error(ex, "File or Directory not found {0}", jsonfile);
-            SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"File or Directory not found:\n\n{ex.Message}\n\nUnable to continue.",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
-            Environment.Exit(1);
-        }
-        catch (Exception ex)
-        {
-            log.Error(ex, "Error reading file: {0}", jsonfile);
-            SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"Error reading file:\n\n{ex.Message}",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
-        }
-
-        if (EntryClass.Entries == null)
-        {
-            log.Error("File {0} is empty or is invalid", jsonfile);
-            SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"File {jsonfile} is empty or is invalid\n\nUnable to continue.",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
-            Environment.Exit(2);
-        }
-
-        if (EntryClass.Entries.Count == 1)
-        {
-            log.Info($"Read {EntryClass.Entries.Count} entry from {jsonfile}");
-        }
-        else
-        {
-            log.Info($"Read {EntryClass.Entries.Count} entries from {jsonfile}");
-        }
-    }
-    #endregion Read the JSON file
 
     #region Create starter JSON file
     private static void CreateNewJson(string file)

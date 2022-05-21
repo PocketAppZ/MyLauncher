@@ -8,6 +8,8 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    Width="auto"
+    Height="480"
     TextElement.FontSize="14"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -26,9 +28,12 @@
         CornerRadius="0">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
             <!--#region ColorZone with close button-->
             <materialDesign:ColorZone
@@ -71,7 +76,7 @@
                     <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" x:Name="RtCol" />
                     <ColumnDefinition Width="5" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -95,20 +100,16 @@
                         x:Name="listbox1"
                         dd:DragDrop.IsDragSource="True"
                         dd:DragDrop.IsDropTarget="True"
-                        dd:DragDrop.UseDefaultEffectDataTemplate="True"
-                        AllowDrop="True">
+                        dd:DragDrop.UseDefaultDragAdorner="False"
+                        AllowDrop="True"
+                        SelectionChanged="Listbox1_SelectionChanged">
+
                         <ListBox.Resources>
                             <Style
                                 BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"
                                 TargetType="ScrollBar" />
                         </ListBox.Resources>
-                        <ListBox.ItemContainerStyle>
-                            <Style
-                                BasedOn="{StaticResource {x:Type ListBoxItem}}"
-                                TargetType="ListBoxItem">
-                                <Setter Property="IsTabStop" Value="False" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock
@@ -146,9 +147,10 @@
                     <Grid>
                         <!--#region Row definitions-->
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="100" />
-                            <RowDefinition Height="100" />
-                            <RowDefinition Height="100" />
+                            <RowDefinition Height="90" />
+                            <RowDefinition Height="90" />
+                            <RowDefinition Height="90" />
+                            <RowDefinition Height="90" />
                             <RowDefinition Height="auto" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
@@ -157,7 +159,7 @@
                         <!--#region Title-->
                         <materialDesign:Card
                             Grid.Row="0"
-                            Height="90"
+                            Height="80"
                             Margin="5,0"
                             materialDesign:ShadowAssist.ShadowDepth="Depth2"
                             MouseEnter="Card_MouseEnter"
@@ -183,7 +185,7 @@
                                     Margin="10,5,10,10"
                                     VerticalAlignment="Bottom"
                                     VerticalContentAlignment="Bottom"
-                                    materialDesign:HintAssist.Hint="The text you want to see in the list"
+                                    materialDesign:HintAssist.Hint="The text you want to see in the list."
                                     PreviewKeyDown="Textbox_KeyDown"
                                     Style="{StaticResource MaterialDesignTextBox}"
                                     TabIndex="0"
@@ -195,7 +197,7 @@
                         <!--#region Path-->
                         <materialDesign:Card
                             Grid.Row="1"
-                            Height="90"
+                            Height="80"
                             Margin="5,0"
                             materialDesign:ShadowAssist.ShadowDepth="Depth2"
                             MouseEnter="Card_MouseEnter"
@@ -237,6 +239,7 @@
                                                     BasedOn="{StaticResource MaterialDesignPopupBox}"
                                                     TargetType="materialDesign:PopupBox">
                                                     <Setter Property="ToggleContent" Value="{StaticResource SpecialIcon}" />
+                                                    <Setter Property="ToolTip" Value="Special Apps" />
                                                 </Style>
                                             </materialDesign:PopupBox.Style>
                                             <Grid
@@ -257,6 +260,10 @@
                                                         Style="{StaticResource MaterialDesignFlatLightButton}" />
                                                     <Button
                                                         Click="BtnSpecial_Click"
+                                                        Content="Mail"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
                                                         Content="Solitaire"
                                                         Style="{StaticResource MaterialDesignFlatLightButton}" />
                                                     <Button
@@ -272,9 +279,11 @@
                                     x:Name="tb2"
                                     Height="40"
                                     Margin="10,5,10,10"
+                                    Padding="1,0"
                                     VerticalAlignment="Bottom"
                                     VerticalContentAlignment="Bottom"
                                     materialDesign:HintAssist.Hint="Enter the complete path to the document, application, or URL"
+                                    materialDesign:TextBlockAssist.AutoToolTip="True"
                                     PreviewKeyDown="Textbox_KeyDown"
                                     Style="{StaticResource MaterialDesignTextBox}"
                                     TabIndex="0"
@@ -283,10 +292,10 @@
                         </materialDesign:Card>
                         <!--#endregion-->
 
-                        <!--#region Title-->
+                        <!--#region Arguments-->
                         <materialDesign:Card
                             Grid.Row="2"
-                            Height="90"
+                            Height="80"
                             Margin="5,0"
                             materialDesign:ShadowAssist.ShadowDepth="Depth2"
                             MouseEnter="Card_MouseEnter"
@@ -300,11 +309,65 @@
                                     CornerRadius="7,7,0,0"
                                     Mode="PrimaryMid"
                                     SnapsToDevicePixels="True">
-                                    <TextBlock
-                                        Margin="10,5"
-                                        FontSize="16"
-                                        FontWeight="DemiBold"
-                                        Text="Icon File" />
+                                    <Grid>
+                                        <TextBlock
+                                            Margin="10,5"
+                                            FontSize="16"
+                                            FontWeight="DemiBold"
+                                            Text="Arguments" />
+                                    </Grid>
+                                </materialDesign:ColorZone>
+                                <TextBox
+                                    x:Name="tbArgs"
+                                    Height="40"
+                                    Margin="10,5,10,10"
+                                    VerticalAlignment="Bottom"
+                                    VerticalContentAlignment="Bottom"
+                                    materialDesign:HintAssist.Hint="Enter any arguments here. "
+                                    PreviewKeyDown="Textbox_KeyDown"
+                                    Style="{StaticResource MaterialDesignTextBox}"
+                                    TabIndex="0"
+                                    Text="{Binding Arguments, UpdateSourceTrigger=Default}" />
+                            </Grid>
+                        </materialDesign:Card>
+                        <!--#endregion-->
+
+                        <!--#region Icon File-->
+                        <materialDesign:Card
+                            Grid.Row="3"
+                            Height="80"
+                            Margin="5,0"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                            MouseEnter="Card_MouseEnter"
+                            MouseLeave="Card_MouseLeave"
+                            UniformCornerRadius="7">
+                            <Grid>
+                                <materialDesign:ColorZone
+                                    Height="33"
+                                    Margin="0,0,1,0"
+                                    Padding="0,0,0,3"
+                                    CornerRadius="7,7,0,0"
+                                    Mode="PrimaryMid"
+                                    SnapsToDevicePixels="True">
+                                    <Grid>
+                                        <TextBlock
+                                            Margin="10,5"
+                                            FontSize="16"
+                                            FontWeight="DemiBold"
+                                            Text="Icon File" />
+                                        <Button
+                                            Margin="0"
+                                            HorizontalAlignment="Right"
+                                            Click="IconFile_Click"
+                                            Style="{StaticResource MaterialDesignFlatLightButton}"
+                                            ToolTip="Browse for image file">
+                                            <materialDesign:PackIcon
+                                                Width="24"
+                                                Height="24"
+                                                Foreground="{Binding ElementName=x31, Path=Foreground}"
+                                                Kind="FileImageOutline" />
+                                        </Button>
+                                    </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox
                                     x:Name="tb3"
@@ -322,7 +385,7 @@
                         <!--#endregion-->
 
                         <!--#region Buttons at bottom-->
-                        <Grid Grid.Row="3">
+                        <Grid Grid.Row="4">
                             <WrapPanel
                                 Margin="0,10"
                                 HorizontalAlignment="Center"

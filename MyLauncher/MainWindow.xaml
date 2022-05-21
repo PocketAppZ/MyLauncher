@@ -31,6 +31,7 @@
     </Window.Resources>
     <!--#endregion-->
 
+
     <materialDesign:DialogHost
         CloseOnClickAway="False"
         DialogTheme="Inherit"
@@ -204,11 +205,10 @@
                         MouseLeave="Card_MouseLeave"
                         UniformCornerRadius="7">
                         <ListBox
-                            x:Name="lbDocs"
+                            x:Name="listboxEntries"
                             Margin="10,0"
                             d:ItemsSource="{d:SampleData ItemCount=5}"
                             materialDesign:ListBoxItemAssist.ShowSelection="True"
-                            ItemsSource="{Binding Source={x:Static local:EntryClass.Entries}}"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
                             Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
