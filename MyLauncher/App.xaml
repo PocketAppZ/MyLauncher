@@ -34,7 +34,7 @@
                 Margin="4,0,4,0"
                 x:Shared="False"
                 Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=Foreground}"
-                Kind="FolderStarOutline" />
+                Kind="APPS" />
 
         </ResourceDictionary>
     </Application.Resources>
