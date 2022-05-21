@@ -95,7 +95,6 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
-
     public int UISize
     {
         get => uiSize;
@@ -168,12 +167,12 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool playSound = true;
     private int primaryColor = (int)AccentColor.Blue;
     private bool showFileIcons = true;
-    private string titleText = "Your text here";
+    private string titleText = "Click on any App Below to Open it";
     private int uiSize = (int)MySize.Default;
     private double windowHeight = 500;
     private double windowLeft = 100;
     private double windowTop = 100;
-    private double windowWidth = 300;
+    private double windowWidth = 500;
     #endregion Private backing fields
 
     #region Handle property change event
