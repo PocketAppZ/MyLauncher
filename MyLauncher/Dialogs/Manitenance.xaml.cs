@@ -24,7 +24,6 @@
         #region List changed event
         private void Entries_ListChanged(object sender, ListChangedEventArgs e)
         {
-            Debug.WriteLine(e.ListChangedType.ToString());
             EntriesChanged = true;
             btnDiscard.IsEnabled = true;
         }
