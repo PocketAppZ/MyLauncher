@@ -298,6 +298,15 @@ public partial class MainWindow : Window
         }
     }
 
+    private static ImageSource IconToImageSource(Icon icon)
+    {
+        return Imaging.CreateBitmapSourceFromHIcon(
+            icon.Handle,
+            new Int32Rect(0, 0, icon.Width, icon.Height),
+            BitmapSizeOptions.FromEmptyOptions());
+    }
+    #endregion Get file icons
+
     #region Check URL
     private static bool IsValidUrl(string uriName)
     {
@@ -306,16 +315,6 @@ public partial class MainWindow : Window
         return Rgx.IsMatch(uriName);
     }
     #endregion Check URL
-
-    private static ImageSource IconToImageSource(Icon icon)
-    {
-        return Imaging.CreateBitmapSourceFromHIcon(
-            icon.Handle,
-            new Int32Rect(0, 0, icon.Width, icon.Height),
-            BitmapSizeOptions.FromEmptyOptions());
-    }
-
-    #endregion Get file icons
 
     #region Launch app or URI
     public void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
