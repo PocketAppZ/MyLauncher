@@ -766,6 +766,23 @@ public partial class MainWindow : Window
     }
     #endregion Exit button event
 
+    #region Center the list of choices when the window is maximized
+    protected override void OnStateChanged(EventArgs e)
+    {
+        if (WindowState == WindowState.Maximized)
+        {
+            MainCard.HorizontalAlignment = HorizontalAlignment.Center;
+            MainCard.VerticalAlignment = VerticalAlignment.Center;
+        }
+        else if (WindowState == WindowState.Normal)
+        {
+            MainCard.HorizontalAlignment = HorizontalAlignment.Stretch;
+            MainCard.VerticalAlignment = VerticalAlignment.Stretch;
+        }
+        base.OnStateChanged(e);
+    }
+    #endregion Center the list of choices when the window is maximized
+
     #region Unhandled Exception Handler
     private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
     {

@@ -98,9 +98,9 @@
                                         Content="View Data File"
                                         Style="{StaticResource MaterialDesignFlatLightButton}" />
                                     <Button
-                                      Click="BtnSettings_Click"
-                                      Content="View Settings"
-                                      Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                        Click="BtnSettings_Click"
+                                        Content="View Settings"
+                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
                                 </StackPanel>
                             </Grid>
                         </materialDesign:PopupBox>
@@ -200,6 +200,7 @@
 
                     <!--#region ListBox in Card-->
                     <materialDesign:Card
+                        x:Name="MainCard"
                         Grid.Row="0"
                         Margin="10,5"
                         Padding="10"
