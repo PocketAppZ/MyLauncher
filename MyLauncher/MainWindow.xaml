@@ -31,11 +31,10 @@
     </Window.Resources>
     <!--#endregion-->
 
-
     <materialDesign:DialogHost
         CloseOnClickAway="False"
         DialogTheme="Inherit"
-        Identifier="MainDialogHost" >
+        Identifier="MainDialogHost">
 
         <Grid x:Name="MainGrid">
             <!--#region Row definitions-->
@@ -86,11 +85,6 @@
                                 Margin="0">
                                 <StackPanel Orientation="Vertical">
                                     <Button
-                                        Click="BtnData_Click"
-                                        Content="View Data File"
-                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                    <Separator />
-                                    <Button
                                         Click="BtnLog_Click"
                                         Content="View Log File"
                                         Style="{StaticResource MaterialDesignFlatLightButton}" />
@@ -98,6 +92,15 @@
                                         Click="BtnReadme_Click"
                                         Content="View ReadMe"
                                         Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                    <Separator />
+                                    <Button
+                                        Click="BtnData_Click"
+                                        Content="View Data File"
+                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                    <Button
+                                      Click="BtnSettings_Click"
+                                      Content="View Settings"
+                                      Style="{StaticResource MaterialDesignFlatLightButton}" />
                                 </StackPanel>
                             </Grid>
                         </materialDesign:PopupBox>
@@ -119,8 +122,8 @@
                         Width="auto"
                         Margin="0,16,0,16"
                         HorizontalAlignment="Left"
-                        FontSize="18"
                         Cursor="Hand"
+                        FontSize="18"
                         SelectionChanged="NavListBox_SelectionChanged"
                         Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
                         <ListBoxItem>
@@ -189,13 +192,14 @@
                     <!--#region Row definitions-->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="auto" />
+                        <RowDefinition
+                            Height="auto"
+                            MinHeight="7" />
                     </Grid.RowDefinitions>
                     <!--#endregion-->
 
                     <!--#region ListBox in Card-->
                     <materialDesign:Card
-                        x:Name="P1Card"
                         Grid.Row="0"
                         Margin="10,5"
                         Padding="10"
@@ -224,22 +228,6 @@
                                     TargetType="ScrollBar" />
                             </ListBox.Resources>
 
-                            <ListBox.ItemContainerStyle>
-                                <Style
-                                    BasedOn="{StaticResource {x:Type ListBoxItem}}"
-                                    TargetType="ListBoxItem">
-                                    <Setter Property="Height" Value="60" />
-                                    <Setter Property="Padding" Value="3,3,20,0" />
-                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
-                                    <Setter Property="BorderThickness" Value="2" />
-                                    <Setter Property="Margin" Value="10,5,10,5" />
-                                    <Setter Property="Cursor" Value="Hand" />
-                                    <EventSetter
-                                        Event="MouseUp"
-                                        Handler="ListBoxItem_MouseClick" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -253,20 +241,22 @@
                                         <TextBlock
                                             Margin="10,0,0,0"
                                             VerticalAlignment="Center"
+                                            FontFamily="Segoe UI"
                                             FontSize="18"
-                                            FontWeight="DemiBold"
                                             Text="{Binding Title}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </materialDesign:Card>
+                    <!--#endregion-->
 
                     <!--#region Buttons-->
                     <DockPanel
                         Grid.Row="1"
                         Margin="0,15"
-                        HorizontalAlignment="Center">
+                        HorizontalAlignment="Center"
+                        Visibility="{Binding ShowExitButton, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}">
                         <Button
                             x:Name="btnExit"
                             Width="110"

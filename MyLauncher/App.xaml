@@ -17,7 +17,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!--  Style for the page headers  -->
+            <!--#region  Style for the page headers-->
             <Style
                 x:Key="PageHeader"
                 TargetType="TextBlock">
@@ -25,8 +25,9 @@
                 <Setter Property="FontWeight" Value="DemiBold" />
                 <Setter Property="Padding" Value="10,2" />
             </Style>
+            <!--#endregion-->
 
-            <!--  Change icon for PopupBox on Maintenance page  -->
+            <!--#region Change icon for PopupBox on Maintenance page-->
             <materialDesign:PackIcon
                 x:Key="SpecialIcon"
                 Width="24"
@@ -34,7 +35,43 @@
                 Margin="4,0,4,0"
                 x:Shared="False"
                 Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=Foreground}"
-                Kind="APPS" />
+                Kind="Apps" />
+            <!--#endregion-->
+
+            <!--#region ListBox Styles-->
+            <Style
+                x:Key="ListBoxComfortable"
+                BasedOn="{StaticResource {x:Type ListBoxItem}}"
+                TargetType="ListBoxItem">
+                <Setter Property="Height" Value="60" />
+                <Setter Property="Padding" Value="3,3,20,5" />
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
+                <Setter Property="BorderThickness" Value="{Binding BorderWidth, Source={x:Static local:UserSettings.Setting}}" />
+                <Setter Property="Margin" Value="10,5,10,5" />
+                <Setter Property="Cursor" Value="Hand" />
+                <EventSetter
+                    Event="MouseUp"
+                    Handler="ListBoxItem_MouseClick" />
+            </Style>
+
+            <Style
+                x:Key="ListBoxCompact"
+                BasedOn="{StaticResource ResourceKey=ListBoxComfortable}"
+                TargetType="ListBoxItem">
+                <Setter Property="Height" Value="58" />
+                <Setter Property="Padding" Value="3,2,15,1" />
+                <Setter Property="Margin" Value="8,3,5,3" />
+            </Style>
+
+            <Style
+                x:Key="ListBoxSpacious"
+                BasedOn="{StaticResource ResourceKey=ListBoxComfortable}"
+                TargetType="ListBoxItem">
+                <Setter Property="Height" Value="65" />
+                <Setter Property="Padding" Value="3,5,17,5" />
+                <Setter Property="Margin" Value="11,8,11,8" />
+            </Style>
+            <!--#endregion-->
 
         </ResourceDictionary>
     </Application.Resources>

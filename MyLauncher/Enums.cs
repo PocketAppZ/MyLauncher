@@ -50,3 +50,27 @@ internal enum AccentColor
     Grey = 17,
     BlueGray = 18
 }
+
+internal enum Weight
+{
+    Thin = 0,
+    Regular = 1,
+    SemiBold = 2,
+    Bold = 3
+}
+
+internal enum Spacing
+{
+    Compact = 0,
+    Comfortable = 1,
+    Wide = 2
+}
+
+internal enum BorderWidth
+{
+    None = 0,
+    Thin = 1,
+    Default = 2,
+    Thick = 3,
+    Jumbo = 5
+}

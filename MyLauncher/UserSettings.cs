@@ -15,6 +15,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public int BorderWidth
+    {
+        get { return borderWidth; }
+        set
+        {
+            borderWidth = value;
+            OnPropertyChanged();
+        }
+    }
+
     public int DarkMode
     {
         get => darkmode;
@@ -55,6 +65,26 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public int ListBoxFontWeight
+    {
+        get { return listBoxFontWeight; }
+        set
+        {
+            listBoxFontWeight = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int ListBoxSpacing
+    {
+        get => listBoxSpacing;
+        set
+        {
+            listBoxSpacing = value;
+            OnPropertyChanged();
+        }
+    }
+
     public bool PlaySound
     {
         get => playSound;
@@ -71,6 +101,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         set
         {
             primaryColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool ShowExitButton
+    {
+        get { return showExitButton; }
+        set
+        {
+            showExitButton = value;
             OnPropertyChanged();
         }
     }
@@ -160,12 +200,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
 
     #region Private backing fields
     private bool allowRightButton = true;
+    private int borderWidth = 2;
     private int darkmode = (int)ThemeType.Light;
     private bool exitOnOpen = false;
     private bool includeDebug = false;
     private bool keepOnTop = false;
+    private int listBoxFontWeight = (int)Weight.Regular;
+    private int listBoxSpacing = (int)Spacing.Comfortable;
     private bool playSound = true;
     private int primaryColor = (int)AccentColor.Blue;
+    private bool showExitButton = true;
     private bool showFileIcons = true;
     private string titleText = "Click on any App Below to Open it";
     private int uiSize = (int)MySize.Default;

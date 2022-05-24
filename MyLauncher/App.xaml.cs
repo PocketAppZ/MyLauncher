@@ -51,4 +51,9 @@ public partial class App : Application
             Environment.Exit(0);
         }
     }
+
+    private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
+    {
+        (Current.MainWindow as MainWindow)?.ListBoxItem_MouseClick(sender, e);
+    }
 }

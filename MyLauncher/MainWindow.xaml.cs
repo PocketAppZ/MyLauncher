@@ -34,7 +34,7 @@ public partial class MainWindow : Window
     public void ReadSettings()
     {
         // Set NLog configuration
-        NLHelpers.NLogConfig(true);
+        NLHelpers.NLogConfig(false);
 
         // Unhandled exception handler
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -66,6 +66,12 @@ public partial class MainWindow : Window
         // Primary color
         SetPrimaryColor((AccentColor)UserSettings.Setting.PrimaryColor);
 
+        // Font
+        SetFontWeight((Weight)UserSettings.Setting.ListBoxFontWeight);
+
+        // Spacing
+        SetSpacing((Spacing)UserSettings.Setting.ListBoxSpacing);
+
         // UI size
         double size = UIScale((MySize)UserSettings.Setting.UISize);
         MainGrid.LayoutTransform = new ScaleTransform(size, size);
@@ -80,7 +86,7 @@ public partial class MainWindow : Window
     {
         PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName);
         object newValue = prop?.GetValue(sender, null);
-        log.Debug($"Setting change: {e.PropertyName} New Value: {newValue}");
+        log.Debug($"Setting change: \"{e.PropertyName}\" New Value: \"{newValue}\"");
         switch (e.PropertyName)
         {
             case nameof(UserSettings.Setting.KeepOnTop):
@@ -95,8 +101,16 @@ public partial class MainWindow : Window
                 SetBaseTheme((ThemeType)newValue);
                 break;
 
+            case nameof(UserSettings.Setting.ListBoxSpacing):
+                SetSpacing((Spacing)newValue);
+                break;
+
             case nameof(UserSettings.Setting.PrimaryColor):
                 SetPrimaryColor((AccentColor)newValue);
+                break;
+
+            case nameof(UserSettings.Setting.ListBoxFontWeight):
+                SetFontWeight((Weight)newValue);
                 break;
 
             case nameof(UserSettings.Setting.UISize):
@@ -304,7 +318,7 @@ public partial class MainWindow : Window
     #endregion Get file icons
 
     #region Launch app or URI
-    private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
+    public void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
     {
         if (((ListBoxItem)sender).Content is not EntryClass || listboxEntries.SelectedItem == null)
         {
@@ -383,6 +397,17 @@ public partial class MainWindow : Window
     {
         string dir = AppInfo.AppDirectory;
         TextFileViewer.ViewTextFile(Path.Combine(dir, "ReadMe.txt"));
+    }
+
+    private void BtnSettings_Click(object sender, RoutedEventArgs e)
+    {
+        UserSettings.Setting.IncludeDebug = true;
+        log.Debug("Current Settings:");
+        foreach (KeyValuePair<string, object> item in UserSettings.ListSettings())
+        {
+            log.Debug($"  {item.Key} = {item.Value}");
+        }
+        TextFileViewer.ViewTextFile(NLHelpers.GetLogfileName());
     }
     #endregion PopupBox button events
 
@@ -507,15 +532,65 @@ public partial class MainWindow : Window
     }
     #endregion Set primary color
 
+    #region Set the row spacing
+    /// <summary>
+    /// Sets the padding & margin around the items in the listbox
+    /// </summary>
+    /// <param name="spacing"></param>
+    private void SetSpacing(Spacing spacing)
+    {
+        switch (spacing)
+        {
+            case Spacing.Compact:
+                listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxCompact") as Style;
+                break;
+            case Spacing.Comfortable:
+                listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxComfortable") as Style;
+                break;
+            case Spacing.Wide:
+                listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxSpacious") as Style;
+                break;
+        }
+    }
+    #endregion Set the row spacing
+
+    #region Set the font weight
+    /// <summary>
+    /// Sets the weight of the font in the main window
+    /// </summary>
+    /// <param name="weight"></param>
+    private void SetFontWeight(Weight weight)
+    {
+        switch (weight)
+        {
+            case Weight.Thin:
+                listboxEntries.FontWeight = FontWeights.Thin;
+                break;
+            case Weight.Regular:
+                listboxEntries.FontWeight = FontWeights.Regular;
+                break;
+            case Weight.SemiBold:
+                listboxEntries.FontWeight = FontWeights.SemiBold;
+                break;
+            case Weight.Bold:
+                listboxEntries.FontWeight = FontWeights.Bold;
+                break;
+            default:
+                listboxEntries.FontWeight = FontWeights.Regular;
+                break;
+        }
+    }
+    #endregion Set the font weight
+
     #region UI scale converter
     private static double UIScale(MySize size)
     {
         switch (size)
         {
             case MySize.Smallest:
-                return 0.90;
+                return 0.85;
             case MySize.Smaller:
-                return 0.95;
+                return 0.92;
             case MySize.Default:
                 return 1.0;
             case MySize.Large:
