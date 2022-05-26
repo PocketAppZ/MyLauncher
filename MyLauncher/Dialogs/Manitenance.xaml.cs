@@ -270,6 +270,18 @@
                     newitem.FilePathOrURI = "bingweather:";
                     newitem.IconSource = "weather.png";
                     break;
+                case "Restart":
+                    newitem.Title = "Restart";
+                    newitem.FilePathOrURI = "shutdown.exe";
+                    newitem.Arguments = "/r /t 0";
+                    newitem.IconSource = "restart.png";
+                    break;
+                case "Shutdown":
+                    newitem.Title = "Shutdown";
+                    newitem.FilePathOrURI = "shutdown.exe";
+                    newitem.Arguments = "/s /t 0";
+                    newitem.IconSource = "shutdown.png";
+                    break;
             }
             if (tb1.Text != string.Empty)
             {
@@ -316,6 +328,16 @@
                 return;
             }
             PrevEntry = listbox1.SelectedItem;
+        }
+
+        private void BtnRestart_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnShutdown_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -70,6 +70,12 @@
     <None Update="Icons\redX.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Icons\restart.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Icons\shutdown.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Icons\weather.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

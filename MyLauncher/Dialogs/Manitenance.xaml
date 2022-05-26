@@ -173,11 +173,66 @@
                                     CornerRadius="7,7,0,0"
                                     Mode="PrimaryMid"
                                     SnapsToDevicePixels="True">
-                                    <TextBlock
-                                        Margin="10,5"
-                                        FontSize="16"
-                                        FontWeight="DemiBold"
-                                        Text="Title" />
+                                    <Grid>
+                                        <TextBlock
+                                            Margin="10,5"
+                                            FontSize="16"
+                                            FontWeight="DemiBold"
+                                            Text="Title" />
+                                        <materialDesign:PopupBox
+                                            Margin="0,0,10,0"
+                                            HorizontalAlignment="Right"
+                                            PlacementMode="LeftAndAlignBottomEdges">
+                                            <materialDesign:PopupBox.Style>
+                                                <Style
+                                                    BasedOn="{StaticResource MaterialDesignPopupBox}"
+                                                    TargetType="materialDesign:PopupBox">
+                                                    <Setter Property="ToggleContent" Value="{StaticResource SpecialIcon}" />
+                                                    <Setter Property="ToolTip" Value="Special Apps" />
+                                                </Style>
+                                            </materialDesign:PopupBox.Style>
+                                            <Grid
+                                                Width="150"
+                                                Margin="0">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock
+                                                        Text="Speical Apps"
+                                                        TextAlignment="Center" />
+                                                    <Separator />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Calculator"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Calendar"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Mail"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Solitaire"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Weather"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Separator />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Restart"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                    <Button
+                                                        Click="BtnSpecial_Click"
+                                                        Content="Shutdown"
+                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </materialDesign:PopupBox>
+
+                                    </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox
                                     x:Name="tb1"
@@ -230,49 +285,6 @@
                                                 Foreground="{Binding ElementName=x31, Path=Foreground}"
                                                 Kind="FolderOpenOutline" />
                                         </Button>
-                                        <materialDesign:PopupBox
-                                            Margin="0,0,50,0"
-                                            HorizontalAlignment="Right"
-                                            PlacementMode="LeftAndAlignBottomEdges">
-                                            <materialDesign:PopupBox.Style>
-                                                <Style
-                                                    BasedOn="{StaticResource MaterialDesignPopupBox}"
-                                                    TargetType="materialDesign:PopupBox">
-                                                    <Setter Property="ToggleContent" Value="{StaticResource SpecialIcon}" />
-                                                    <Setter Property="ToolTip" Value="Special Apps" />
-                                                </Style>
-                                            </materialDesign:PopupBox.Style>
-                                            <Grid
-                                                Width="150"
-                                                Margin="0">
-                                                <StackPanel Orientation="Vertical">
-                                                    <TextBlock
-                                                        Text="Speical Apps"
-                                                        TextAlignment="Center" />
-                                                    <Separator />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Calculator"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Calendar"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Mail"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Solitaire"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Weather"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                </StackPanel>
-                                            </Grid>
-                                        </materialDesign:PopupBox>
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox

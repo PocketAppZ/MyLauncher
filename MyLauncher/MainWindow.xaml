@@ -12,6 +12,7 @@
     FontSize="14"
     KeyDown="Window_KeyDown"
     MouseWheel="Window_MouseWheel"
+    SnapsToDevicePixels="True"
     Style="{StaticResource MaterialDesignWindow}"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
