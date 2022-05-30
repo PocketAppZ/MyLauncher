@@ -85,6 +85,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public bool MinimizeToTray
+    {
+        get => minimizeToTray;
+        set
+        {
+            minimizeToTray = value;
+            OnPropertyChanged();
+        }
+    }
+
     public bool PlaySound
     {
         get => playSound;
@@ -121,6 +131,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         set
         {
             showFileIcons = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool StartMinimized
+    {
+        get => startMinimized;
+        set
+        {
+            startMinimized = value;
             OnPropertyChanged();
         }
     }
@@ -207,10 +227,12 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool keepOnTop = false;
     private int listBoxFontWeight = (int)Weight.Regular;
     private int listBoxSpacing = (int)Spacing.Comfortable;
+    private bool minimizeToTray = false;
     private bool playSound = true;
     private int primaryColor = (int)AccentColor.Blue;
     private bool showExitButton = true;
     private bool showFileIcons = true;
+    private bool startMinimized = false;
     private string titleText = "Click on any App Below to Open it";
     private int uiSize = (int)MySize.Default;
     private double windowHeight = 500;

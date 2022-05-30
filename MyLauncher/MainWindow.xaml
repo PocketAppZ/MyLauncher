@@ -6,13 +6,15 @@
     xmlns:local="clr-namespace:MyLauncher"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tb="http://www.hardcodet.net/taskbar"
     MinWidth="200"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
     FontSize="14"
     KeyDown="Window_KeyDown"
+    Loaded="Window_Loaded"
     MouseWheel="Window_MouseWheel"
-    SnapsToDevicePixels="True"
+    StateChanged="Window_StateChanged"
     Style="{StaticResource MaterialDesignWindow}"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -45,6 +47,41 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <!--#endregion-->
+
+            <tb:TaskbarIcon
+                x:Name="tbIcon"
+                IconSource="/Images/ML.ico"
+                MenuActivation="RightClick"
+                ToolTipText="My Launcher"
+                TrayLeftMouseDown="TbIconShowMainWindow_Click"
+                TrayMouseDoubleClick="TbIconShowMainWindow_Click"
+                Visibility="Hidden">
+                <tb:TaskbarIcon.ContextMenu>
+                    <ContextMenu Name="trayMenu">
+                        <MenuItem
+                            Foreground="{DynamicResource PrimaryHueMidBrush}"
+                            Header="{Binding Source={x:Static local:AppInfo.TitleVersion}}"
+                            HeaderStringFormat="My Launcher {0}"
+                            IsEnabled="False"
+                            IsHitTestVisible="False" />
+                        <Separator />
+                        <MenuItem
+                            Click="TbIconShowMainWindow_Click"
+                            Header="Show Main Window" />
+                        <Separator />
+                        <MenuItem
+                            Click="TbIconMaintenance_Click"
+                            Header="List Maintenance" />
+                        <MenuItem
+                            Click="TbIconSettings_Click"
+                            Header="Settings" />
+                        <Separator />
+                        <MenuItem
+                            Click="BtnExit_Click"
+                            Header="Exit My Launcher" />
+                    </ContextMenu>
+                </tb:TaskbarIcon.ContextMenu>
+            </tb:TaskbarIcon>
 
             <!--#region ColorZone with navigation icon-->
             <DockPanel

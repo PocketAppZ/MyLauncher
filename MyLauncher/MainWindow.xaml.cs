@@ -76,6 +76,20 @@ public partial class MainWindow : Window
         double size = UIScale((MySize)UserSettings.Setting.UISize);
         MainGrid.LayoutTransform = new ScaleTransform(size, size);
 
+        // Minimize to tray
+        if (UserSettings.Setting.MinimizeToTray)
+        {
+            tbIcon.Visibility = Visibility.Visible;
+        }
+
+        // Start minimized
+        if (UserSettings.Setting.StartMinimized)
+        {
+            //Hide();
+            WindowState = WindowState.Minimized;
+            Debug.WriteLine("Minimized via settings");
+        }
+
         // Settings change event
         UserSettings.Setting.PropertyChanged += UserSettingChanged;
     }
@@ -111,6 +125,10 @@ public partial class MainWindow : Window
 
             case nameof(UserSettings.Setting.ListBoxFontWeight):
                 SetFontWeight((Weight)newValue);
+                break;
+
+            case nameof(UserSettings.Setting.MinimizeToTray):
+                tbIcon.Visibility = (bool)newValue ? Visibility.Visible : Visibility.Hidden;
                 break;
 
             case nameof(UserSettings.Setting.UISize):
@@ -711,6 +729,43 @@ public partial class MainWindow : Window
     #endregion Smaller/Larger
 
     #region Window Events
+    private void Window_StateChanged(object sender, EventArgs e)
+    {
+        if (WindowState == WindowState.Minimized)
+        {
+            if (UserSettings.Setting.MinimizeToTray)
+            {
+                Hide();
+            }
+        }
+        else if (WindowState == WindowState.Maximized)
+        {
+            MainCard.HorizontalAlignment = HorizontalAlignment.Center;
+            MainCard.VerticalAlignment = VerticalAlignment.Center;
+        }
+        else if (WindowState == WindowState.Normal)
+        {
+            MainCard.HorizontalAlignment = HorizontalAlignment.Stretch;
+            MainCard.VerticalAlignment = VerticalAlignment.Stretch;
+        }
+    }
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (UserSettings.Setting.StartMinimized)
+        {
+            if (UserSettings.Setting.MinimizeToTray)
+            {
+                Hide();
+                tbIcon.ToolTipText = $"My Launcher {AppInfo.TitleVersion}\nClick to Show Main Window";
+            }
+            else
+            {
+                WindowState = WindowState.Minimized;
+            }
+        }
+    }
+
     private void Window_Closing(object sender, CancelEventArgs e)
     {
         stopwatch.Stop();
@@ -718,6 +773,9 @@ public partial class MainWindow : Window
 
         // Shut down NLog
         LogManager.Shutdown();
+
+        // Dispose of the tray icon
+        tbIcon.Dispose();
 
         // Save settings
         UserSettings.Setting.WindowLeft = Math.Floor(Left);
@@ -727,6 +785,30 @@ public partial class MainWindow : Window
         UserSettings.SaveSettings();
     }
     #endregion Window Events
+
+    #region Tray icon menu events
+    internal void TbIconShowMainWindow_Click(object sender, RoutedEventArgs e)
+    {
+        ShowMainWindow();
+    }
+
+    private void TbIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        ShowMainWindow();
+    }
+
+    private void TbIconSettings_Click(object sender, RoutedEventArgs e)
+    {
+        ShowMainWindow();
+        NavigateToPage(NavPage.Settings);
+    }
+
+    private void TbIconMaintenance_Click(object sender, RoutedEventArgs e)
+    {
+        ShowMainWindow();
+        NavigateToPage(NavPage.Maintenance);
+    }
+    #endregion Tray icon menu events
 
     #region Get the menu JSON file name
     private static string GetJsonFile()
@@ -765,22 +847,17 @@ public partial class MainWindow : Window
     }
     #endregion Exit button event
 
-    #region Center the list of choices when the window is maximized
-    protected override void OnStateChanged(EventArgs e)
+    #region Show Main window
+    private void ShowMainWindow()
     {
-        if (WindowState == WindowState.Maximized)
-        {
-            MainCard.HorizontalAlignment = HorizontalAlignment.Center;
-            MainCard.VerticalAlignment = VerticalAlignment.Center;
-        }
-        else if (WindowState == WindowState.Normal)
-        {
-            MainCard.HorizontalAlignment = HorizontalAlignment.Stretch;
-            MainCard.VerticalAlignment = VerticalAlignment.Stretch;
-        }
-        base.OnStateChanged(e);
+        Show();
+        WindowState = WindowState.Normal;
+        Topmost = true;
+        Focus();
+        Thread.Sleep(50);
+        Topmost = UserSettings.Setting.KeepOnTop;
     }
-    #endregion Center the list of choices when the window is maximized
+    #endregion Show Main window
 
     #region Unhandled Exception Handler
     private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
