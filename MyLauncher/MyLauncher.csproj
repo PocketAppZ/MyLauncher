@@ -16,8 +16,9 @@
     <SignAssembly>False</SignAssembly>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <Resource Include="Images\ML.ico" />
+    <Resource Include="Images\ML.png" />
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

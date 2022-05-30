@@ -1,24 +1,28 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
-/// <summary>
-/// <para>
-/// This inspired by the of answers from this question
-/// https://stackoverflow.com/questions/19147/what-is-the-correct-way-to-create-a-single-instance-wpf-application
-/// </para>
-/// <para>
-/// And this blog post
-/// https://weblog.west-wind.com/posts/2016/May/13/Creating-Single-Instance-WPF-Applications-that-open-multiple-Files
-/// </para>
-/// </summary>
 namespace MyLauncher;
 
 public partial class App : Application
 {
     public Mutex Mutex;
-
+    public static string[] Args { get; set; }
     public App()
     {
         SingleInstanceCheck();
+    }
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        // Show splash screen unless command line argument "NoSplash" is specified
+        Args = e.Args;
+        if (!Args.Any(s => s.Contains("NoSplash", StringComparison.OrdinalIgnoreCase)))
+        {
+            const string splashPath = @"\Images\ML.png";
+            SplashScreen splashScreen = new(splashPath);
+            splashScreen.Show(true);
+        }
+
+        base.OnStartup(e);
     }
 
     public void SingleInstanceCheck()
