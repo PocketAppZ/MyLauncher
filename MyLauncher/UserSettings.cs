@@ -150,7 +150,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         get => titleText;
         set
         {
-            titleText = value.Trim();
+            titleText = value;
             OnPropertyChanged();
         }
     }
