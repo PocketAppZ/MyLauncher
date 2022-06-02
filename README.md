@@ -10,5 +10,7 @@
 
 My Launcher is a simple application launcher that I built for my mother.
 
-## Screenshot
-![My Launcher screenshot](https://github.com/Timthreetwelve/MyLauncher/blob/main/MyLauncher.png)
+## Screenshots
+![My Launcher screenshot](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/MyLauncher.png)
+
+![List Maintenance](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/List_Maintenance.png)
