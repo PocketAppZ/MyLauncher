@@ -27,17 +27,6 @@
             </Style>
             <!--#endregion-->
 
-            <!--#region Change icon for PopupBox on Maintenance page-->
-            <materialDesign:PackIcon
-                x:Key="SpecialIcon"
-                Width="24"
-                Height="24"
-                Margin="4,0,4,0"
-                x:Shared="False"
-                Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=materialDesign:PopupBox}, Path=Foreground}"
-                Kind="Apps" />
-            <!--#endregion-->
-
             <!--#region ListBox Styles-->
             <Style
                 x:Key="ListBoxComfortable"
@@ -52,6 +41,15 @@
                 <EventSetter
                     Event="MouseUp"
                     Handler="ListBoxItem_MouseClick" />
+            </Style>
+
+            <Style
+                x:Key="ListBoxScrunched"
+                BasedOn="{StaticResource ResourceKey=ListBoxComfortable}"
+                TargetType="ListBoxItem">
+                <Setter Property="Height" Value="50" />
+                <Setter Property="Padding" Value="2,2,10,1" />
+                <Setter Property="Margin" Value="8,1,5,1" />
             </Style>
 
             <Style

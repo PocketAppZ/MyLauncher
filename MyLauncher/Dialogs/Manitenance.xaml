@@ -9,12 +9,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     Width="auto"
-    Height="480"
+    Height="570"
+    Loaded="UserControl_Loaded"
     TextElement.FontSize="14"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
-    TextOptions.TextRenderingMode="Auto">
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
 
     <!--#region Resources-->
     <UserControl.Resources>
@@ -27,13 +29,12 @@
         BorderThickness="1"
         CornerRadius="0">
         <Grid>
+            <!--#region Row definitions-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+            <!--#endregion-->
 
             <!--#region ColorZone with close button-->
             <materialDesign:ColorZone
@@ -75,7 +76,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="5" />
                 </Grid.ColumnDefinitions>
@@ -102,14 +103,26 @@
                         dd:DragDrop.IsDropTarget="True"
                         dd:DragDrop.UseDefaultDragAdorner="False"
                         AllowDrop="True"
-                        SelectionChanged="Listbox1_SelectionChanged">
-
+                        SelectionChanged="Listbox1_SelectionChanged"
+                        TabIndex="0">
                         <ListBox.Resources>
                             <Style
                                 BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"
                                 TargetType="ScrollBar" />
                         </ListBox.Resources>
-
+                        <ListBox.ItemContainerStyle>
+                            <Style
+                                BasedOn="{StaticResource {x:Type ListBoxItem}}"
+                                TargetType="ListBoxItem">
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding EntryType}"
+                                        Value="1">
+                                        <Setter Property="Foreground" Value="{DynamicResource SecondaryHueDarkBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock
@@ -121,18 +134,6 @@
                 </materialDesign:Card>
                 <!--#endregion-->
 
-                <!--#region GridSplitter-->
-                <GridSplitter
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    Width="3"
-                    Margin="0,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    BorderThickness="2"
-                    IsTabStop="False"
-                    Style="{StaticResource MaterialDesignGridSplitter}" />
-                <!--#endregion-->
 
                 <!--#region Text boxes and buttons on the right side-->
                 <Grid
@@ -151,12 +152,13 @@
                             <RowDefinition Height="90" />
                             <RowDefinition Height="90" />
                             <RowDefinition Height="90" />
+                            <RowDefinition Height="90" />
                             <RowDefinition Height="auto" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <!--#endregion-->
 
-                        <!--#region Title-->
+                        <!--#region Title with "special" apps button-->
                         <materialDesign:Card
                             Grid.Row="0"
                             Height="80"
@@ -177,65 +179,113 @@
                                         <TextBlock
                                             Margin="10,5"
                                             FontSize="16"
-                                            FontWeight="DemiBold"
-                                            Text="Title" />
-                                        <materialDesign:PopupBox
-                                            Margin="0,0,10,0"
-                                            HorizontalAlignment="Right"
-                                            PlacementMode="LeftAndAlignBottomEdges">
-                                            <materialDesign:PopupBox.Style>
+                                            FontWeight="DemiBold">
+                                            <TextBlock.Style>
                                                 <Style
-                                                    BasedOn="{StaticResource MaterialDesignPopupBox}"
-                                                    TargetType="materialDesign:PopupBox">
-                                                    <Setter Property="ToggleContent" Value="{StaticResource SpecialIcon}" />
-                                                    <Setter Property="ToolTip" Value="Special Apps" />
+                                                    BasedOn="{StaticResource {x:Type TextBlock}}"
+                                                    TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="Title" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger
+                                                            Binding="{Binding EntryType}"
+                                                            Value="1">
+                                                            <Setter Property="Text" Value="Pop-up List Title" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
                                                 </Style>
-                                            </materialDesign:PopupBox.Style>
-                                            <Grid
-                                                Width="150"
-                                                Margin="0">
-                                                <StackPanel Orientation="Vertical">
-                                                    <TextBlock
-                                                        Text="Speical Apps"
-                                                        TextAlignment="Center" />
-                                                    <Separator />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Calculator"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Calendar"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Mail"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Solitaire"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Weather"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Separator />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Restart"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                    <Button
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Shutdown"
-                                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                                </StackPanel>
-                                            </Grid>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <materialDesign:PopupBox
+                                            x:Name="pbxSpecialApps"
+                                            Margin="0,0,10,0"
+                                            Padding="0"
+                                            HorizontalAlignment="Right"
+                                            PlacementMode="LeftAndAlignTopEdges">
+                                            <materialDesign:PopupBox.ToggleContent>
+                                                <materialDesign:PackIcon
+                                                    Width="24"
+                                                    Height="24"
+                                                    Foreground="{Binding ElementName=x31, Path=Foreground}"
+                                                    Kind="Apps" />
+                                            </materialDesign:PopupBox.ToggleContent>
+                                            <Border
+                                                Padding="3"
+                                                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderThickness="2">
+                                                <Grid
+                                                    Width="180"
+                                                    Margin="0"
+                                                    Background="{DynamicResource MaterialDesignPaper}">
+                                                    <StackPanel Orientation="Vertical">
+                                                        <TextBlock
+                                                            Margin="15,10,0,10"
+                                                            FontSize="17"
+                                                            Text="Speical Apps"
+                                                            TextAlignment="Left" />
+                                                        <Separator />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="BtnSpecial_Click"
+                                                            Content="Calculator" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="BtnSpecial_Click"
+                                                            Content="Calendar" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="BtnSpecial_Click"
+                                                            Content="Email" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="BtnSpecial_Click"
+                                                            Content="Solitaire" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="BtnSpecial_Click"
+                                                            Content="Weather" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="BtnSpecial_Click"
+                                                            Content="Windows Settings" />
+                                                        <Separator />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="BtnSpecial_Click"
+                                                            Content="Restart" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="BtnSpecial_Click"
+                                                            Content="Shutdown" />
+                                                        <Separator />
+                                                        <Button
+                                                            HorizontalContentAlignment="Left"
+                                                            Click="CancelNewItem_Click"
+                                                            Content="Cancel"
+                                                            Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
                                         </materialDesign:PopupBox>
-
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox
-                                    x:Name="tb1"
+                                    x:Name="tbTitle"
                                     Height="40"
                                     Margin="10,5,10,10"
                                     VerticalAlignment="Bottom"
@@ -249,7 +299,7 @@
                         </materialDesign:Card>
                         <!--#endregion-->
 
-                        <!--#region Path-->
+                        <!--#region Path or URL with file picker button-->
                         <materialDesign:Card
                             Grid.Row="1"
                             Height="80"
@@ -283,12 +333,24 @@
                                                 Width="24"
                                                 Height="24"
                                                 Foreground="{Binding ElementName=x31, Path=Foreground}"
+                                                Kind="FileDocumentOutline" />
+                                        </Button>
+                                        <Button
+                                            Margin="0,0,35,0"
+                                            HorizontalAlignment="Right"
+                                            Click="BtnFolderPicker_Click"
+                                            Style="{StaticResource MaterialDesignFlatLightButton}"
+                                            ToolTip="Browse for fold">
+                                            <materialDesign:PackIcon
+                                                Width="24"
+                                                Height="24"
+                                                Foreground="{Binding ElementName=x31, Path=Foreground}"
                                                 Kind="FolderOpenOutline" />
                                         </Button>
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox
-                                    x:Name="tb2"
+                                    x:Name="tbPath"
                                     Height="40"
                                     Margin="10,5,10,10"
                                     Padding="1,0"
@@ -344,7 +406,7 @@
                         </materialDesign:Card>
                         <!--#endregion-->
 
-                        <!--#region Icon File-->
+                        <!--#region Icon File with file picker button-->
                         <materialDesign:Card
                             Grid.Row="3"
                             Height="80"
@@ -382,7 +444,7 @@
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox
-                                    x:Name="tb3"
+                                    x:Name="tbIconFile"
                                     Height="40"
                                     Margin="10,5,10,10"
                                     VerticalAlignment="Bottom"
@@ -396,21 +458,125 @@
                         </materialDesign:Card>
                         <!--#endregion-->
 
+                        <!--#region ComboBox-->
+                        <materialDesign:Card
+                            Grid.Row="4"
+                            Height="80"
+                            Margin="5,0"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                            MouseEnter="Card_MouseEnter"
+                            MouseLeave="Card_MouseLeave"
+                            UniformCornerRadius="7">
+                            <Grid>
+                                <materialDesign:ColorZone
+                                    Height="33"
+                                    Margin="0,0,1,0"
+                                    Padding="0,0,0,3"
+                                    CornerRadius="7,7,0,0"
+                                    Mode="PrimaryMid"
+                                    SnapsToDevicePixels="True">
+                                    <Grid>
+                                        <TextBlock
+                                            Margin="10,5"
+                                            FontSize="16"
+                                            FontWeight="DemiBold"
+                                            Text="Child of ..." />
+                                    </Grid>
+                                </materialDesign:ColorZone>
+                                <ComboBox
+                                    Name="HostCombo"
+                                    Height="40"
+                                    Margin="10,5,10,10"
+                                    Padding="2"
+                                    DisplayMemberPath="Title"
+                                    SelectedValuePath="HostID"
+                                    SelectedValue="{Binding ChildOfHost}"
+                                    VerticalAlignment="Bottom"
+                                    VerticalContentAlignment="Bottom"
+                                    materialDesign:HintAssist.Hint="A really good explainer goes here."
+                                    TabIndex="4">
+                                </ComboBox>
+                            </Grid>
+                        </materialDesign:Card>
+                        <!--#endregion-->
+
+
                         <!--#region Buttons at bottom-->
-                        <Grid Grid.Row="4">
+                        <Grid Grid.Row="6">
                             <WrapPanel
                                 Margin="0,10"
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal">
-
+                                <!--  New Item button opens a PopupBox with item type choices  -->
                                 <Button
                                     Width="140"
                                     Margin="10"
+                                    Padding="0"
                                     Click="NewItem_Click"
-                                    Content="New Item"
                                     Style="{StaticResource MaterialDesignRaisedButton}"
                                     TabIndex="5"
-                                    ToolTip="Add a new item to the bottom of the list" />
+                                    ToolTip="Add a new item to the bottom of the list">
+                                    <Grid>
+                                        <materialDesign:PopupBox
+                                            x:Name="pbxNewItem"
+                                            Padding="0"
+                                            PlacementMode="TopAndAlignCentres"
+                                            PopupMode="Click"
+                                            PopupVerticalOffset="-5">
+                                            <materialDesign:PopupBox.ToggleContent>
+                                                <TextBlock
+                                                    FontWeight="{Binding ElementName=btnDiscard, Path=FontWeight}"
+                                                    Foreground="{Binding ElementName=btnDiscard, Path=Foreground}"
+                                                    Text="New Item"
+                                                    TextAlignment="Center" />
+                                            </materialDesign:PopupBox.ToggleContent>
+                                            <Border
+                                                Padding="3"
+                                                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderThickness="2">
+                                                <Grid
+                                                    Width="200"
+                                                    Margin="0"
+                                                    Background="{DynamicResource MaterialDesignPaper}">
+                                                    <StackPanel
+                                                        Margin="5"
+                                                        Orientation="Vertical">
+                                                        <TextBlock
+                                                            Margin="15,10,0,10"
+                                                            FontSize="17"
+                                                            Text="New Item Type"
+                                                            TextAlignment="Left" />
+                                                        <Separator />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="NewNormalItem_Click"
+                                                            Content="Normal Item" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="NewPopupItem_Click"
+                                                            Content="Pop Up List" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="NewSpecialApp_Click"
+                                                            Content="Special App" />
+                                                        <Separator />
+                                                        <Button
+                                                            HorizontalContentAlignment="Left"
+                                                            Click="CancelNewItem_Click"
+                                                            Content="Cancel"
+                                                            Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </materialDesign:PopupBox>
+                                    </Grid>
+                                </Button>
                                 <Button
                                     Width="140"
                                     Margin="10"

@@ -21,6 +21,8 @@ public partial class MainWindow : Window
         ReadSettings();
 
         ResetListBox();
+
+        ReadPopupsJson();
     }
 
     #region Settings
@@ -65,6 +67,9 @@ public partial class MainWindow : Window
 
         // Primary color
         SetPrimaryColor((AccentColor)UserSettings.Setting.PrimaryColor);
+
+        // Secondary color
+        SetSecondaryColor((AccentColor)UserSettings.Setting.SecondaryColor);
 
         // Font
         SetFontWeight((Weight)UserSettings.Setting.ListBoxFontWeight);
@@ -123,6 +128,10 @@ public partial class MainWindow : Window
                 SetPrimaryColor((AccentColor)newValue);
                 break;
 
+            case nameof(UserSettings.Setting.SecondaryColor):
+                SetSecondaryColor((AccentColor)newValue);
+                break;
+
             case nameof(UserSettings.Setting.ListBoxFontWeight):
                 SetFontWeight((Weight)newValue);
                 break;
@@ -135,6 +144,17 @@ public partial class MainWindow : Window
                 int size = (int)newValue;
                 double newSize = UIScale((MySize)size);
                 MainGrid.LayoutTransform = new ScaleTransform(newSize, newSize);
+                break;
+
+            case nameof(UserSettings.Setting.StartWithWindows):
+                if ((bool)newValue)
+                {
+                    AddStartToRegistry();
+                }
+                else
+                {
+                    RemoveStartFromRegistry();
+                }
                 break;
         }
     }
@@ -182,12 +202,39 @@ public partial class MainWindow : Window
     {
         EntryClass.Entries?.Clear();
         ReadJson();
-        GetIcons();
+        GetIcons(EntryClass.Entries);
+        PopulateMainListBox();
     }
     #endregion Clear and repopulate the listbox
 
+    public void PopulateMainListBox()
+    {
+        BindingList<EntryClass> temp = new();
+        foreach (EntryClass entry in EntryClass.Entries)
+        {
+            if (entry.ChildOfHost == 0)
+            {
+                temp.Add(entry);
+            }
+        }
+        listboxEntries.ItemsSource = temp;
+    }
+
+    public static void ReadPopupsJson()
+    {
+        string jsonfile = GetJsonFile().Replace("MyLauncher.json", "Popups.json");
+
+        if (!File.Exists(jsonfile))
+        {
+            File.WriteAllText(jsonfile, "[]");
+        }
+        string json = File.ReadAllText(jsonfile);
+        PopupAttributes.Popups = JsonSerializer.Deserialize<List<PopupAttributes>>(json);
+        log.Info($"Read {PopupAttributes.Popups.Count} entries from {jsonfile}");
+    }
+
     #region Read the JSON file
-    public void ReadJson()
+    public static void ReadJson()
     {
         string jsonfile = GetJsonFile();
 
@@ -201,7 +248,6 @@ public partial class MainWindow : Window
         {
             string json = File.ReadAllText(jsonfile);
             EntryClass.Entries = JsonSerializer.Deserialize<BindingList<EntryClass>>(json);
-            listboxEntries.ItemsSource = EntryClass.Entries;
         }
         catch (Exception ex) when (ex is DirectoryNotFoundException || ex is FileNotFoundException)
         {
@@ -240,18 +286,35 @@ public partial class MainWindow : Window
     #endregion Read the JSON file
 
     #region Get file icons
-    public static void GetIcons()
+    public static void GetIcons(BindingList<EntryClass> ec)
     {
-        foreach (EntryClass item in EntryClass.Entries)
+        foreach (EntryClass item in ec)
         {
-            if (!string.IsNullOrEmpty(item.FilePathOrURI))
+            if (!string.IsNullOrEmpty(item.FilePathOrURI) || item.EntryType == (int)ListEntryType.Popup)
             {
                 if (!string.IsNullOrEmpty(item.IconSource))
                 {
                     string image = Path.Combine(AppInfo.AppDirectory, "Icons", item.IconSource);
                     if (File.Exists(image))
                     {
-                        log.Debug($"Using image file {item.IconSource} for \"{item.Title}\"");
+                        log.Debug($"Using image file {item.IconSource} for \"{item.Title}\".");
+                        BitmapImage bmi = new();
+                        bmi.BeginInit();
+                        bmi.UriSource = new Uri(image);
+                        bmi.EndInit();
+                        item.FileIcon = bmi;
+                        //log.Debug($"Image size is {bmi.PixelHeight} x {bmi.PixelWidth}");
+                        continue;
+                    }
+                    log.Debug($"Could not find file {image} to use for \"{item.Title}\".");
+                }
+
+                if (item.EntryType == (int)ListEntryType.Popup)
+                {
+                    string image = Path.Combine(AppInfo.AppDirectory, "Icons", "UpArrow.png");
+                    if (File.Exists(image))
+                    {
+                        log.Debug($"Using image file UpArrow.png for \"{item.Title}\".");
                         BitmapImage bmi = new();
                         bmi.BeginInit();
                         bmi.UriSource = new Uri(image);
@@ -259,7 +322,7 @@ public partial class MainWindow : Window
                         item.FileIcon = bmi;
                         continue;
                     }
-                    log.Debug($"Could not find file {image} to use for \"{item.Title}\"");
+                    log.Debug($"Could not find file {image} to use for \"{item.Title}\".");
                 }
 
                 string filePath = item.FilePathOrURI.TrimEnd('\\');
@@ -267,14 +330,14 @@ public partial class MainWindow : Window
                 {
                     Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
                     item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"{item.FilePathOrURI} is a file");
+                    log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
                 }
                 // expand environmental variables for folders
                 else if (Directory.Exists(Environment.ExpandEnvironmentVariables(filePath)))
                 {
                     Icon temp = Properties.Resources.folder;
                     item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"{item.FilePathOrURI} is a directory");
+                    log.Debug($"Using folder icon for {item.FilePathOrURI}.");
                 }
                 // if complete path wasn't supplied check the path
                 else if (filePath.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
@@ -285,33 +348,35 @@ public partial class MainWindow : Window
                     {
                         Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(sb.ToString());
                         item.FileIcon = IconToImageSource(temp);
-                        log.Debug($"{item.FilePathOrURI} was found on the Path");
+                        log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
                     }
                     else
                     {
                         Icon temp = Properties.Resources.question;
                         item.FileIcon = IconToImageSource(temp);
-                        log.Debug($"{item.FilePathOrURI} was not found on the Path");
+                        log.Warn($"Icon for {item.FilePathOrURI} could not be located.");
                     }
                 }
+                // maybe it's a url
                 else if (IsValidUrl(filePath))
                 {
                     Icon temp = Properties.Resources.globe;
                     item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"{item.FilePathOrURI} is valid URL");
+                    log.Debug($"Using globe icon for {item.FilePathOrURI}. It appears to be a valid URL.");
                 }
                 else
                 {
                     Icon temp = Properties.Resources.question;
                     item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"{item.FilePathOrURI} is undetermined");
+                    log.Warn($"Icon for {item.FilePathOrURI} could not be located.");
                 }
             }
+            // this shouldn't happen
             else
             {
                 Icon temp = Properties.Resources.question;
                 item.FileIcon = IconToImageSource(temp);
-                log.Debug("Path is empty or null");
+                log.Warn("Path is empty or null. Icon cannot be assigned.");
             }
         }
     }
@@ -348,18 +413,24 @@ public partial class MainWindow : Window
         }
 
         EntryClass entry = (EntryClass)listboxEntries.SelectedItem;
-        if (LaunchApp(entry))
+
+        if (entry.EntryType == (int)ListEntryType.Popup)
         {
-            if (UserSettings.Setting.ExitOnOpen)
+            _ = OpenPopup(entry, this);
+        }
+        else
+        {
+            LaunchApp(entry);
+            if (UserSettings.Setting.MinimizeOnOpen)
             {
                 Thread.Sleep(250);
-                Close();
+                WindowState = WindowState.Minimized;
             }
         }
         listboxEntries.SelectedIndex = -1;
     }
 
-    private static bool LaunchApp(EntryClass item)
+    internal static bool LaunchApp(EntryClass item)
     {
         using Process launch = new();
         try
@@ -369,7 +440,10 @@ public partial class MainWindow : Window
             launch.StartInfo.UseShellExecute = true;
             _ = launch.Start();
             log.Info($"Opening \"{item.Title}\"");
-            SnackbarMsg.QueueMessage($"{item.Title} launched");
+            if (!UserSettings.Setting.MinimizeOnOpen)
+            {
+                SnackbarMsg.QueueMessage($"{item.Title} launched", 2000);
+            }
             if (UserSettings.Setting.PlaySound)
             {
                 using SoundPlayer soundPlayer = new()
@@ -396,6 +470,24 @@ public partial class MainWindow : Window
         }
     }
     #endregion Launch app or uri
+
+    #region Open pop up list
+    public static bool OpenPopup(EntryClass entry, Window owner)
+    {
+        if (entry.EntryType != (int)ListEntryType.Popup)
+        {
+            return false;
+        }
+
+        PopupWindow popup = new(entry.Title, entry.HostID)
+        {
+            Owner = owner
+        };
+        popup.Show();
+
+        return true;
+    }
+    #endregion Open pop up list
 
     #region PopupBox button events
 
@@ -549,6 +641,74 @@ public partial class MainWindow : Window
     }
     #endregion Set primary color
 
+    #region Set secondary color
+    private static void SetSecondaryColor(AccentColor color)
+    {
+        PaletteHelper paletteHelper = new();
+        ITheme theme = paletteHelper.GetTheme();
+
+        SecondaryColor secondary;
+        switch (color)
+        {
+            case AccentColor.Red:
+                secondary = SecondaryColor.Red;
+                break;
+            case AccentColor.Pink:
+                secondary = SecondaryColor.Pink;
+                break;
+            case AccentColor.Purple:
+                secondary = SecondaryColor.Purple;
+                break;
+            case AccentColor.DeepPurple:
+                secondary = SecondaryColor.DeepPurple;
+                break;
+            case AccentColor.Indigo:
+                secondary = SecondaryColor.Indigo;
+                break;
+            case AccentColor.Blue:
+                secondary = SecondaryColor.Blue;
+                break;
+            case AccentColor.LightBlue:
+                secondary = SecondaryColor.LightBlue;
+                break;
+            case AccentColor.Cyan:
+                secondary = SecondaryColor.Cyan;
+                break;
+            case AccentColor.Teal:
+                secondary = SecondaryColor.Teal;
+                break;
+            case AccentColor.Green:
+                secondary = SecondaryColor.Green;
+                break;
+            case AccentColor.LightGreen:
+                secondary = SecondaryColor.LightGreen;
+                break;
+            case AccentColor.Lime:
+                secondary = SecondaryColor.Lime;
+                break;
+            case AccentColor.Yellow:
+                secondary = SecondaryColor.Yellow;
+                break;
+            case AccentColor.Amber:
+                secondary = SecondaryColor.Amber;
+                break;
+            case AccentColor.Orange:
+                secondary = SecondaryColor.Orange;
+                break;
+            case AccentColor.DeepOrange:
+                secondary = SecondaryColor.DeepOrange;
+                break;
+
+            default:
+                secondary = SecondaryColor.Blue;
+                break;
+        }
+        System.Windows.Media.Color secondaryColor = SwatchHelper.Lookup[(MaterialDesignColor)secondary];
+        theme.SetSecondaryColor(secondaryColor);
+        paletteHelper.SetTheme(theme);
+    }
+    #endregion Set secondary color
+
     #region Set the row spacing
     /// <summary>
     /// Sets the padding & margin around the items in the listbox
@@ -558,6 +718,9 @@ public partial class MainWindow : Window
     {
         switch (spacing)
         {
+            case Spacing.Scrunched:
+                listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxScrunched") as Style;
+                break;
             case Spacing.Compact:
                 listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxCompact") as Style;
                 break;
@@ -600,14 +763,16 @@ public partial class MainWindow : Window
     #endregion Set the font weight
 
     #region UI scale converter
-    private static double UIScale(MySize size)
+    internal static double UIScale(MySize size)
     {
         switch (size)
         {
             case MySize.Smallest:
-                return 0.85;
+                return 0.80;
             case MySize.Smaller:
-                return 0.92;
+                return 0.90;
+            case MySize.Small:
+                return 0.95;
             case MySize.Default:
                 return 1.0;
             case MySize.Large:
@@ -717,7 +882,7 @@ public partial class MainWindow : Window
     public void EverythingLarger()
     {
         int size = UserSettings.Setting.UISize;
-        if (size < 5)
+        if (size < (int)MySize.Largest)
         {
             size++;
             UserSettings.Setting.UISize = size;
@@ -811,7 +976,7 @@ public partial class MainWindow : Window
     #endregion Tray icon menu events
 
     #region Get the menu JSON file name
-    private static string GetJsonFile()
+    public static string GetJsonFile()
     {
         return Path.Combine(AppInfo.AppDirectory, "MyLauncher.json");
     }
@@ -820,9 +985,20 @@ public partial class MainWindow : Window
     #region Create starter JSON file
     private static void CreateNewJson(string file)
     {
-        const string json = /*lang=json,strict*/ "[{\"Title\": \"Calculator\",\"FilePathOrURI\": \"calc.exe\"}]";
+        StringBuilder sb = new();
+        _ = sb.AppendLine("[")
+            .AppendLine("  {")
+            .AppendLine("    \"Arguments\": \"\",")
+            .AppendLine("    \"ChildOfHost\": 0,")
+            .AppendLine("    \"EntryType\": 0,")
+            .AppendLine("    \"FilePathOrURI\": \"calc.exe\",")
+            .AppendLine("    \"HostID\": -1,")
+            .AppendLine("    \"IconSource\": \"\",")
+            .AppendLine("    \"Title\": \"Calculator\" ")
+            .AppendLine("  }")
+            .AppendLine("]");
+        File.WriteAllText(file, sb.ToString());
         log.Debug($"Creating new JSON file with one entry - {file}");
-        File.WriteAllText(file, json);
     }
     #endregion Create starter JSON file
 
@@ -858,6 +1034,48 @@ public partial class MainWindow : Window
         Topmost = UserSettings.Setting.KeepOnTop;
     }
     #endregion Show Main window
+
+    #region Add/Remove from registry
+    private void AddStartToRegistry()
+    {
+        if (IsLoaded && !RegRun.RegRunEntry("MyLauncher"))
+        {
+            string result = RegRun.AddRegEntry("MyLauncher", AppInfo.AppPath);
+            if (result == "OK")
+            {
+                log.Info(@"MyLauncher added to HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
+                _ = new MDCustMsgBox("My Launcher will now start with Windows.",
+                                    "My Launcher", ButtonType.Ok).ShowDialog();
+            }
+            else
+            {
+                log.Error($"MyLauncher add to startup failed: {result}");
+                _ = new MDCustMsgBox("An error has occurred. See the log file",
+                                     "My Launcher Error", ButtonType.Ok).ShowDialog();
+            }
+        }
+    }
+
+    private void RemoveStartFromRegistry()
+    {
+        if (IsLoaded)
+        {
+            string result = RegRun.RemoveRegEntry("MyLauncher");
+            if (result == "OK")
+            {
+                log.Info(@"MyLauncher removed from HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
+                _ = new MDCustMsgBox(@"My Launcher was removed from Windows startup.",
+                                    "My Launcher", ButtonType.Ok).ShowDialog();
+            }
+            else
+            {
+                log.Error($"MyLauncher remove from startup failed: {result}");
+                _ = new MDCustMsgBox("An error has occurred. See the log file",
+                                     "My Launcher Error", ButtonType.Ok).ShowDialog();
+            }
+        }
+    }
+    #endregion
 
     #region Unhandled Exception Handler
     private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)

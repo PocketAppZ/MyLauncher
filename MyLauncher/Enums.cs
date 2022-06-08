@@ -2,32 +2,6 @@
 
 namespace MyLauncher;
 
-internal enum NavPage
-{
-    Daily = 0,
-    Maintenance = 1,
-    Settings = 2,
-    About = 3,
-    Exit = 4
-}
-
-internal enum ThemeType
-{
-    Light = 0,
-    Dark = 1,
-    System = 2
-}
-
-internal enum MySize
-{
-    Smallest = 0,
-    Smaller = 1,
-    Default = 2,
-    Large = 3,
-    Larger = 4,
-    Largest = 5
-}
-
 internal enum AccentColor
 {
     Red = 0,
@@ -51,21 +25,6 @@ internal enum AccentColor
     BlueGray = 18
 }
 
-internal enum Weight
-{
-    Thin = 0,
-    Regular = 1,
-    SemiBold = 2,
-    Bold = 3
-}
-
-internal enum Spacing
-{
-    Compact = 0,
-    Comfortable = 1,
-    Wide = 2
-}
-
 internal enum BorderWidth
 {
     None = 0,
@@ -73,4 +32,54 @@ internal enum BorderWidth
     Default = 2,
     Thick = 3,
     Jumbo = 5
+}
+
+internal enum ListEntryType
+{
+    Normal = 0,
+    Popup = 1,
+    Other = 2
+}
+
+internal enum MySize
+{
+    Smallest = 0,
+    Smaller = 1,
+    Small = 2,
+    Default = 3,
+    Large = 4,
+    Larger = 5,
+    Largest = 6
+}
+
+internal enum NavPage
+{
+    Daily = 0,
+    Maintenance = 1,
+    Settings = 2,
+    About = 3,
+    Exit = 4
+}
+
+internal enum Spacing
+{
+    Scrunched = 0,
+    Compact = 1,
+    Comfortable = 2,
+    Wide = 3
+}
+
+internal enum ThemeType
+{
+    Light = 0,
+    Dark = 1,
+    System = 2
+}
+
+internal enum Weight
+{
+    Thin = 0,
+    Regular = 1,
+    SemiBold = 2,
+    Bold = 3
 }

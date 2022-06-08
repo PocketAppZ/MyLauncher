@@ -82,6 +82,7 @@
                         <RowDefinition Height="35" />
                         <RowDefinition Height="35" />
                         <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -160,6 +161,44 @@
                         Orientation="Horizontal">
                         <Label
                             Width="70"
+                            Content="Accent" />
+                        <ComboBox
+                            x:Name="cbxAccentColor"
+                            Width="110"
+                            Margin="0,0,0,5"
+                            HorizontalAlignment="Left"
+                            materialDesign:HintAssist.Hint="Accent Color"
+                            MaxDropDownHeight="170"
+                            SelectedIndex="{Binding SecondaryColor, Source={x:Static local:UserSettings.Setting}}"
+                            Style="{StaticResource MaterialDesignComboBox}"
+                            TabIndex="1">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="Red" />
+                                <ComboBoxItem Content="Pink" />
+                                <ComboBoxItem Content="Purple" />
+                                <ComboBoxItem Content="Deep Purple" />
+                                <ComboBoxItem Content="Indigo" />
+                                <ComboBoxItem Content="Blue" />
+                                <ComboBoxItem Content="Light Blue" />
+                                <ComboBoxItem Content="Cyan" />
+                                <ComboBoxItem Content="Teal" />
+                                <ComboBoxItem Content="Green" />
+                                <ComboBoxItem Content="Light Green" />
+                                <ComboBoxItem Content="Lime" />
+                                <ComboBoxItem Content="Yellow" />
+                                <ComboBoxItem Content="Amber" />
+                                <ComboBoxItem Content="Orange" />
+                                <ComboBoxItem Content="Deep Orange" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Orientation="Horizontal">
+                        <Label
+                            Width="70"
                             Content="UI Size" />
                         <ComboBox
                             x:Name="cbxSize"
@@ -173,6 +212,7 @@
                             <ComboBox.Items>
                                 <ComboBoxItem Content="{x:Static local:MySize.Smallest}" />
                                 <ComboBoxItem Content="{x:Static local:MySize.Smaller}" />
+                                <ComboBoxItem Content="{x:Static local:MySize.Small}" />
                                 <ComboBoxItem Content="{x:Static local:MySize.Default}" />
                                 <ComboBoxItem Content="{x:Static local:MySize.Large}" />
                                 <ComboBoxItem Content="{x:Static local:MySize.Larger}" />
@@ -225,6 +265,7 @@
                             Style="{StaticResource MaterialDesignComboBox}"
                             TabIndex="5">
                             <ComboBox.Items>
+                                <ComboBoxItem Content="Scrunched" />
                                 <ComboBoxItem Content="Compact" />
                                 <ComboBoxItem Content="Comfortable" />
                                 <ComboBoxItem Content="Spacious" />
@@ -284,6 +325,7 @@
                         <RowDefinition Height="31" />
                         <RowDefinition Height="31" />
                         <RowDefinition Height="31" />
+                        <RowDefinition Height="31" />
                     </Grid.RowDefinitions>
                     <!--#endregion-->
                     <StackPanel
@@ -292,11 +334,11 @@
                         Orientation="Horizontal">
                         <ToggleButton
                             HorizontalAlignment="Left"
-                            IsChecked="{Binding ExitOnOpen, Source={x:Static local:UserSettings.Setting}}"
+                            IsChecked="{Binding MinimizeOnOpen, Source={x:Static local:UserSettings.Setting}}"
                             Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                         <Label
                             Margin="10,-1,0,0"
-                            Content="Exit after launching app" />
+                            Content="Minimize after launching app" />
                     </StackPanel>
 
                     <StackPanel
@@ -402,6 +444,19 @@
                         <Label
                             Margin="10,-1,0,0"
                             Content="Start Minimized" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="9"
+                        Grid.Column="1"
+                        Orientation="Horizontal">
+                        <ToggleButton
+                            HorizontalAlignment="Left"
+                            IsChecked="{Binding StartWithWindows, Source={x:Static local:UserSettings.Setting}}"
+                            Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+                        <Label
+                            Margin="10,-1,0,0"
+                            Content="Start with Windows" />
                     </StackPanel>
                 </Grid>
             </materialDesign:Card>

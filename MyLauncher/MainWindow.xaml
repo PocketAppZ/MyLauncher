@@ -10,7 +10,7 @@
     MinWidth="200"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
-    FontSize="14"
+    FontSize="16"
     KeyDown="Window_KeyDown"
     Loaded="Window_Loaded"
     MouseWheel="Window_MouseWheel"
@@ -116,31 +116,35 @@
 
                         <materialDesign:PopupBox
                             Margin="1,0"
+                            Padding="0"
                             HorizontalAlignment="Right"
                             PlacementMode="LeftAndAlignTopEdges">
-                            <Grid
-                                Width="150"
-                                Margin="0">
-                                <StackPanel Orientation="Vertical">
-                                    <Button
-                                        Click="BtnLog_Click"
-                                        Content="View Log File"
-                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                    <Button
-                                        Click="BtnReadme_Click"
-                                        Content="View ReadMe"
-                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                    <Separator />
-                                    <Button
-                                        Click="BtnData_Click"
-                                        Content="View Data File"
-                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                    <Button
-                                        Click="BtnSettings_Click"
-                                        Content="View Settings"
-                                        Style="{StaticResource MaterialDesignFlatLightButton}" />
-                                </StackPanel>
-                            </Grid>
+                            <Border
+                                Padding="3"
+                                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                BorderThickness="2">
+                                <Grid
+                                    Width="150"
+                                    Margin="0"
+                                    Background="{DynamicResource MaterialDesignPaper}">
+                                    <StackPanel Orientation="Vertical">
+                                        <Button
+                                            Click="BtnReadme_Click"
+                                            Content="View ReadMe" />
+                                        <Button
+                                            Click="BtnLog_Click"
+                                            Content="View Log File" />
+                                        <Button
+                                            Click="BtnData_Click"
+                                            Content="View Data File" />
+                                        <Separator />
+                                        <Button
+                                            HorizontalContentAlignment="Left"
+                                            Content="Cancel"
+                                            Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
                         </materialDesign:PopupBox>
 
                     </Grid>

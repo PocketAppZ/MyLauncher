@@ -5,6 +5,7 @@ namespace MyLauncher;
 public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChanged
 {
     #region Properties
+
     public bool AllowRightButton
     {
         get => allowRightButton;
@@ -35,12 +36,12 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
-    public bool ExitOnOpen
+    public bool MinimizeOnOpen
     {
-        get => exitOnOpen;
+        get => minimizeOnOpen;
         set
         {
-            exitOnOpen = value;
+            minimizeOnOpen = value;
             OnPropertyChanged();
         }
     }
@@ -63,6 +64,14 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
             keepOnTop = value;
             OnPropertyChanged();
         }
+    }
+
+    private int lastPopID = 1000;
+
+    public int LastPopID
+    {
+        get { return lastPopID; }
+        set { lastPopID = value; OnPropertyChanged(); }
     }
 
     public int ListBoxFontWeight
@@ -115,6 +124,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public int SecondaryColor
+    {
+        get => secondaryColor;
+        set
+        {
+            secondaryColor = value;
+            OnPropertyChanged();
+        }
+    }
+
     public bool ShowExitButton
     {
         get { return showExitButton; }
@@ -141,6 +160,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         set
         {
             startMinimized = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool StartWithWindows
+    {
+        get => startWithWindows;
+        set
+        {
+            startWithWindows = value;
             OnPropertyChanged();
         }
     }
@@ -222,7 +251,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool allowRightButton = true;
     private int borderWidth = 2;
     private int darkmode = (int)ThemeType.Light;
-    private bool exitOnOpen = false;
+    private bool minimizeOnOpen = false;
     private bool includeDebug = false;
     private bool keepOnTop = false;
     private int listBoxFontWeight = (int)Weight.Regular;
@@ -230,9 +259,11 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool minimizeToTray = false;
     private bool playSound = true;
     private int primaryColor = (int)AccentColor.Blue;
+    private int secondaryColor = (int)AccentColor.Red;
     private bool showExitButton = true;
     private bool showFileIcons = true;
     private bool startMinimized = false;
+    private bool startWithWindows = false;
     private string titleText = "Click on any App Below to Open it";
     private int uiSize = (int)MySize.Default;
     private double windowHeight = 500;

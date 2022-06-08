@@ -22,6 +22,15 @@ public class EntryClass : INotifyPropertyChanged
         }
     }
 
+    public int EntryType
+    {
+        get => entryType;
+        set
+        {
+            entryType = value;
+            OnPropertyChanged();
+        }
+    }
     public string FilePathOrURI
     {
         get => filePathOrURI;
@@ -48,6 +57,25 @@ public class EntryClass : INotifyPropertyChanged
         }
     }
 
+    public int HostID
+    {
+        get => hostID;
+        set
+        {
+            hostID = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int ChildOfHost
+    {
+        get => childOfHost;
+        set
+        {
+            childOfHost = value;
+            OnPropertyChanged();
+        }
+    }
     public string IconSource
     {
         get => iconSource;
@@ -61,7 +89,9 @@ public class EntryClass : INotifyPropertyChanged
         }
     }
 
-    //Ignore the image as we don't want to save it in the JSON file
+    /// <summary>
+    /// Ignore the image as we don't want to save it in the JSON file
+    /// </summary>
     [JsonIgnore]
     public ImageSource FileIcon
     {
@@ -78,11 +108,14 @@ public class EntryClass : INotifyPropertyChanged
     #endregion Properties
 
     #region Private backing fields
-    private string title;
-    private string filePathOrURI;
     private string arguments = string.Empty;
-    private string iconSource = string.Empty;
+    private int childOfHost;
+    private int entryType = (int)ListEntryType.Normal;
     private ImageSource fileIcon;
+    private string filePathOrURI;
+    private int hostID = -1;
+    private string iconSource = string.Empty;
+    private string title;
     #endregion Private backing fields
 
     #region Handle property change
