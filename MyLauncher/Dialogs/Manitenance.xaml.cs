@@ -167,7 +167,7 @@ public partial class Maintenance : UserControl
                 EntryClass ec = new()
                 {
                     Title = item.Title.Trim(),
-                    FilePathOrURI = item.FilePathOrURI.Trim(),
+                    FilePathOrURI = item.FilePathOrURI.Trim('"').Trim(),
                     FileIcon = item.FileIcon,
                     Arguments = item.Arguments,
                     IconSource = item.IconSource.Trim(),
