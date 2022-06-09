@@ -328,18 +328,6 @@
                         <RowDefinition Height="31" />
                     </Grid.RowDefinitions>
                     <!--#endregion-->
-                    <StackPanel
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Orientation="Horizontal">
-                        <ToggleButton
-                            HorizontalAlignment="Left"
-                            IsChecked="{Binding MinimizeOnOpen, Source={x:Static local:UserSettings.Setting}}"
-                            Style="{StaticResource MaterialDesignSwitchToggleButton}" />
-                        <Label
-                            Margin="10,-1,0,0"
-                            Content="Minimize after launching app" />
-                    </StackPanel>
 
                     <StackPanel
                         Grid.Row="1"

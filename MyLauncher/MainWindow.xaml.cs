@@ -220,6 +220,7 @@ public partial class MainWindow : Window
         listboxEntries.ItemsSource = temp;
     }
 
+    #region Read Pop-ups file
     public static void ReadPopupsJson()
     {
         string jsonfile = GetJsonFile().Replace("MyLauncher.json", "Popups.json");
@@ -232,6 +233,7 @@ public partial class MainWindow : Window
         PopupAttributes.Popups = JsonSerializer.Deserialize<List<PopupAttributes>>(json);
         log.Info($"Read {PopupAttributes.Popups.Count} entries from {jsonfile}");
     }
+    #endregion Read Pop-ups file
 
     #region Read the JSON file
     public static void ReadJson()
@@ -421,11 +423,6 @@ public partial class MainWindow : Window
         else
         {
             LaunchApp(entry);
-            if (UserSettings.Setting.MinimizeOnOpen)
-            {
-                Thread.Sleep(250);
-                WindowState = WindowState.Minimized;
-            }
         }
         listboxEntries.SelectedIndex = -1;
     }
@@ -440,10 +437,7 @@ public partial class MainWindow : Window
             launch.StartInfo.UseShellExecute = true;
             _ = launch.Start();
             log.Info($"Opening \"{item.Title}\"");
-            if (!UserSettings.Setting.MinimizeOnOpen)
-            {
-                SnackbarMsg.QueueMessage($"{item.Title} launched", 2000);
-            }
+            SnackbarMsg.QueueMessage($"{item.Title} launched", 2000);
             if (UserSettings.Setting.PlaySound)
             {
                 using SoundPlayer soundPlayer = new()

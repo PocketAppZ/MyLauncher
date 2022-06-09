@@ -2,9 +2,6 @@
 
 namespace MyLauncher;
 
-/// <summary>
-/// Interaction logic for PopupWindow.xaml
-/// </summary>
 public partial class PopupWindow : Window
 {
     #region Properties
@@ -28,7 +25,6 @@ public partial class PopupWindow : Window
         PopupTitle = title;
         HostID = hostID;
         Title = "My Launcher - Pop-Up List";
-        MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 100;
 
         // UI size
         double size = MainWindow.UIScale((MySize)UserSettings.Setting.UISize);
@@ -37,27 +33,12 @@ public partial class PopupWindow : Window
         // Font
         SetFontWeight((Weight)UserSettings.Setting.ListBoxFontWeight);
 
-        PopupSize(hostID);
-    }
-
-    private void PopupSize(int hostID)
-    {
-        foreach (PopupAttributes attributes in PopupAttributes.Popups)
-        {
-            if (attributes != null && attributes.PopupID == hostID)
-            {
-                Left = attributes.PopupLeft;
-                Top = attributes.PopupTop;
-                Height = attributes.PopupHeight;
-                Width = attributes.PopupWidth;
-                return;
-            }
-        }
-        WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        SizeToContent = SizeToContent.WidthAndHeight;
+        PopupPosition(hostID);
+        MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 100;
     }
     #endregion Init Pop-up
 
+    #region Load the listbox
     private void PopulateListBox(int hostID)
     {
         BindingList<EntryClass> temp = new();
@@ -69,19 +50,12 @@ public partial class PopupWindow : Window
                 temp.Add(entry);
             }
         }
-
         MainWindow.GetIcons(temp);
-
         PopupListBox.ItemsSource = temp;
     }
+    #endregion Load the listbox
 
-    #region Get the menu JSON file name
-    private static string GetJsonFile()
-    {
-        return Path.Combine(AppInfo.AppDirectory, "Popups.json");
-    }
-    #endregion Get the menu JSON file name
-
+    #region Mouse Click Events
     private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
     {
         if (((ListBoxItem)sender).Content is not EntryClass || PopupListBox.SelectedItem == null)
@@ -97,17 +71,60 @@ public partial class PopupWindow : Window
         if (entry.EntryType == (int)ListEntryType.Popup)
         {
             _ = MainWindow.OpenPopup(entry, this);
-            PopupListBox.SelectedItem = null;
-            return;
         }
-        MainWindow.LaunchApp(entry);
+        else
+        {
+            MainWindow.LaunchApp(entry);
+        }
         PopupListBox.SelectedIndex = -1;
     }
+    #endregion Mouse Click Events
 
+    #region Button Events
     private void Btn_Click_Cancel(object sender, RoutedEventArgs e)
     {
         Close();
     }
+    #endregion Button Events
+
+    #region Window Events
+    private void Window_Closing(object sender, CancelEventArgs e)
+    {
+        PopupAttributes item = PopupAttributes.Popups.Find(x => x.PopupID == HostID);
+
+        if (item != null)
+        {
+            item.PopupHeight = Height;
+            item.PopupLeft = Left;
+            item.PopupTop = Top;
+            item.PopupWidth = Width;
+            item.PopupTitle = PopupTitle;
+        }
+        else
+        {
+            PopupAttributes pa = new()
+            {
+                PopupID = HostID,
+                PopupTitle = PopupTitle,
+                PopupHeight = Height,
+                PopupWidth = Width,
+                PopupTop = Top,
+                PopupLeft = Left
+            };
+            PopupAttributes.Popups.Add(pa);
+        }
+
+        JsonSerializerOptions opts = new()
+        {
+            ReadCommentHandling = JsonCommentHandling.Skip,
+            WriteIndented = true
+        };
+        string json = JsonSerializer.Serialize(PopupAttributes.Popups, opts);
+
+        string jsonfile = MainWindow.GetJsonFile().Replace("MyLauncher.json", "Popups.json");
+        File.WriteAllText(jsonfile, json);
+    }
+    #endregion Window Events
 
     #region Set the font weight
     /// <summary>
@@ -145,40 +162,22 @@ public partial class PopupWindow : Window
     }
     #endregion Remove minimize and maximize/restore buttons
 
-    private void Window_Closing(object sender, CancelEventArgs e)
+    #region Set window size and position
+    private void PopupPosition(int hostID)
     {
-        PopupAttributes item = PopupAttributes.Popups.Find(x => x.PopupID == HostID);
-
-        if (item != null)
+        foreach (PopupAttributes attributes in PopupAttributes.Popups)
         {
-            item.PopupHeight = Height;
-            item.PopupLeft = Left;
-            item.PopupTop = Top;
-            item.PopupWidth = Width;
-            item.PopupTitle = PopupTitle;
-        }
-        else
-        {
-            PopupAttributes pa = new()
+            if (attributes != null && attributes.PopupID == hostID)
             {
-                PopupID = HostID,
-                PopupTitle = PopupTitle,
-                PopupHeight = Height,
-                PopupWidth = Width,
-                PopupTop = Top,
-                PopupLeft = Left
-            };
-            PopupAttributes.Popups.Add(pa);
+                Left = attributes.PopupLeft;
+                Top = attributes.PopupTop;
+                Height = attributes.PopupHeight;
+                Width = attributes.PopupWidth;
+                return;
+            }
         }
-
-        JsonSerializerOptions opts = new()
-        {
-            ReadCommentHandling = JsonCommentHandling.Skip,
-            WriteIndented = true
-        };
-        string json = JsonSerializer.Serialize(PopupAttributes.Popups, opts);
-
-        string jsonfile = MainWindow.GetJsonFile().Replace("MyLauncher.json", "Popups.json");
-        File.WriteAllText(jsonfile, json);
+        WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        SizeToContent = SizeToContent.WidthAndHeight;
     }
+    #endregion Set window size and position
 }

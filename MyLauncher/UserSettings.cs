@@ -36,16 +36,6 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
-    public bool MinimizeOnOpen
-    {
-        get => minimizeOnOpen;
-        set
-        {
-            minimizeOnOpen = value;
-            OnPropertyChanged();
-        }
-    }
-
     public bool IncludeDebug
     {
         get => includeDebug;
@@ -251,7 +241,6 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool allowRightButton = true;
     private int borderWidth = 2;
     private int darkmode = (int)ThemeType.Light;
-    private bool minimizeOnOpen = false;
     private bool includeDebug = false;
     private bool keepOnTop = false;
     private int listBoxFontWeight = (int)Weight.Regular;
