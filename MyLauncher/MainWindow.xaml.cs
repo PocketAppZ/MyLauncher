@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
+
+
 namespace MyLauncher;
 
 public partial class MainWindow : Window
@@ -330,9 +332,19 @@ public partial class MainWindow : Window
                 string filePath = item.FilePathOrURI.TrimEnd('\\');
                 if (File.Exists(filePath))
                 {
+                    if (filePath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string shortcut = ((IWshShortcut)new WshShell().CreateShortcut(filePath)).TargetPath;
+                        Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(shortcut);
+                        item.FileIcon = IconToImageSource(temp);
+                        log.Debug($"Using extracted associated icon from shortcut to {item.FilePathOrURI}.");
+                    }
+                    else
+                    {
                     Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
                     item.FileIcon = IconToImageSource(temp);
                     log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
+                    }
                 }
                 // expand environmental variables for folders
                 else if (Directory.Exists(Environment.ExpandEnvironmentVariables(filePath)))
