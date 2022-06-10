@@ -56,12 +56,14 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
-    private int lastPopID = 1000;
-
-    public int LastPopID
+    public int LastHostID
     {
-        get { return lastPopID; }
-        set { lastPopID = value; OnPropertyChanged(); }
+        get => lastHostID;
+        set
+        {
+            lastHostID = value;
+            OnPropertyChanged();
+        }
     }
 
     public int ListBoxFontWeight
@@ -243,6 +245,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private int darkmode = (int)ThemeType.Light;
     private bool includeDebug = false;
     private bool keepOnTop = false;
+    private int lastHostID = 100;
     private int listBoxFontWeight = (int)Weight.Regular;
     private int listBoxSpacing = (int)Spacing.Comfortable;
     private bool minimizeToTray = false;
