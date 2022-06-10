@@ -75,7 +75,7 @@
                 <!--#region Grid row and column definitions-->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="220" />
                     <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="5" />
@@ -127,6 +127,7 @@
                             <DataTemplate>
                                 <TextBlock
                                     FontSize="14"
+                                    TextTrimming="CharacterEllipsis"
                                     Text="{Binding Title, Converter={StaticResource nconv}}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
