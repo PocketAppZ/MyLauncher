@@ -10,7 +10,7 @@
     MinWidth="200"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
-    FontSize="16"
+    FontSize="15"
     KeyDown="Window_KeyDown"
     Loaded="Window_Loaded"
     MouseWheel="Window_MouseWheel"
@@ -48,6 +48,7 @@
             </Grid.RowDefinitions>
             <!--#endregion-->
 
+            <!--#region Icon in system tray-->
             <tb:TaskbarIcon
                 x:Name="tbIcon"
                 IconSource="/Images/ML.ico"
@@ -82,6 +83,7 @@
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>
             </tb:TaskbarIcon>
+            <!--#endregion-->
 
             <!--#region ColorZone with navigation icon-->
             <DockPanel
@@ -130,17 +132,24 @@
                                     <StackPanel Orientation="Vertical">
                                         <Button
                                             Click="BtnReadme_Click"
-                                            Content="View ReadMe" />
+                                            Content="View ReadMe"
+                                            FontSize="16" />
                                         <Button
                                             Click="BtnLog_Click"
-                                            Content="View Log File" />
+                                            Content="View Log File"
+                                            FontSize="16" />
                                         <Button
                                             Click="BtnData_Click"
-                                            Content="View Data File" />
-                                        <Separator />
+                                            Content="View Data File"
+                                            FontSize="16" />
+                                        <Separator
+                                            Margin="0"
+                                            Padding="1"
+                                            Background="{DynamicResource PrimaryHueMidBrush}" />
                                         <Button
                                             HorizontalContentAlignment="Left"
                                             Content="Cancel"
+                                            FontSize="16"
                                             Style="{StaticResource MaterialDesignFlatAccentButton}" />
                                     </StackPanel>
                                 </Grid>
@@ -261,7 +270,9 @@
                             Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Vertical" />
+                                    <WrapPanel
+                                        Grid.IsSharedSizeScope="True"
+                                        Orientation="Vertical" />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
 
@@ -270,24 +281,35 @@
                                     BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"
                                     TargetType="ScrollBar" />
                             </ListBox.Resources>
-
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image
-                                            Width="32"
-                                            Height="32"
-                                            Margin="10,0,0,0"
-                                            VerticalAlignment="Center"
-                                            Source="{Binding FileIcon}"
-                                            Visibility="{Binding ShowFileIcons, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}" />
-                                        <TextBlock
-                                            Margin="10,0,0,0"
-                                            VerticalAlignment="Center"
-                                            FontFamily="Segoe UI"
-                                            FontSize="18"
-                                            Text="{Binding Title}" />
-                                    </StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="55" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Image
+                                                Width="32"
+                                                Height="32"
+                                                Margin="8,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                SnapsToDevicePixels="True"
+                                                Source="{Binding FileIcon}"
+                                                Visibility="{Binding ShowFileIcons, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Padding="1"
+                                                VerticalAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="18"
+                                                Text="{Binding Title}" />
+                                        </Grid>
+                                    </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -314,7 +336,6 @@
                     </DockPanel>
                     <!--#endregion-->
                 </Grid>
-                <!--#endregion-->
             </materialDesign:DrawerHost>
 
             <!--#region SnackBar-->
