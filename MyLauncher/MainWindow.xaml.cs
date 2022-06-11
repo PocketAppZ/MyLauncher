@@ -1132,7 +1132,6 @@ public partial class MainWindow : Window
             {
                 _ = LaunchApp(entry);
             }
-            Debug.WriteLine($"{entry.Title} was clicked with the {e.ChangedButton} button");
             listboxEntries.SelectedItem = null;
         }
     }
@@ -1157,7 +1156,7 @@ public partial class MainWindow : Window
     private void RegisterEventHandlers()
     {
         EventManager.RegisterClassHandler(typeof(ListBoxItem),
-            MouseDownEvent,
+            MouseUpEvent,
             new MouseButtonEventHandler(ListBoxMouseButtonDown));
 
         EventManager.RegisterClassHandler(typeof(ListBoxItem),
