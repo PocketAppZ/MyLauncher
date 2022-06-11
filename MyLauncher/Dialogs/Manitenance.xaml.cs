@@ -1,4 +1,4 @@
-﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher.Dialogs;
 public partial class Maintenance : UserControl
@@ -75,9 +75,9 @@ public partial class Maintenance : UserControl
     private bool CheckForUntitled()
     {
         // Loop through the list backwards checking for null titles
-        for (int i = listbox1.Items.Count - 1; i >= 0; i--)
+        for (int i = MaintListBox.Items.Count - 1; i >= 0; i--)
         {
-            object item = listbox1.Items[i];
+            object item = MaintListBox.Items[i];
             EntryClass x = item as EntryClass;
             if (string.IsNullOrEmpty(x.Title))
             {
