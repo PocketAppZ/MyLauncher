@@ -1106,10 +1106,11 @@ public partial class MainWindow : Window
     }
     #endregion Unhandled Exception Handler
 
+    #region ListBox mouse and key events
     private void ListBoxMouseButtonUp(object sender, MouseButtonEventArgs e)
     {
         ListBoxItem lbi = sender as ListBoxItem;
-        ListBox box = FindParent<ListBox>(lbi);
+        ListBox box = WindowHelpers.FindParent<ListBox>(lbi);
 
         if (box is null or not ListBox || box.Name == "MaintListBox")
         {
@@ -1161,4 +1162,5 @@ public partial class MainWindow : Window
             KeyDownEvent,
             new KeyEventHandler(ListBoxKeyDown));
     }
+    #endregion ListBox mouse and key events
 }
