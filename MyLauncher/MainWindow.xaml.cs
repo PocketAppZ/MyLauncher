@@ -1106,18 +1106,16 @@ public partial class MainWindow : Window
     }
     #endregion Unhandled Exception Handler
 
-    private void ListBoxMouseButtonDown(object sender, MouseButtonEventArgs e)
+    private void ListBoxMouseButtonUp(object sender, MouseButtonEventArgs e)
     {
         ListBoxItem lbi = sender as ListBoxItem;
         ListBox box = FindParent<ListBox>(lbi);
-        if (box != null)
+
+        if (box is null or not ListBox || box.Name == "MaintListBox")
         {
-            Debug.WriteLine($"Found {box.Name}");
-            if (box.Name == "MaintListBox")
-            {
-                return;
-            }
+            return;
         }
+
         if (lbi.Content is EntryClass entry)
         {
             if (!UserSettings.Setting.AllowRightButton && e.ChangedButton != MouseButton.Left)
@@ -1157,26 +1155,10 @@ public partial class MainWindow : Window
     {
         EventManager.RegisterClassHandler(typeof(ListBoxItem),
             MouseUpEvent,
-            new MouseButtonEventHandler(ListBoxMouseButtonDown));
+            new MouseButtonEventHandler(ListBoxMouseButtonUp));
 
         EventManager.RegisterClassHandler(typeof(ListBoxItem),
             KeyDownEvent,
             new KeyEventHandler(ListBoxKeyDown));
-    }
-
-    public static T FindParent<T>(DependencyObject child) where T : DependencyObject
-    {
-        //get parent item
-        DependencyObject parentObject = VisualTreeHelper.GetParent(child);
-
-        //we've reached the end of the tree
-        if (parentObject == null) return null;
-
-        //check if the parent matches the type we're looking for
-        T parent = parentObject as T;
-        if (parent != null)
-            return parent;
-        else
-            return FindParent<T>(parentObject);
     }
 }
