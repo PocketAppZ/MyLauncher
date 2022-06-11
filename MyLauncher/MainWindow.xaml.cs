@@ -1,7 +1,5 @@
 ﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
-
-
 namespace MyLauncher;
 
 public partial class MainWindow : Window
@@ -96,6 +94,9 @@ public partial class MainWindow : Window
             WindowState = WindowState.Minimized;
             Debug.WriteLine("Minimized via settings");
         }
+
+        // ListBox event handlers
+        RegisterEventHandlers();
 
         // Settings change event
         UserSettings.Setting.PropertyChanged += UserSettingChanged;
@@ -209,6 +210,7 @@ public partial class MainWindow : Window
     }
     #endregion Clear and repopulate the listbox
 
+    #region Load the listbox
     public void PopulateMainListBox()
     {
         BindingList<EntryClass> temp = new();
@@ -221,6 +223,7 @@ public partial class MainWindow : Window
         }
         listboxEntries.ItemsSource = temp;
     }
+    #endregion Load the listbox
 
     #region Read Pop-ups file
     public static void ReadPopupsJson()
@@ -341,9 +344,9 @@ public partial class MainWindow : Window
                     }
                     else
                     {
-                    Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
-                    item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
+                        Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
+                        item.FileIcon = IconToImageSource(temp);
+                        log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
                     }
                 }
                 // expand environmental variables for folders
@@ -414,31 +417,6 @@ public partial class MainWindow : Window
     #endregion Check URL
 
     #region Launch app or URI
-    public void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
-    {
-        if (((ListBoxItem)sender).Content is not EntryClass || listboxEntries.SelectedItem == null)
-        {
-            return;
-        }
-        if (e.ChangedButton == MouseButton.Right && !UserSettings.Setting.AllowRightButton)
-        {
-            listboxEntries.SelectedItem = null;
-            return;
-        }
-
-        EntryClass entry = (EntryClass)listboxEntries.SelectedItem;
-
-        if (entry.EntryType == (int)ListEntryType.Popup)
-        {
-            _ = OpenPopup(entry, this);
-        }
-        else
-        {
-            LaunchApp(entry);
-        }
-        listboxEntries.SelectedIndex = -1;
-    }
-
     internal static bool LaunchApp(EntryClass item)
     {
         using Process launch = new();
@@ -478,17 +456,15 @@ public partial class MainWindow : Window
     #endregion Launch app or uri
 
     #region Open pop up list
-    public static bool OpenPopup(EntryClass entry, Window owner)
+    public static bool OpenPopup(EntryClass entry)
     {
         if (entry.EntryType != (int)ListEntryType.Popup)
         {
             return false;
         }
 
-        PopupWindow popup = new(entry.Title, entry.HostID)
-        {
-            Owner = owner
-        };
+        PopupWindow popup = new(entry.Title, entry.HostID);
+
         popup.Show();
 
         return true;
@@ -774,21 +750,21 @@ public partial class MainWindow : Window
         switch (size)
         {
             case MySize.Smallest:
-                return 0.80;
+                return 0.60;
             case MySize.Smaller:
-                return 0.90;
+                return 0.70;
             case MySize.Small:
-                return 0.95;
+                return 0.80;
             case MySize.Default:
-                return 1.0;
+                return 0.9;
             case MySize.Large:
-                return 1.05;
+                return 1.0;
             case MySize.Larger:
                 return 1.15;
             case MySize.Largest:
                 return 1.3;
             default:
-                return 1.0;
+                return 0.9;
         }
     }
     #endregion UI scale converter
@@ -796,6 +772,7 @@ public partial class MainWindow : Window
     #region Keyboard Events
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
+        // With Ctrl
         if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
         {
             if (e.Key == Key.L)
@@ -803,22 +780,6 @@ public partial class MainWindow : Window
                 NavigateToPage(NavPage.Maintenance);
             }
 
-            if (e.Key == Key.M)
-            {
-                switch (UserSettings.Setting.DarkMode)
-                {
-                    case (int)ThemeType.Light:
-                        UserSettings.Setting.DarkMode = (int)ThemeType.Dark;
-                        break;
-                    case (int)ThemeType.Dark:
-                        UserSettings.Setting.DarkMode = (int)ThemeType.System;
-                        break;
-                    case (int)ThemeType.System:
-                        UserSettings.Setting.DarkMode = (int)ThemeType.Light;
-                        break;
-                }
-                SnackbarMsg.ClearAndQueueMessage($"Theme set to {(ThemeType)UserSettings.Setting.DarkMode}");
-            }
             if (e.Key == Key.Add)
             {
                 EverythingLarger();
@@ -840,7 +801,52 @@ public partial class MainWindow : Window
                 }
             }
         }
+        // Ctrl and Shift
+        if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+        {
+            if (e.Key == Key.M)
+            {
+                switch (UserSettings.Setting.DarkMode)
+                {
+                    case (int)ThemeType.Light:
+                        UserSettings.Setting.DarkMode = (int)ThemeType.Dark;
+                        break;
+                    case (int)ThemeType.Dark:
+                        UserSettings.Setting.DarkMode = (int)ThemeType.System;
+                        break;
+                    case (int)ThemeType.System:
+                        UserSettings.Setting.DarkMode = (int)ThemeType.Light;
+                        break;
+                }
+                SnackbarMsg.ClearAndQueueMessage($"Theme set to {(ThemeType)UserSettings.Setting.DarkMode}");
+            }
+            if (e.Key == Key.P)
+            {
+                if (UserSettings.Setting.PrimaryColor >= (int)AccentColor.BlueGray)
+                {
+                    UserSettings.Setting.PrimaryColor = 0;
+                }
+                else
+                {
+                    UserSettings.Setting.PrimaryColor++;
+                }
+                SnackbarMsg.ClearAndQueueMessage($"Accent color set to {(AccentColor)UserSettings.Setting.PrimaryColor}");
+            }
+            if (e.Key == Key.S)
+            {
+                if (UserSettings.Setting.SecondaryColor >= (int)AccentColor.DeepOrange)
+                {
+                    UserSettings.Setting.SecondaryColor = 0;
+                }
+                else
+                {
+                    UserSettings.Setting.SecondaryColor++;
+                }
+                SnackbarMsg.ClearAndQueueMessage($"Accent color set to {(AccentColor)UserSettings.Setting.SecondaryColor}");
+            }
+        }
 
+        // No Ctrl or Shift
         if (e.Key == Key.F1)
         {
             if (!DialogHost.IsDialogOpen("MainDialogHost"))
@@ -1070,7 +1076,7 @@ public partial class MainWindow : Window
             if (result == "OK")
             {
                 log.Info(@"MyLauncher removed from HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
-                _ = new MDCustMsgBox(@"My Launcher was removed from Windows startup.",
+                _ = new MDCustMsgBox("My Launcher was removed from Windows startup.",
                                     "My Launcher", ButtonType.Ok).ShowDialog();
             }
             else
@@ -1099,4 +1105,79 @@ public partial class MainWindow : Window
             "My Launcher Error", ButtonType.Ok).ShowDialog();
     }
     #endregion Unhandled Exception Handler
+
+    private void ListBoxMouseButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        ListBoxItem lbi = sender as ListBoxItem;
+        ListBox box = FindParent<ListBox>(lbi);
+        if (box != null)
+        {
+            Debug.WriteLine($"Found {box.Name}");
+            if (box.Name == "MaintListBox")
+            {
+                return;
+            }
+        }
+        if (lbi.Content is EntryClass entry)
+        {
+            if (!UserSettings.Setting.AllowRightButton && e.ChangedButton != MouseButton.Left)
+            {
+                return;
+            }
+            if (entry.EntryType == (int)ListEntryType.Popup)
+            {
+                _ = OpenPopup(entry);
+            }
+            else
+            {
+                _ = LaunchApp(entry);
+            }
+            Debug.WriteLine($"{entry.Title} was clicked with the {e.ChangedButton} button");
+            listboxEntries.SelectedItem = null;
+        }
+    }
+
+    private void ListBoxKeyDown(object sender, KeyEventArgs e)
+    {
+        ListBoxItem lbi = sender as ListBoxItem;
+        if (lbi.Content is EntryClass entry && e.Key == Key.Enter)
+        {
+            if (entry.EntryType == (int)ListEntryType.Popup)
+            {
+                _ = OpenPopup(entry);
+            }
+            else
+            {
+                _ = LaunchApp(entry);
+            }
+            listboxEntries.SelectedItem = null;
+        }
+    }
+
+    private void RegisterEventHandlers()
+    {
+        EventManager.RegisterClassHandler(typeof(ListBoxItem),
+            MouseDownEvent,
+            new MouseButtonEventHandler(ListBoxMouseButtonDown));
+
+        EventManager.RegisterClassHandler(typeof(ListBoxItem),
+            KeyDownEvent,
+            new KeyEventHandler(ListBoxKeyDown));
+    }
+
+    public static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    {
+        //get parent item
+        DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+
+        //we've reached the end of the tree
+        if (parentObject == null) return null;
+
+        //check if the parent matches the type we're looking for
+        T parent = parentObject as T;
+        if (parent != null)
+            return parent;
+        else
+            return FindParent<T>(parentObject);
+    }
 }

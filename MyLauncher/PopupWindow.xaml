@@ -115,9 +115,6 @@
                     <Setter Property="BorderThickness" Value="{Binding BorderWidth, Source={x:Static local:UserSettings.Setting}}" />
                     <Setter Property="Margin" Value="10,5,10,5" />
                     <Setter Property="Cursor" Value="Hand" />
-                    <EventSetter
-                        Event="MouseUp"
-                        Handler="ListBoxItem_MouseClick" />
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:MyLauncher"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    ShutdownMode="OnMainWindowClose"
     StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -38,9 +39,6 @@
                 <Setter Property="BorderThickness" Value="{Binding BorderWidth, Source={x:Static local:UserSettings.Setting}}" />
                 <Setter Property="Margin" Value="10,5,10,5" />
                 <Setter Property="Cursor" Value="Hand" />
-                <EventSetter
-                    Event="MouseUp"
-                    Handler="ListBoxItem_MouseClick" />
             </Style>
 
             <Style
@@ -49,7 +47,7 @@
                 TargetType="ListBoxItem">
                 <Setter Property="Height" Value="50" />
                 <Setter Property="Padding" Value="2,2,10,1" />
-                <Setter Property="Margin" Value="8,1,5,1" />
+                <Setter Property="Margin" Value="5,1,5,1" />
             </Style>
 
             <Style
