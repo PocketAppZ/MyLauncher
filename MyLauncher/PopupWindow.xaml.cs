@@ -33,10 +33,45 @@ public partial class PopupWindow : Window
         // Font
         SetFontWeight((Weight)UserSettings.Setting.ListBoxFontWeight);
 
+        // Spacing
+        SetSpacing((Spacing)UserSettings.Setting.ListBoxSpacing);
+
+        // Position & Size
         PopupPosition(hostID);
         MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 100;
+
+        // Settings change event
+        UserSettings.Setting.PropertyChanged += UserSettingChanged;
     }
     #endregion Init Pop-up
+
+    #region Setting changed
+    private void UserSettingChanged(object sender, PropertyChangedEventArgs e)
+    {
+        PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName);
+        object newValue = prop?.GetValue(sender, null);
+        switch (e.PropertyName)
+        {
+            case nameof(UserSettings.Setting.KeepOnTop):
+                Topmost = (bool)newValue;
+                break;
+
+            case nameof(UserSettings.Setting.ListBoxFontWeight):
+                SetFontWeight((Weight)newValue);
+                break;
+
+            case nameof(UserSettings.Setting.ListBoxSpacing):
+                SetSpacing((Spacing)newValue);
+                break;
+
+            case nameof(UserSettings.Setting.UISize):
+                int size = (int)newValue;
+                double newSize = MainWindow.UIScale((MySize)size);
+                PMain.LayoutTransform = new ScaleTransform(newSize, newSize);
+                break;
+        }
+    }
+    #endregion Setting changed
 
     #region Load the listbox
     private void PopulateListBox(int hostID)
@@ -70,7 +105,7 @@ public partial class PopupWindow : Window
         EntryClass entry = (EntryClass)PopupListBox.SelectedItem;
         if (entry.EntryType == (int)ListEntryType.Popup)
         {
-            _ = MainWindow.OpenPopup(entry, this);
+            _ = MainWindow.OpenPopup(entry);
         }
         else
         {
@@ -180,4 +215,29 @@ public partial class PopupWindow : Window
         SizeToContent = SizeToContent.WidthAndHeight;
     }
     #endregion Set window size and position
+
+    #region Set the row spacing
+    /// <summary>
+    /// Sets the padding & margin around the items in the listbox
+    /// </summary>
+    /// <param name="spacing"></param>
+    private void SetSpacing(Spacing spacing)
+    {
+        switch (spacing)
+        {
+            case Spacing.Scrunched:
+                PopupListBox.ItemContainerStyle = Application.Current.FindResource("ListBoxScrunched") as Style;
+                break;
+            case Spacing.Compact:
+                PopupListBox.ItemContainerStyle = Application.Current.FindResource("ListBoxCompact") as Style;
+                break;
+            case Spacing.Comfortable:
+                PopupListBox.ItemContainerStyle = Application.Current.FindResource("ListBoxComfortable") as Style;
+                break;
+            case Spacing.Wide:
+                PopupListBox.ItemContainerStyle = Application.Current.FindResource("ListBoxSpacious") as Style;
+                break;
+        }
+    }
+    #endregion Set the row spacing
 }
