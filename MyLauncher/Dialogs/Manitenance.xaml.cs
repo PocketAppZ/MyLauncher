@@ -1,4 +1,4 @@
-// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher.Dialogs;
 public partial class Maintenance : UserControl
@@ -24,7 +24,7 @@ public partial class Maintenance : UserControl
     }
     private void UserControl_Loaded(object sender, RoutedEventArgs e)
     {
-        _ = listbox1.Focus();
+        _ = MaintListBox.Focus();
     }
 
     #region List changed event
@@ -40,9 +40,9 @@ public partial class Maintenance : UserControl
     {
         if (EntryClass.Entries.Count > 0)
         {
-            listbox1.ItemsSource = EntryClass.Entries;
-            listbox1.SelectedItem = EntryClass.Entries.First();
-            _ = listbox1.Focus();
+            MaintListBox.ItemsSource = EntryClass.Entries;
+            MaintListBox.SelectedItem = EntryClass.Entries.First();
+            _ = MaintListBox.Focus();
         }
     }
     #endregion Load the ListBox
@@ -50,7 +50,7 @@ public partial class Maintenance : UserControl
     #region Load the ComboBox
     private void LoadComboBox()
     {
-        BindingList<EntryClass> hostEntries = new();
+        List<EntryClass> hostEntries = new();
 
         EntryClass entry1 = new()
         {
@@ -67,7 +67,7 @@ public partial class Maintenance : UserControl
             }
         }
 
-        HostCombo.ItemsSource = hostEntries;
+        HostCombo.ItemsSource = hostEntries.OrderBy(x => x.Title);
     }
     #endregion Load the ComboBox
 
@@ -102,8 +102,8 @@ public partial class Maintenance : UserControl
             HostID = -1
         };
         EntryClass.Entries.Add(newitem);
-        listbox1.SelectedIndex = listbox1.Items.Count - 1;
-        listbox1.ScrollIntoView(listbox1.SelectedItem);
+        MaintListBox.SelectedIndex = MaintListBox.Items.Count - 1;
+        MaintListBox.ScrollIntoView(MaintListBox.SelectedItem);
         _ = tbTitle.Focus();
         SnackbarMsg.ClearAndQueueMessage("New \"untitled\" item was created.", 5000);
     }
@@ -112,41 +112,59 @@ public partial class Maintenance : UserControl
     #region Add New Pop-Up
     private void NewPopup()
     {
+        int nexthost = GetNextHostID();
+
         EntryClass newitem = new()
         {
             Title = string.Empty,
             FilePathOrURI = string.Empty,
             IconSource = "Menu.png",
             EntryType = (int)ListEntryType.Popup,
-            HostID = ++UserSettings.Setting.LastPopID
+            HostID = nexthost
         };
         EntryClass.Entries.Add(newitem);
-        listbox1.SelectedIndex = listbox1.Items.Count - 1;
-        listbox1.ScrollIntoView(listbox1.SelectedItem);
+        MaintListBox.SelectedIndex = MaintListBox.Items.Count - 1;
+        MaintListBox.ScrollIntoView(MaintListBox.SelectedItem);
         _ = tbTitle.Focus();
         SnackbarMsg.ClearAndQueueMessage("New \"untitled\" pop-up list was created.", 5000);
+    }
+
+    private static int GetNextHostID()
+    {
+        EntryClass id;
+        int hostID = UserSettings.Setting.LastHostID;
+        do
+        {
+            hostID++;
+            id = EntryClass.Entries.FirstOrDefault(x => x.HostID == hostID);
+        }
+        while (id != null);
+
+        Debug.WriteLine($"New HostID is {hostID}");
+        UserSettings.Setting.LastHostID = hostID;
+        return hostID;
     }
     #endregion Add New Pop-Up
 
     #region Delete an item
     private void DeleteItem()
     {
-        if (listbox1.SelectedItem != null)
+        if (MaintListBox.SelectedItem != null)
         {
-            string item = (listbox1.SelectedItem as EntryClass)?.Title;
-            int index = listbox1.SelectedIndex;
-            _ = EntryClass.Entries.Remove((EntryClass)listbox1.SelectedItem);
+            string item = (MaintListBox.SelectedItem as EntryClass)?.Title;
+            int index = MaintListBox.SelectedIndex;
+            _ = EntryClass.Entries.Remove((EntryClass)MaintListBox.SelectedItem);
             SnackbarMsg.ClearAndQueueMessage($"Deleted \"{item}\"", 2000);
             if (index > 0)
             {
-                listbox1.SelectedItem = listbox1.Items[index - 1];
-                listbox1.ScrollIntoView(listbox1.SelectedItem);
+                MaintListBox.SelectedItem = MaintListBox.Items[index - 1];
+                MaintListBox.ScrollIntoView(MaintListBox.SelectedItem);
             }
             else
             {
-                listbox1.SelectedItem = EntryClass.Entries.First();
+                MaintListBox.SelectedItem = EntryClass.Entries.First();
             }
-            _ = listbox1.Focus();
+            _ = MaintListBox.Focus();
         }
         else
         {
@@ -228,7 +246,7 @@ public partial class Maintenance : UserControl
         if (result == true)
         {
             tbPath.Text = dlgOpen.FileName;
-            EntryClass entry = (EntryClass)listbox1.SelectedItem;
+            EntryClass entry = (EntryClass)MaintListBox.SelectedItem;
             entry.FilePathOrURI = tbPath.Text;
         }
     }
@@ -245,7 +263,7 @@ public partial class Maintenance : UserControl
         if (dialogFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
             tbPath.Text = dialogFolder.SelectedPath;
-            EntryClass entry = (EntryClass)listbox1.SelectedItem;
+            EntryClass entry = (EntryClass)MaintListBox.SelectedItem;
             entry.FilePathOrURI = tbPath.Text;
         }
     }
@@ -290,7 +308,7 @@ public partial class Maintenance : UserControl
         MainWindow.ReadJson();
         (Application.Current.MainWindow as MainWindow)?.ResetListBox();
         LoadListBox();
-        listbox1.Items.Refresh();
+        MaintListBox.Items.Refresh();
         EntriesChanged = false;
         btnDiscard.IsEnabled = false;
     }
@@ -416,9 +434,9 @@ public partial class Maintenance : UserControl
             if (tbTitle.Text != string.Empty)
             {
                 EntryClass.Entries.Add(newitem);
-                listbox1.SelectedIndex = listbox1.Items.Count - 1;
-                listbox1.ScrollIntoView(listbox1.SelectedItem);
-                _ = listbox1.Focus();
+                MaintListBox.SelectedIndex = MaintListBox.Items.Count - 1;
+                MaintListBox.ScrollIntoView(MaintListBox.SelectedItem);
+                _ = MaintListBox.Focus();
                 EntriesChanged = true;
             }
         }
@@ -443,13 +461,13 @@ public partial class Maintenance : UserControl
             if (Path.GetDirectoryName(dlgOpen.FileName) == dlgOpen.InitialDirectory)
             {
                 tbIconFile.Text = Path.GetFileName(dlgOpen.FileName);
-                EntryClass entry = (EntryClass)listbox1.SelectedItem;
+                EntryClass entry = (EntryClass)MaintListBox.SelectedItem;
                 entry.IconSource = tbIconFile.Text;
             }
             else
             {
                 tbIconFile.Text = dlgOpen.FileName;
-                EntryClass entry = (EntryClass)listbox1.SelectedItem;
+                EntryClass entry = (EntryClass)MaintListBox.SelectedItem;
                 entry.IconSource = tbIconFile.Text;
             }
         }
@@ -459,16 +477,16 @@ public partial class Maintenance : UserControl
     #region ListBox selection changed
     private void Listbox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (listbox1.SelectedItem == null)
+        if (MaintListBox.SelectedItem == null)
         {
-            listbox1.SelectedItem = PrevEntry;
+            MaintListBox.SelectedItem = PrevEntry;
             return;
         }
-        PrevEntry = listbox1.SelectedItem;
+        PrevEntry = MaintListBox.SelectedItem;
 
-        if (listbox1.SelectedItem != null)
+        if (MaintListBox.SelectedItem != null)
         {
-            int? x = (listbox1.SelectedItem as EntryClass)?.EntryType;
+            int? x = (MaintListBox.SelectedItem as EntryClass)?.EntryType;
             tbPath.IsEnabled = x != 1;
             tbArgs.IsEnabled = x != 1;
         }
