@@ -1,4 +1,4 @@
-﻿The ### ReadMe file
+﻿The My Launcher ReadMe file
 
 
 Introduction
@@ -14,13 +14,13 @@ Introduction
 	List Maintenance
 	----------------
 	On the left side of the List Maintenance page you will see a scrollable list. This list represents
-	the items in the Daily page. When you click on an item in the list, the text boxes on the right side
+	the items in the Launcher page. When you click on an item in the list, the text boxes on the right side
 	of the window are populated with the details of that list item. To update an item, simply make any
 	changes in the appropriate text box and then press the tab key or the enter key.
 
 	To arrange list items, simply drag an entry to a new position in the list.
 
-	To add a new item, click the new item button. An new entry, temporarily named "untitled", is added
+	To add a new item, click the New Item button. An new entry, temporarily named "untitled", is added
 	to the bottom of the list on the list. The text boxes on the right will have some instructional
 	text. That instructional text will be removed when you select that text box.
 
