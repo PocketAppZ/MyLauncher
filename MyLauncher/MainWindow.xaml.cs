@@ -174,7 +174,8 @@ public partial class MainWindow : Window
 
             case NavPage.Maintenance:
                 NavDrawer.IsLeftDrawerOpen = false;
-                DialogHelpers.ShowManitenanceDialog();
+                Maintenance maintenance = new Maintenance();
+                maintenance.Show();
                 break;
 
             case NavPage.Settings:

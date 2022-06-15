@@ -1,4 +1,4 @@
-﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
 
@@ -85,6 +85,38 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
             OnPropertyChanged();
         }
     }
+
+    public bool MaintFistRun { get; set; } = true;
+
+    public double MaintWindowHeight { get; set; } = 540;
+
+    public double MaintWindowLeft
+    {
+        get
+        {
+            if (maintWindowLeft < 0)
+            {
+                maintWindowLeft = 0;
+            }
+            return maintWindowLeft;
+        }
+        set => maintWindowLeft = value;
+    }
+
+    public double MaintWindowTop
+    {
+        get
+        {
+            if (maintWindowTop < 0)
+            {
+                maintWindowTop = 0;
+            }
+            return maintWindowTop;
+        }
+        set => maintWindowTop = value;
+    }
+
+    public double MaintWindowWidth { get; set; } = 850;
 
     public bool MinimizeToTray
     {
@@ -248,6 +280,8 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private int lastHostID = 100;
     private int listBoxFontWeight = (int)Weight.Regular;
     private int listBoxSpacing = (int)Spacing.Comfortable;
+    private double maintWindowLeft = 100;
+    private double maintWindowTop = 100;
     private bool minimizeToTray = false;
     private bool playSound = true;
     private int primaryColor = (int)AccentColor.Blue;
@@ -258,10 +292,10 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool startWithWindows = false;
     private string titleText = "Click on any App Below to Open it";
     private int uiSize = (int)MySize.Default;
-    private double windowHeight = 500;
+    private double windowHeight = 550;
     private double windowLeft = 100;
     private double windowTop = 100;
-    private double windowWidth = 500;
+    private double windowWidth = 875;
     #endregion Private backing fields
 
     #region Handle property change event
