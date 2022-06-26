@@ -7,26 +7,30 @@
     xmlns:local="clr-namespace:MyLauncher"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
     Title="Maintenance"
     MinWidth="300"
     MinHeight="300"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
     Loaded="Window_Loaded"
-    TextElement.FontSize="18"
+    TextElement.FontSize="14"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
 
+    <!--#region Window resources (styles)-->
     <Window.Resources>
-        <local:NConverter x:Key="nconv" />
+        <Style
+            BasedOn="{StaticResource {x:Type TreeViewItem}}"
+            TargetType="TreeViewItem">
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
         <Style
             x:Key="CardStyle"
             TargetType="materialDesign:Card">
-            <Setter Property="Height" Value="75" />
+            <Setter Property="Height" Value="70" />
             <Setter Property="Margin" Value="5,0" />
             <Setter Property="UniformCornerRadius" Value="7" />
             <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth2" />
@@ -35,38 +39,43 @@
             x:Key="SectionHeader"
             TargetType="materialDesign:ColorZone">
             <Setter Property="Mode" Value="PrimaryMid" />
-            <Setter Property="Height" Value="38" />
+            <Setter Property="Height" Value="33" />
             <Setter Property="CornerRadius" Value="7,7,0,0" />
             <Setter Property="Padding" Value="0,0,0,3" />
             <Setter Property="Margin" Value="0,1,0,0" />
             <Setter Property="FontWeight" Value="DemiBold" />
-            <Setter Property="FontSize" Value="19" />
-
+            <Setter Property="FontSize" Value="15" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
         </Style>
         <Style
             x:Key="EntryTextBox"
             BasedOn="{StaticResource MaterialDesignTextBox}"
             TargetType="TextBox">
-            <Setter Property="Margin" Value="10,5,10,6" />
-            <Setter Property="Padding" Value="0,2,0,0" />
+            <Setter Property="Margin" Value="10,5,10,7" />
+            <Setter Property="Padding" Value="0,2,0,1" />
             <Setter Property="VerticalAlignment" Value="Bottom" />
             <Setter Property="VerticalContentAlignment" Value="Bottom" />
             <Setter Property="FontWeight" Value="Regular" />
+            <Setter Property="FontSize" Value="14" />
         </Style>
         <Style
             x:Key="BottomButtonRow"
             BasedOn="{StaticResource MaterialDesignRaisedButton}"
             TargetType="Button">
             <Setter Property="FontWeight" Value="DemiBold" />
-            <Setter Property="FontSize" Value="17" />
-            <Setter Property="Height" Value="35" />
-            <Setter Property="Width" Value="150" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Margin" Value="10" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="120" />
+            <Setter Property="Padding" Value="0,0,0,2" />
+            <Setter Property="Margin" Value="5,10" />
         </Style>
-
+        <Style
+            BasedOn="{StaticResource {x:Type materialDesign:SnackbarMessage}}"
+            TargetType="{x:Type materialDesign:SnackbarMessage}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
     </Window.Resources>
+    <!--#endregion-->
 
     <Grid x:Name="MaintGrid">
         <!--#region Row definitions-->
@@ -83,7 +92,8 @@
             Padding="0,0,0,3"
             materialDesign:ShadowAssist.ShadowDepth="Depth2"
             CornerRadius="4"
-            Mode="PrimaryMid">
+            Mode="PrimaryMid"
+            MouseDoubleClick="ColorZone_MouseDoubleClick">
             <Grid>
                 <TextBlock
                     x:Name="tbHeader"
@@ -98,7 +108,7 @@
             <!--#region Grid row and column definitions-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="5" />
@@ -110,7 +120,7 @@
             </Grid.RowDefinitions>
             <!--#endregion-->
 
-            <!--#region List box on the left side-->
+            <!--#region TreeView on the left side-->
             <materialDesign:Card
                 Grid.Row="1"
                 Grid.Column="1"
@@ -119,45 +129,55 @@
                 materialDesign:ShadowAssist.ShadowDepth="Depth2"
                 MouseEnter="Card_MouseEnter"
                 MouseLeave="Card_MouseLeave"
-                UniformCornerRadius="7">
-                <ListBox
-                    x:Name="MaintListBox"
+                UniformCornerRadius="1">
+                <TreeView
+                    x:Name="TvMaint"
+                    Margin="1,2"
+                    Padding="1"
+                    dd:DragDrop.DragHandler="{Binding}"
+                    dd:DragDrop.DropHandler="{Binding}"
                     dd:DragDrop.IsDragSource="True"
                     dd:DragDrop.IsDropTarget="True"
-                    dd:DragDrop.UseDefaultDragAdorner="False"
+                    dd:DragDrop.UseDefaultDragAdorner="True"
                     AllowDrop="True"
-                    SelectionChanged="Listbox1_SelectionChanged"
-                    TabIndex="0">
-                    <ListBox.Resources>
+                    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                    BorderThickness="2"
+                    ScrollViewer.CanContentScroll="True">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type local:Child}"
+                            ItemsSource="{Binding ChildrenOfChild}">
+                            <TextBlock Text="{Binding Title}" Margin="0" />
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                    <TreeView.Resources>
                         <Style
-                            BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"
-                            TargetType="ScrollBar" />
-                    </ListBox.Resources>
-                    <ListBox.ItemContainerStyle>
-                        <Style
-                            BasedOn="{StaticResource {x:Type ListBoxItem}}"
-                            TargetType="ListBoxItem">
-                            <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding EntryType}"
-                                    Value="1">
-                                    <Setter Property="Foreground" Value="{DynamicResource SecondaryHueDarkBrush}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                            <Setter Property="Tag" Value="{Binding ElementName=MaintListBox}" />
+                            BasedOn="{StaticResource MaterialDesignTreeViewItem}"
+                            TargetType="TreeViewItem">
+                            <Setter Property="materialDesign:TreeViewAssist.ExpanderSize" Value="20" />
                         </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Text="{Binding Title, Converter={StaticResource nconv}}"
-                                TextTrimming="CharacterEllipsis" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                        <Style
+                            BasedOn="{StaticResource MaterialDesignScrollBar}"
+                            TargetType="ScrollBar">
+                            <Setter Property="Margin" Value="10,4,2,4" />
+                            <Setter Property="materialDesign:ScrollBarAssist.ButtonsVisibility" Value="Collapsed" />
+                            <Setter Property="materialDesign:ScrollBarAssist.ThumbWidth" Value="10" />
+                        </Style>
+                    </TreeView.Resources>
+                    <TreeView.ItemContainerStyle>
+                        <Style
+                            BasedOn="{StaticResource {x:Type TreeViewItem}}"
+                            TargetType="TreeViewItem">
+                            <Setter Property="Margin" Value="8,2,10,0" />
+                            <Setter Property="Padding" Value="5" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.DataContext>
+                        <local:Child />
+                    </TreeView.DataContext>
+                </TreeView>
             </materialDesign:Card>
             <!--#endregion-->
-
 
             <!--#region Text boxes and buttons on the right side-->
             <Grid
@@ -165,18 +185,17 @@
                 Grid.Column="3">
                 <Grid.DataContext>
                     <Binding
-                        ElementName="MaintListBox"
+                        ElementName="TvMaint"
                         Path="SelectedItem" />
                 </Grid.DataContext>
 
                 <Grid>
                     <!--#region Row definitions-->
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="90" />
-                        <RowDefinition Height="90" />
-                        <RowDefinition Height="90" />
-                        <RowDefinition Height="90" />
-                        <RowDefinition Height="90" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
                         <RowDefinition Height="auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
@@ -208,11 +227,61 @@
                                         </TextBlock.Style>
                                     </TextBlock>
                                     <materialDesign:PopupBox
-                                        x:Name="pbxSpecialApps"
-                                        Margin="0,0,10,0"
+                                        x:Name="pbxInfo"
+                                        Margin="0,0,60,0"
                                         Padding="0"
                                         HorizontalAlignment="Right"
-                                        PlacementMode="LeftAndAlignTopEdges">
+                                        PlacementMode="LeftAndAlignTopEdges"
+                                        ToolTip="Item Information">
+                                        <materialDesign:PopupBox.ToggleContent>
+                                            <materialDesign:PackIcon
+                                                Width="24"
+                                                Height="24"
+                                                Foreground="{Binding ElementName=x31, Path=Foreground}"
+                                                Kind="InfoVariant" />
+                                        </materialDesign:PopupBox.ToggleContent>
+                                        <Border
+                                            Padding="3"
+                                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                            BorderThickness="2">
+                                            <Grid
+                                                Width="410"
+                                                Margin="0"
+                                                Background="{DynamicResource MaterialDesignPaper}">
+                                                <Grid.DataContext>
+                                                    <Binding
+                                                        ElementName="TvMaint"
+                                                        Path="SelectedItem" />
+                                                </Grid.DataContext>
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock
+                                                        Margin="15,10,0,0"
+                                                        Text="{Binding Title, StringFormat='Title: {0}', FallbackValue='Please select an item'}"
+                                                        TextAlignment="Left" />
+                                                    <TextBlock
+                                                        Margin="15,5,0,0"
+                                                        Text="{Binding EntryType, StringFormat='Type: {0}'}"
+                                                        TextAlignment="Left" />
+                                                    <TextBlock
+                                                        Margin="15,5,0,0"
+                                                        Text="{Binding ChildrenOfChild.Count, StringFormat='Children: {0}', FallbackValue='Children: None'}"
+                                                        TextAlignment="Left" />
+                                                    <TextBlock
+                                                        Margin="15,5,0,5"
+                                                        Text="{Binding ItemID, StringFormat='ID: {0}'}"
+                                                        TextAlignment="Left" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </materialDesign:PopupBox>
+
+                                    <materialDesign:PopupBox
+                                        x:Name="pbxSpecialApps"
+                                        Margin="0,0,17,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Right"
+                                        PlacementMode="LeftAndAlignTopEdges"
+                                        ToolTip="Special Apps">
                                         <materialDesign:PopupBox.ToggleContent>
                                             <materialDesign:PackIcon
                                                 Width="24"
@@ -225,7 +294,7 @@
                                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                                             BorderThickness="2">
                                             <Grid
-                                                Width="180"
+                                                Width="185"
                                                 Margin="0"
                                                 Background="{DynamicResource MaterialDesignPaper}">
                                                 <StackPanel Orientation="Vertical">
@@ -301,12 +370,13 @@
                                 PreviewKeyDown="Textbox_KeyDown"
                                 Style="{StaticResource EntryTextBox}"
                                 TabIndex="0"
-                                Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                                ToolTip="{Binding ItemID}" />
                         </Grid>
                     </materialDesign:Card>
                     <!--#endregion-->
 
-                    <!--#region Path or URL with file picker button-->
+                    <!--#region Path or URL with folder and file picker buttons-->
                     <materialDesign:Card
                         Grid.Row="1"
                         MouseEnter="Card_MouseEnter"
@@ -332,7 +402,7 @@
                                             Kind="FileDocumentOutline" />
                                     </Button>
                                     <Button
-                                        Margin="0,0,35,0"
+                                        Margin="0,0,40,0"
                                         HorizontalAlignment="Right"
                                         Click="BtnFolderPicker_Click"
                                         Style="{StaticResource MaterialDesignFlatLightButton}"
@@ -419,46 +489,14 @@
                     </materialDesign:Card>
                     <!--#endregion-->
 
-                    <!--#region ComboBox-->
-                    <materialDesign:Card
-                        Grid.Row="4"
-                        MouseEnter="Card_MouseEnter"
-                        MouseLeave="Card_MouseLeave"
-                        Style="{StaticResource CardStyle}">
-                        <Grid>
-                            <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
-                                <Grid>
-                                    <TextBlock
-                                        Margin="10,5"
-                                        Text="Child of ..." />
-                                </Grid>
-                            </materialDesign:ColorZone>
-                            <ComboBox
-                                Name="HostCombo"
-                                Height="{Binding ElementName=tbIconFile, Path=Height}"
-                                Margin="{Binding ElementName=tbIconFile, Path=Margin}"
-                                Padding="{Binding ElementName=tbIconFile, Path=Padding}"
-                                VerticalAlignment="{Binding ElementName=tbIconFile, Path=VerticalAlignment}"
-                                VerticalContentAlignment="{Binding ElementName=tbIconFile, Path=VerticalContentAlignment}"
-                                DisplayMemberPath="Title"
-                                FontWeight="{Binding ElementName=tbIconFile, Path=FontWeight}"
-                                SelectedValue="{Binding ChildOfHost}"
-                                SelectedValuePath="HostID"
-                                TabIndex="4" />
-                        </Grid>
-                    </materialDesign:Card>
-                    <!--#endregion-->
-
-
                     <!--#region Buttons at bottom-->
-                    <Grid Grid.Row="6">
+                    <Grid Grid.Row="4">
                         <WrapPanel
                             Margin="0,10"
                             HorizontalAlignment="Center"
                             Orientation="Horizontal">
                             <!--  New Item button opens a PopupBox with item type choices  -->
                             <Button
-
                                 Click="NewItem_Click"
                                 Style="{StaticResource BottomButtonRow}"
                                 TabIndex="5"
@@ -478,7 +516,7 @@
                                                 TextAlignment="Center" />
                                         </materialDesign:PopupBox.ToggleContent>
                                         <Border
-                                            Padding="3"
+                                            Padding="0"
                                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                                             BorderThickness="2">
                                             <Grid
@@ -490,10 +528,11 @@
                                                     Orientation="Vertical">
                                                     <TextBlock
                                                         Margin="15,10,0,10"
-                                                        FontSize="17"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
                                                         Text="New Item Type"
                                                         TextAlignment="Left" />
-                                                    <Separator />
+                                                    <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
                                                     <Button
                                                         Height="35"
                                                         Padding="15,0,15,10"
@@ -512,12 +551,13 @@
                                                         VerticalContentAlignment="Center"
                                                         Click="NewSpecialApp_Click"
                                                         Content="Special App" />
-                                                    <Separator />
+                                                    <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
                                                     <Button
+                                                        Height="35"
                                                         HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
                                                         Click="CancelNewItem_Click"
-                                                        Content="Cancel"
-                                                        Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                                                        Content="Cancel" />
                                                 </StackPanel>
                                             </Grid>
                                         </Border>
@@ -539,6 +579,12 @@
                                 TabIndex="6"
                                 ToolTip="Discard any changes and reload the list" />
                             <Button
+                                Click="BtnBackup_Click"
+                                Content="Backup List"
+                                Style="{StaticResource BottomButtonRow}"
+                                TabIndex="4"
+                                ToolTip="Make a backup copy of the current list" />
+                            <Button
                                 Click="BtnClose_Click"
                                 Content="Save &amp; Close"
                                 Style="{StaticResource BottomButtonRow}"
@@ -551,5 +597,17 @@
             </Grid>
             <!--#endregion-->
         </Grid>
+
+        <!--#region SnackBar-->
+        <materialDesign:Snackbar
+            x:Name="SnackBarMaint"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Background="#FF202020"
+            FontWeight="DemiBold"
+            Foreground="White"
+            MessageQueue="{materialDesign:MessageQueue}" />
+        <!--#endregion-->
     </Grid>
 </Window>

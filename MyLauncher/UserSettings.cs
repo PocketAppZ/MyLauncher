@@ -56,16 +56,6 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
-    public int LastHostID
-    {
-        get => lastHostID;
-        set
-        {
-            lastHostID = value;
-            OnPropertyChanged();
-        }
-    }
-
     public int ListBoxFontWeight
     {
         get { return listBoxFontWeight; }
@@ -116,6 +106,14 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         set => maintWindowTop = value;
     }
 
+
+    public bool MainWindowMinimizeOnLaunch
+    {
+        get { return mainWindowMinimizeOnLaunch; }
+        set { mainWindowMinimizeOnLaunch = value; OnPropertyChanged(); }
+    }
+
+
     public double MaintWindowWidth { get; set; } = 850;
 
     public bool MinimizeToTray
@@ -138,6 +136,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public bool PopupCloseAfterLaunch
+    {
+        get => popupCloseAfterLaunch;
+        set
+        {
+            popupCloseAfterLaunch = value;
+            OnPropertyChanged();
+        }
+    }
+
     public int PrimaryColor
     {
         get => primaryColor;
@@ -156,6 +164,45 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
             secondaryColor = value;
             OnPropertyChanged();
         }
+    }
+
+    public double SettingsWindowHeight
+    {
+        get
+        {
+            if (settingsWindowHeight < 100)
+            {
+                settingsWindowHeight = 100;
+            }
+            return settingsWindowHeight;
+        }
+        set => settingsWindowHeight = value;
+    }
+
+    public double SettingsWindowLeft
+    {
+        get
+        {
+            if (settingsWindowLeft < 0)
+            {
+                settingsWindowLeft = 0;
+            }
+            return settingsWindowLeft;
+        }
+        set => settingsWindowLeft = value;
+    }
+
+    public double SettingsWindowTop
+    {
+        get
+        {
+            if (settingsWindowTop < 0)
+            {
+                settingsWindowTop = 0;
+            }
+            return settingsWindowTop;
+        }
+        set => settingsWindowTop = value;
     }
 
     public bool ShowExitButton
@@ -277,15 +324,19 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private int darkmode = (int)ThemeType.Light;
     private bool includeDebug = false;
     private bool keepOnTop = false;
-    private int lastHostID = 100;
     private int listBoxFontWeight = (int)Weight.Regular;
     private int listBoxSpacing = (int)Spacing.Comfortable;
+    private bool mainWindowMinimizeOnLaunch = false;
     private double maintWindowLeft = 100;
     private double maintWindowTop = 100;
     private bool minimizeToTray = false;
     private bool playSound = true;
+    private bool popupCloseAfterLaunch = true;
     private int primaryColor = (int)AccentColor.Blue;
     private int secondaryColor = (int)AccentColor.Red;
+    private double settingsWindowHeight = 660;
+    private double settingsWindowLeft = 100;
+    private double settingsWindowTop = 100;
     private bool showExitButton = true;
     private bool showFileIcons = true;
     private bool startMinimized = false;

@@ -6,17 +6,31 @@ namespace MyLauncher;
 
 public partial class MDCustMsgBox : Window
 {
+    #region Public Property
+    public static CustResultType CustResult { get; set; }
+    #endregion
+
     /// <summary>
     /// Custom message box for MDIX
     /// </summary>
     /// <param name="Message">Text of the message</param>
     /// <param name="Title">Text that goes in the title bar</param>
-    /// <param name="Buttons">OK, OKCancel or YesNo</param>
-    public MDCustMsgBox(string Message, string Title, ButtonType Buttons)
+    /// <param name="Buttons">OK, OKCancel, YesNoCancel or YesNo</param>
+    /// <param name="HideClose">True to hide red close button</param>
+    public MDCustMsgBox(string Message, string Title, ButtonType Buttons, bool HideClose = false, bool OnTop = true)
     {
         InitializeComponent();
 
+        #region Topmost
+        if (OnTop)
+        {
+            Topmost = true;
+        }
+        #endregion
+
+        #region Message text
         txtMessage.Text = Message;
+        #endregion Message text
 
         #region Message box title
         if (string.IsNullOrEmpty(Title))
@@ -33,21 +47,32 @@ public partial class MDCustMsgBox : Window
         switch (Buttons)
         {
             case ButtonType.Ok:
-                btnOk.Visibility = Visibility.Visible;
                 btnCancel.Visibility = Visibility.Collapsed;
                 btnYes.Visibility = Visibility.Collapsed;
                 btnNo.Visibility = Visibility.Collapsed;
+                _ = btnOk.Focus();
                 break;
 
             case ButtonType.OkCancel:
                 btnYes.Visibility = Visibility.Collapsed;
                 btnNo.Visibility = Visibility.Collapsed;
+                _ = btnOk.Focus();
                 break;
 
             case ButtonType.YesNo:
                 btnOk.Visibility = Visibility.Collapsed;
                 btnCancel.Visibility = Visibility.Collapsed;
+                _ = btnYes.Focus();
                 break;
+
+            case ButtonType.YesNoCancel:
+                btnOk.Visibility = Visibility.Collapsed;
+                _ = btnYes.Focus();
+                break;
+        }
+        if (HideClose)
+        {
+            btnClose.Visibility = Visibility.Collapsed;
         }
         #endregion Button visibility
 
@@ -65,16 +90,27 @@ public partial class MDCustMsgBox : Window
     }
 
     #region Button and mouse events
-    private void Btn_Click_True(object sender, RoutedEventArgs e)
+    private void Btn_Click_Ok(object sender, RoutedEventArgs e)
     {
-        DialogResult = true;
         Close();
+        CustResult = CustResultType.Ok;
     }
 
-    private void Btn_Click_False(object sender, RoutedEventArgs e)
+    private void Btn_Click_Yes(object sender, RoutedEventArgs e)
     {
-        DialogResult = false;
         Close();
+        CustResult = CustResultType.Yes;
+    }
+    private void Btn_Click_No(object sender, RoutedEventArgs e)
+    {
+        Close();
+        CustResult = CustResultType.No;
+    }
+
+    private void Btn_Click_Cancel(object sender, RoutedEventArgs e)
+    {
+        Close();
+        CustResult = CustResultType.Cancel;
     }
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -89,6 +125,17 @@ public enum ButtonType
 {
     OkCancel,
     YesNo,
+    YesNoCancel,
     Ok,
 }
-#endregion
+#endregion Button type enumeration
+
+#region Result type enumeration
+public enum CustResultType
+{
+    Ok,
+    Yes,
+    No,
+    Cancel
+}
+#endregion Result type enumeration

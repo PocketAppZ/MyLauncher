@@ -17,11 +17,13 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     mc:Ignorable="d">
 
+    <!--#region Window resources-->
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolVisConverter" />
     </Window.Resources>
+    <!--#endregion-->
 
-    <Grid x:Name="PMain">
+    <Grid x:Name="PopMain">
         <!--#region Row definitions-->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -32,91 +34,103 @@
         </Grid.ColumnDefinitions>
         <!--#endregion-->
 
-        <DockPanel
+        <!--#region ColorZone with title-->
+        <materialDesign:ColorZone
             Grid.Row="0"
-            LastChildFill="True">
-            <materialDesign:ColorZone
-                Height="40"
-                Margin="10"
-                materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                CornerRadius="4,4,4,4"
-                Mode="PrimaryMid">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        x:Name="PageTitle"
-                        Margin="6,0,6,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="20"
-                        FontWeight="DemiBold"
-                        Text="{Binding PopupTitle}">
-                        <TextBlock.ToolTip>
-                            <ToolTip
-                                Content="{Binding HostID}"
-                                ContentStringFormat="Host ID: {0}" />
-                        </TextBlock.ToolTip>
-                    </TextBlock>
-                </Grid>
-            </materialDesign:ColorZone>
-        </DockPanel>
+            Height="35"
+            Margin="8,10,8,5"
+            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+            CornerRadius="4,4,4,4"
+            Mode="PrimaryMid"
+            MouseDoubleClick="ColorZone_MouseDoubleClick">
+            <Grid>
+                <TextBlock
+                    x:Name="PageTitle"
+                    Margin="6,0,6,0"
+                    Padding="0,0,0,2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="18"
+                    FontWeight="DemiBold"
+                    Text="{Binding PopupTitle, FallbackValue='Pop-up'}" />
+            </Grid>
+        </materialDesign:ColorZone>
+        <!--#endregion-->
 
-        <ListBox
-            x:Name="PopupListBox"
+        <!--#region ListBox-->
+        <materialDesign:Card
             Grid.Row="1"
-            Margin="10"
-            d:ItemsSource="{d:SampleData ItemCount=4}"
-            materialDesign:ListBoxItemAssist.ShowSelection="True"
-            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-            ScrollViewer.VerticalScrollBarVisibility="Disabled"
-            Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
-
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-
-            <ListBox.Resources>
-                <Style
-                    BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"
-                    TargetType="ScrollBar" />
-            </ListBox.Resources>
-
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image
-                            Width="32"
-                            Height="32"
-                            Margin="10,0,0,0"
-                            VerticalAlignment="Center"
-                            Source="{Binding FileIcon}"
-                            Visibility="{Binding ShowFileIcons, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}" />
-
-                        <TextBlock
-                            Margin="10,0,10,0"
-                            VerticalAlignment="Center"
-                            FontFamily="Segoe UI"
-                            FontSize="18"
-                            Text="{Binding Title}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemContainerStyle>
-                <Style
-                    BasedOn="{StaticResource {x:Type ListBoxItem}}"
-                    TargetType="ListBoxItem">
-                    <Setter Property="Height" Value="60" />
-                    <Setter Property="Padding" Value="3,3,20,5" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
-                    <Setter Property="BorderThickness" Value="{Binding BorderWidth, Source={x:Static local:UserSettings.Setting}}" />
-                    <Setter Property="Margin" Value="10,5,10,5" />
-                    <Setter Property="Cursor" Value="Hand" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
+            Margin="8"
+            Padding="2,5,8,5"
+            HorizontalAlignment="Stretch"
+            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+            UniformCornerRadius="7">
+            <ListBox
+                x:Name="PopupListBox"
+                Margin="0,5"
+                d:ItemsSource="{d:SampleData ItemCount=3}"
+                materialDesign:ListBoxItemAssist.ShowSelection="True"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel
+                            Grid.IsSharedSizeScope="True"
+                            Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.Resources>
+                    <Style
+                        BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"
+                        TargetType="ScrollBar" />
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Image
+                                    Width="28"
+                                    Height="28"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    SnapsToDevicePixels="True"
+                                    Source="{Binding FileIcon}"
+                                    Visibility="{Binding ShowFileIcons, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    Padding="1"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Segoe UI"
+                                    FontSize="14"
+                                    Text="{Binding Title}" />
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style
+                        BasedOn="{StaticResource {x:Type ListBoxItem}}"
+                        TargetType="ListBoxItem">
+                        <Setter Property="Height" Value="60" />
+                        <Setter Property="Padding" Value="3,3,20,5" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
+                        <Setter Property="BorderThickness" Value="{Binding BorderWidth, Source={x:Static local:UserSettings.Setting}}" />
+                        <Setter Property="Margin" Value="10,5,10,5" />
+                        <Setter Property="Cursor" Value="Hand" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </materialDesign:Card>
+        <!--#endregion-->
     </Grid>
 </Window>

@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
-
+/// <summary>
+/// All enums all of the time
+/// </summary>
 internal enum AccentColor
 {
     Red = 0,
@@ -25,20 +27,10 @@ internal enum AccentColor
     BlueGray = 18
 }
 
-internal enum BorderWidth
-{
-    None = 0,
-    Thin = 1,
-    Default = 2,
-    Thick = 3,
-    Jumbo = 5
-}
-
-internal enum ListEntryType
+public enum ListEntryType
 {
     Normal = 0,
-    Popup = 1,
-    Other = 2
+    Popup = 1
 }
 
 internal enum MySize

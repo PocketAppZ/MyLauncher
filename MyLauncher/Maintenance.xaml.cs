@@ -1,556 +1,554 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
-namespace MyLauncher
+namespace MyLauncher;
+
+public partial class Maintenance : Window
 {
-    public partial class Maintenance : Window
+    #region NLog
+    private static readonly Logger log = LogManager.GetCurrentClassLogger();
+    #endregion NLog
+
+    #region Properties
+    /// <summary>
+    /// Indicates if the list of entries has changed
+    /// </summary>
+    public static bool EntriesChanged { get; set; }
+    #endregion Properties
+
+    public Maintenance()
     {
-        #region NLog
-        private static readonly Logger log = LogManager.GetCurrentClassLogger();
-        #endregion NLog
+        InitializeComponent();
 
-        #region Properties
-        public static bool EntriesChanged { get; set; }
-        public static object PrevEntry { get; set; }
-        #endregion Properties
+        InitSettings();
 
-        public Maintenance()
+        LoadTreeView();
+
+        DataContext = Child.Children;
+    }
+
+    #region Settings
+    private void InitSettings()
+    {
+        // Put the version number in the title bar
+        Title = $"{AppInfo.AppName} - {AppInfo.TitleVersion}";
+
+        // If this is the first run place the window in the center of the screen
+        if (UserSettings.Setting.MaintFistRun)
         {
-            InitializeComponent();
-
-            InitSettings();
-
-            LoadListBox();
-
-            LoadComboBox();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            UserSettings.Setting.MaintFistRun = false;
         }
-
-        #region Settings
-        private void InitSettings()
+        else
         {
-            if (UserSettings.Setting.MaintFistRun)
-            {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                UserSettings.Setting.MaintFistRun = false;
-            }
-            else
-            {
-                // Window position
-                Top = UserSettings.Setting.MaintWindowTop;
-                Left = UserSettings.Setting.MaintWindowLeft;
-            }
-            Height = UserSettings.Setting.MaintWindowHeight;
-            Width = UserSettings.Setting.MaintWindowWidth;
-
-            // UI size
-            double size = MainWindow.UIScale((MySize)UserSettings.Setting.UISize);
-            MaintGrid.LayoutTransform = new ScaleTransform(size, size);
-
-            // Settings change event
-            UserSettings.Setting.PropertyChanged += UserSettingChanged;
-
-            EntryClass.Entries.ListChanged += Entries_ListChanged;
+            // Window position
+            Top = UserSettings.Setting.MaintWindowTop;
+            Left = UserSettings.Setting.MaintWindowLeft;
         }
-        #endregion Settings
+        Height = UserSettings.Setting.MaintWindowHeight;
+        Width = UserSettings.Setting.MaintWindowWidth;
 
-        #region Setting changed
-        private void UserSettingChanged(object sender, PropertyChangedEventArgs e)
+        // UI size
+        double size = MainWindow.UIScale((MySize)UserSettings.Setting.UISize);
+        MaintGrid.LayoutTransform = new ScaleTransform(size, size);
+
+        // Settings change event
+        UserSettings.Setting.PropertyChanged += UserSettingChanged;
+
+        //Child.Entries.ListChanged += Entries_ListChanged;
+        Child.Children.CollectionChanged += Children_CollectionChanged;
+    }
+    #endregion Settings
+
+    #region Setting changed
+    /// <summary>
+    /// Handle relevent settings changes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void UserSettingChanged(object sender, PropertyChangedEventArgs e)
+    {
+        PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName);
+        object newValue = prop?.GetValue(sender, null);
+        switch (e.PropertyName)
         {
-            PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName);
-            object newValue = prop?.GetValue(sender, null);
-            switch (e.PropertyName)
+            case nameof(UserSettings.Setting.UISize):
+                int size = (int)newValue;
+                double newSize = MainWindow.UIScale((MySize)size);
+                MaintGrid.LayoutTransform = new ScaleTransform(newSize, newSize);
+                break;
+        }
+    }
+    #endregion Setting changed
+
+    #region Window events
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        // Select the first item in the treeview
+        _ = TvMaint.Focus();
+        if (TvMaint.Items.Count > 0)
+        {
+            Child first = Child.Children.FirstOrDefault();
+            if (TvMaint.ItemContainerGenerator.ContainerFromItem(first) is TreeViewItem tvi)
             {
-                case nameof(UserSettings.Setting.UISize):
-                    int size = (int)newValue;
-                    double newSize = MainWindow.UIScale((MySize)size);
-                    MaintGrid.LayoutTransform = new ScaleTransform(newSize, newSize);
+                tvi.IsSelected = true;
+            }
+        }
+    }
+
+    private void Window_Closing(object sender, CancelEventArgs e)
+    {
+        // Clear any remaining messages
+        SnackBarMaint.MessageQueue.Clear();
+
+        // Save window position
+        UserSettings.Setting.MaintWindowLeft = Math.Floor(Left);
+        UserSettings.Setting.MaintWindowTop = Math.Floor(Top);
+        UserSettings.Setting.MaintWindowWidth = Math.Floor(Width);
+        UserSettings.Setting.MaintWindowHeight = Math.Floor(Height);
+        UserSettings.SaveSettings();
+    }
+    #endregion Window events
+
+    #region Load the TreeView
+    /// <summary>
+    /// Loads the TreeView with the contents of the Observable Collection
+    /// </summary>
+    private void LoadTreeView()
+    {
+        if (Child.Children is not null)
+        {
+            TvMaint.ItemsSource = Child.Children;
+        }
+    }
+    #endregion Load the TreeView
+
+    #region Check for "untitled" entries in the list box
+    /// <summary>
+    /// Checks the obserable collection for any Title equal to "untitled"
+    /// </summary>
+    /// <returns>True if not found. False if found.</returns>
+    private static bool CheckForUntitled()
+    {
+        // Loop through the list backwards checking for "untitled" entries
+        if (Child.Children.Any(x => string.Equals(x.Title, "untitled", StringComparison.OrdinalIgnoreCase)))
+        {
+            log.Error("New item prohibited, \"untitled\" entry in list");
+            _ = new MDCustMsgBox("Please update or delete the \"untitled\" entry before adding another new entry.",
+                "ERROR", ButtonType.Ok).ShowDialog();
+            return false;
+        }
+        return true;
+    }
+    #endregion Check for "untitled" entries in the list box
+
+    #region Add new normal item
+    /// <summary>
+    /// Adds a new Normal item to the list
+    /// </summary>
+    private void NewItem()
+    {
+        Child newitem = new()
+        {
+            Title = "untitled",
+            FilePathOrURI = string.Empty,
+            EntryType = (int)ListEntryType.Normal,
+            ItemID = Guid.NewGuid().ToString()
+        };
+        Child.Children.Add(newitem);
+        if (TvMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
+        {
+            tvi.IsSelected = true;
+        }
+        _ = tbTitle.Focus();
+        tbTitle.SelectAll();
+        ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
+    }
+    #endregion Add New item
+
+    #region Add New Pop-Up
+    /// <summary>
+    /// Adds a new pop-up item to the list
+    /// </summary>
+    private void NewPopup()
+    {
+        Child newitem = new()
+        {
+            Title = "untitled",
+            FilePathOrURI = string.Empty,
+            IconSource = "Menu.png",
+            ChildrenOfChild = new ObservableCollection<Child>(),
+            EntryType = ListEntryType.Popup,
+            ItemID = Guid.NewGuid().ToString(),
+        };
+        Child.Children.Add(newitem);
+        if (TvMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
+        {
+            tvi.IsSelected = true;
+        }
+        _ = tbTitle.Focus();
+        tbTitle.SelectAll();
+        ClearAndQueueMessage("New \"untitled\" pop-up list was created.", 3000);
+    }
+    #endregion Add New Pop-Up
+
+    #region Delete an item
+    /// <summary>
+    /// Calles RemoveByID to delete an item from the list
+    /// </summary>
+    private void DeleteItem()
+    {
+        if (TvMaint.SelectedItem != null)
+        {
+            Child itemToDelete = (TvMaint.SelectedItem as Child);
+
+            if (itemToDelete?.ChildrenOfChild is not null && itemToDelete.ChildrenOfChild.Count > 0)
+            {
+                _ = new MDCustMsgBox($"Remove {itemToDelete.Title} and all {itemToDelete.ChildrenOfChild.Count} of its child items?",
+                    "Delete All?", ButtonType.YesNo, false).ShowDialog();
+                if (MDCustMsgBox.CustResult != CustResultType.Yes)
+                {
+                    return;
+                }
+            }
+
+            RemoveByID(Child.Children, itemToDelete);
+        }
+        else
+        {
+            ClearAndQueueMessage("No item was selected to delete.", 3000);
+        }
+    }
+    #endregion Delete an item
+
+    #region Remove an item from the list
+    /// <summary>
+    /// Deletes a single item from the list.
+    /// </summary>
+    /// <param name="children">ObservableCollection to search</param>
+    /// <param name="delItem">Child object to remove</param>
+    private void RemoveByID(ObservableCollection<Child> children, Child delItem)
+    {
+        for (int i = children.Count - 1; i >= 0; --i)
+        {
+            Child child = children[i];
+
+            if (child.ItemID == delItem.ItemID && child.Title == delItem.Title)
+            {
+                children.RemoveAt(i);
+                log.Debug($"Removing \"{child.Title}\" - {child.ItemID}");
+                ClearAndQueueMessage($"\"{child.Title}\" was removed.", 3000);
+                EntriesChanged = true;
+                break;
+            }
+            else if (child.ChildrenOfChild != null)
+            {
+                RemoveByID(child.ChildrenOfChild, delItem);
+            }
+        }
+    }
+    #endregion Remove an item from the list
+
+    #region File picker buttons (for Path)
+    private void BtnFilePicker_Click(object sender, RoutedEventArgs e)
+    {
+        ChooseFile();
+    }
+    private void BtnFolderPicker_Click(object sender, RoutedEventArgs e)
+    {
+        ChooseFolder();
+    }
+
+    /// <summary>
+    /// Pick a file using the OpenFileDialog
+    /// </summary>
+    private void ChooseFile()
+    {
+        OpenFileDialog dlgOpen = new()
+        {
+            Title = "Browse for a File",
+            Multiselect = false,
+            CheckFileExists = false,
+            CheckPathExists = true,
+        };
+        bool? result = dlgOpen.ShowDialog();
+        if (result == true)
+        {
+            tbPath.Text = dlgOpen.FileName;
+            Child entry = (Child)TvMaint.SelectedItem;
+            entry.FilePathOrURI = tbPath.Text;
+        }
+    }
+
+    /// <summary>
+    /// Pick a folder using the Windows Forms FolderBrowserDialog
+    /// </summary>
+    private void ChooseFolder()
+    {
+        System.Windows.Forms.FolderBrowserDialog dialogFolder = new()
+        {
+            Description = "Browse for a Folder",
+            UseDescriptionForTitle = true,
+            AutoUpgradeEnabled = true,
+        };
+
+        if (dialogFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            tbPath.Text = dialogFolder.SelectedPath;
+            Child entry = (Child)TvMaint.SelectedItem;
+            entry.FilePathOrURI = tbPath.Text;
+        }
+    }
+    #endregion File picker buttons (for Path)
+
+    #region Button events
+    private void Delete_Click(object sender, RoutedEventArgs e)
+    {
+        DeleteItem();
+    }
+
+    private void NewItem_Click(object sender, RoutedEventArgs e)
+    {
+        if (CheckForUntitled())
+        {
+            pbxNewItem.IsPopupOpen = true;
+        }
+    }
+
+    private void NewNormalItem_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
+        NewItem();
+    }
+
+    private void NewPopupItem_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
+        NewPopup();
+    }
+
+    private void NewSpecialApp_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        pbxSpecialApps.IsPopupOpen = true;
+    }
+
+    private void Discard_Click(object sender, RoutedEventArgs e)
+    {
+        JsonHelpers.ReadJson(this);
+        (Application.Current.MainWindow as MainWindow)?.ResetListBox();
+        LoadTreeView();
+        TvMaint.Items.Refresh();
+        EntriesChanged = false;
+        btnDiscard.IsEnabled = false;
+    }
+
+    private void BtnBackup_Click(object sender, RoutedEventArgs e)
+    {
+        JsonHelpers.CreateBackupFile(this);
+    }
+
+    private void BtnClose_Click(object sender, RoutedEventArgs e)
+    {
+        if (EntriesChanged)
+        {
+            JsonHelpers.SaveJson(this);
+            (Application.Current.MainWindow as MainWindow)?.ResetListBox();
+            ClearAndQueueMessage("List saved", 1000);
+        }
+        else
+        {
+            Debug.WriteLine("list wasn't saved");
+        }
+        Close();
+    }
+
+    private void CancelNewItem_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
+    }
+    #endregion Button events
+
+    #region Move to next control on Enter
+    private void Textbox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            if (e.Source is TextBox tbx)
+            {
+                tbx.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            }
+            e.Handled = true;
+        }
+    }
+    #endregion Move to next control on Enter
+
+    #region Mouse Enter/Leave Card (to change shadow)
+    private void Card_MouseEnter(object sender, MouseEventArgs e)
+    {
+        Card card = sender as Card;
+        ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth3);
+    }
+
+    private void Card_MouseLeave(object sender, MouseEventArgs e)
+    {
+        Card card = sender as Card;
+        ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth2);
+    }
+    #endregion Mouse Enter/Leave Card (to change shadow)
+
+    #region Add "Special" apps
+    /// <summary>
+    /// Add predefined "special" app as normal item
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void BtnSpecial_Click(object sender, RoutedEventArgs e)
+    {
+        if (CheckForUntitled())
+        {
+            Child newitem = new();
+            Button btn = sender as Button;
+            switch (btn.Content.ToString())
+            {
+                case "Calculator":
+                    newitem.Title = "Calculator";
+                    newitem.FilePathOrURI = "calculator:";
+                    newitem.IconSource = "calc.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Calendar":
+                    newitem.Title = "Calendar";
+                    newitem.FilePathOrURI = "outlookcal:";
+                    newitem.IconSource = "calendar.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Email":
+                    newitem.Title = "Email";
+                    newitem.FilePathOrURI = "outlookmail:";
+                    newitem.IconSource = "mail.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Solitaire":
+                    newitem.Title = "Solitaire Collection";
+                    newitem.FilePathOrURI = "xboxliveapp-1297287741:";
+                    newitem.IconSource = "cards.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Weather":
+                    newitem.Title = "Weather";
+                    newitem.FilePathOrURI = "bingweather:";
+                    newitem.IconSource = "weather.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Windows Settings":
+                    newitem.Title = "Windows Settings";
+                    newitem.FilePathOrURI = "ms-settings:";
+                    newitem.IconSource = "gear.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Restart":
+                    newitem.Title = "Restart";
+                    newitem.FilePathOrURI = "shutdown.exe";
+                    newitem.Arguments = "/r /t 0";
+                    newitem.IconSource = "restart.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Shutdown":
+                    newitem.Title = "Shutdown";
+                    newitem.FilePathOrURI = "shutdown.exe";
+                    newitem.Arguments = "/s /t 0";
+                    newitem.IconSource = "shutdown.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
                     break;
             }
-        }
-        #endregion Setting changed
-
-        #region Window events
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            _ = MaintListBox.Focus();
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            // Save settings
-            UserSettings.Setting.MaintWindowLeft = Math.Floor(Left);
-            UserSettings.Setting.MaintWindowTop = Math.Floor(Top);
-            UserSettings.Setting.MaintWindowWidth = Math.Floor(Width);
-            UserSettings.Setting.MaintWindowHeight = Math.Floor(Height);
-            UserSettings.SaveSettings();
-        }
-
-        #endregion Window events
-
-        #region List changed event
-        private void Entries_ListChanged(object sender, ListChangedEventArgs e)
-        {
-            EntriesChanged = true;
-            btnDiscard.IsEnabled = true;
-        }
-        #endregion List changed event
-
-        #region Load the ListBox
-        private void LoadListBox()
-        {
-            if (EntryClass.Entries.Count > 0)
+            if (newitem.Title != string.Empty)
             {
-                MaintListBox.ItemsSource = EntryClass.Entries;
-                MaintListBox.SelectedItem = EntryClass.Entries.First();
-                _ = MaintListBox.Focus();
+                newitem.ItemID = Guid.NewGuid().ToString();
+                Child.Children.Add(newitem);
+                EntriesChanged = true;
+                if (TvMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
+                {
+                    tvi.IsSelected = true;
+                }
+                _ = tbTitle.Focus();
+                tbTitle.SelectAll();
+                ClearAndQueueMessage($"New \"{newitem.Title}\" item was created.", 3000);
             }
         }
-        #endregion Load the ListBox
+    }
+    #endregion Add "Special" apps
 
-        #region Load the ComboBox
-        private void LoadComboBox()
+    #region Get an image for the selected item
+    /// <summary>
+    /// File picker for image
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void IconFile_Click(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog dlgOpen = new()
         {
-            List<EntryClass> hostEntries = new();
-
-            EntryClass entry1 = new()
-            {
-                HostID = 0,
-                Title = "Main Page"
-            };
-            hostEntries.Add(entry1);
-
-            foreach (EntryClass entry in EntryClass.Entries)
-            {
-                if (entry.EntryType == 1)
-                {
-                    hostEntries.Add(entry);
-                }
-            }
-
-            HostCombo.ItemsSource = hostEntries.OrderBy(x => x.Title);
-        }
-        #endregion Load the ComboBox
-
-        #region Check for "untitled" entries in the list box
-        private bool CheckForUntitled()
+            Title = "Choose an Image File",
+            InitialDirectory = Path.Combine(AppInfo.AppDirectory, "Icons"),
+            Filter = "Image Files|*.png;*.ico;*.bmp;*.jpg;*.jpeg",
+            Multiselect = false,
+            CheckFileExists = true,
+            CheckPathExists = true
+        };
+        bool? result = dlgOpen.ShowDialog();
+        if (result == true && File.Exists(dlgOpen.FileName))
         {
-            // Loop through the list backwards checking for null titles
-            for (int i = MaintListBox.Items.Count - 1; i >= 0; i--)
+            if (Path.GetDirectoryName(dlgOpen.FileName) == dlgOpen.InitialDirectory)
             {
-                object item = MaintListBox.Items[i];
-                EntryClass x = item as EntryClass;
-                if (string.IsNullOrEmpty(x.Title))
-                {
-                    log.Error("New item prohibited, \"untitled\" entry in list");
-                    _ = new MDCustMsgBox("Please update or delete the \"untitled\" entry before adding another new entry.",
-                        "ERROR", ButtonType.Ok).ShowDialog();
-                    return false;
-                }
-            }
-            return true;
-        }
-        #endregion Check for "untitled" entries in the list box
-
-        #region Add New item
-        private void NewItem()
-        {
-            EntryClass newitem = new()
-            {
-                Title = string.Empty,
-                FilePathOrURI = String.Empty,
-                EntryType = 0,
-                HostID = -1
-            };
-            EntryClass.Entries.Add(newitem);
-            MaintListBox.SelectedIndex = MaintListBox.Items.Count - 1;
-            MaintListBox.ScrollIntoView(MaintListBox.SelectedItem);
-            _ = tbTitle.Focus();
-            SnackbarMsg.ClearAndQueueMessage("New \"untitled\" item was created.", 5000);
-        }
-        #endregion Add New item
-
-        #region Add New Pop-Up
-        private void NewPopup()
-        {
-            int nexthost = GetNextHostID();
-
-            EntryClass newitem = new()
-            {
-                Title = string.Empty,
-                FilePathOrURI = string.Empty,
-                IconSource = "Menu.png",
-                EntryType = (int)ListEntryType.Popup,
-                HostID = nexthost
-            };
-            EntryClass.Entries.Add(newitem);
-            MaintListBox.SelectedIndex = MaintListBox.Items.Count - 1;
-            MaintListBox.ScrollIntoView(MaintListBox.SelectedItem);
-            _ = tbTitle.Focus();
-            SnackbarMsg.ClearAndQueueMessage("New \"untitled\" pop-up list was created.", 5000);
-        }
-
-        private static int GetNextHostID()
-        {
-            EntryClass id;
-            int hostID = UserSettings.Setting.LastHostID;
-            do
-            {
-                hostID++;
-                id = EntryClass.Entries.FirstOrDefault(x => x.HostID == hostID);
-            }
-            while (id != null);
-
-            Debug.WriteLine($"New HostID is {hostID}");
-            UserSettings.Setting.LastHostID = hostID;
-            return hostID;
-        }
-        #endregion Add New Pop-Up
-
-        #region Delete an item
-        private void DeleteItem()
-        {
-            if (MaintListBox.SelectedItem != null)
-            {
-                string item = (MaintListBox.SelectedItem as EntryClass)?.Title;
-                int index = MaintListBox.SelectedIndex;
-                _ = EntryClass.Entries.Remove((EntryClass)MaintListBox.SelectedItem);
-                SnackbarMsg.ClearAndQueueMessage($"Deleted \"{item}\"", 2000);
-                if (index > 0)
-                {
-                    MaintListBox.SelectedItem = MaintListBox.Items[index - 1];
-                    MaintListBox.ScrollIntoView(MaintListBox.SelectedItem);
-                }
-                else
-                {
-                    MaintListBox.SelectedItem = EntryClass.Entries.First();
-                }
-                _ = MaintListBox.Focus();
+                tbIconFile.Text = Path.GetFileName(dlgOpen.FileName);
+                Child entry = (Child)TvMaint.SelectedItem;
+                entry.IconSource = tbIconFile.Text;
             }
             else
             {
-                SnackbarMsg.ClearAndQueueMessage("No item was selected to delete.", 5000);
+                tbIconFile.Text = dlgOpen.FileName;
+                Child entry = (Child)TvMaint.SelectedItem;
+                entry.IconSource = tbIconFile.Text;
             }
         }
-        #endregion Delete an item
+    }
+    #endregion Get an image for the selected item
 
-        #region Save the list to JSON file
-        private static async void SaveJson()
-        {
-            List<EntryClass> tempCollection = new();
+    #region Collection changed event
+    private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        EntriesChanged = true;
+        btnDiscard.IsEnabled = true;
+        Debug.WriteLine($"List changed, action was: {e.Action} {e.OldStartingIndex} {e.NewStartingIndex}");
+    }
+    #endregion Collection changed event
 
-            foreach (EntryClass item in EntryClass.Entries)
-            {
-                if (!string.IsNullOrEmpty(item.Title))
-                {
-                    EntryClass ec = new()
-                    {
-                        Title = item.Title.Trim(),
-                        FilePathOrURI = item.FilePathOrURI.Trim('"').Trim(),
-                        FileIcon = item.FileIcon,
-                        Arguments = item.Arguments,
-                        IconSource = item.IconSource.Trim(),
-                        EntryType = item.EntryType,
-                        HostID = item.HostID,
-                        ChildOfHost = item.ChildOfHost
-                    };
-                    tempCollection.Add(ec);
-                }
-            }
+    #region Clear message queue then queue a snackbar message and set duration
+    /// <summary>
+    /// Displays a snackbar message in the Maintenance window
+    /// </summary>
+    /// <param name="message">Text of the message</param>
+    /// <param name="duration">Time in milliseconds to display the message</param>
+    public void ClearAndQueueMessage(string message, int duration)
+    {
+        SnackBarMaint.MessageQueue.Clear();
+        SnackBarMaint.MessageQueue.Enqueue(message,
+            null,
+            null,
+            null,
+            false,
+            true,
+            TimeSpan.FromMilliseconds(duration));
+    }
+    #endregion Clear message queue then queue a snackbar message and set duration
 
-            JsonSerializerOptions opts = new()
-            {
-                ReadCommentHandling = JsonCommentHandling.Skip,
-                WriteIndented = true
-            };
-
-            try
-            {
-                log.Info($"Saving JSON file: {GetJsonFile()}");
-                string json = JsonSerializer.Serialize(tempCollection, opts);
-                File.WriteAllText(GetJsonFile(), json);
-                EntriesChanged = false;
-                SnackbarMsg.QueueMessage("File Saved.", 2000);
-                tempCollection.Clear();
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex, "Error saving file.");
-                SystemSounds.Exclamation.Play();
-                ErrorDialog error = new()
-                {
-                    Message = $"Error saving file\n\n{ex.Message}"
-                };
-                _ = await DialogHost.Show(error, "MainDialogHost");
-            }
-        }
-        #endregion Save the list to JSON file
-
-        #region Get the JSON file name
-        private static string GetJsonFile()
-        {
-            return Path.Combine(AppInfo.AppDirectory, "MyLauncher.json");
-        }
-        #endregion Get the JSON file name
-
-        #region File picker buttons (for Path)
-        private void BtnFilePicker_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dlgOpen = new()
-            {
-                Title = "Browse for a File",
-                Multiselect = false,
-                CheckFileExists = false,
-                CheckPathExists = true,
-            };
-            bool? result = dlgOpen.ShowDialog();
-            if (result == true)
-            {
-                tbPath.Text = dlgOpen.FileName;
-                EntryClass entry = (EntryClass)MaintListBox.SelectedItem;
-                entry.FilePathOrURI = tbPath.Text;
-            }
-        }
-
-        private void BtnFolderPicker_Click(object sender, RoutedEventArgs e)
-        {
-            using System.Windows.Forms.FolderBrowserDialog dialogFolder = new()
-            {
-                Description = "Browse for a Folder",
-                UseDescriptionForTitle = true,
-                AutoUpgradeEnabled = true,
-            };
-
-            if (dialogFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                tbPath.Text = dialogFolder.SelectedPath;
-                EntryClass entry = (EntryClass)MaintListBox.SelectedItem;
-                entry.FilePathOrURI = tbPath.Text;
-            }
-        }
-        #endregion File picker buttons (for Path)
-
-        #region Button events
-        private void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            DeleteItem();
-        }
-
-        private void NewItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (CheckForUntitled())
-            {
-                pbxNewItem.IsPopupOpen = true;
-            }
-        }
-
-        private void NewNormalItem_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            pbxNewItem.IsPopupOpen = false;
-            NewItem();
-        }
-
-        private void NewPopupItem_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            pbxNewItem.IsPopupOpen = false;
-            NewPopup();
-        }
-
-        private void NewSpecialApp_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            pbxSpecialApps.IsPopupOpen = true;
-        }
-
-        private void Discard_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow.ReadJson();
-            (Application.Current.MainWindow as MainWindow)?.ResetListBox();
-            LoadListBox();
-            MaintListBox.Items.Refresh();
-            EntriesChanged = false;
-            btnDiscard.IsEnabled = false;
-        }
-
-        private void BtnClose_Click(object sender, RoutedEventArgs e)
-        {
-            //DialogHost.Close("MainDialogHost");
-            if (EntriesChanged)
-            {
-                SaveJson();
-                (Application.Current.MainWindow as MainWindow)?.ResetListBox();
-                SnackbarMsg.ClearAndQueueMessage("List saved", 1000);
-            }
-            else
-            {
-                Debug.WriteLine("list wasn't saved");
-            }
-            Close();
-        }
-
-        private void CancelNewItem_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            pbxNewItem.IsPopupOpen = false;
-        }
-        #endregion Button events
-
-        #region Move to next control on Enter
-        private void Textbox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (e.Source is TextBox tbx)
-                {
-                    tbx.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                }
-                e.Handled = true;
-            }
-        }
-        #endregion Move to next control on Enter
-
-        #region Mouse Enter/Leave Card (to change shadow)
-        private void Card_MouseEnter(object sender, MouseEventArgs e)
-        {
-            Card card = sender as Card;
-            ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth3);
-        }
-
-        private void Card_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Card card = sender as Card;
-            ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth2);
-        }
-        #endregion Mouse Enter/Leave Card (to change shadow)
-
-        #region Add "Special" apps
-        private void BtnSpecial_Click(object sender, RoutedEventArgs e)
-        {
-            if (CheckForUntitled())
-            {
-                EntryClass newitem = new();
-                Button btn = sender as Button;
-                switch (btn.Content.ToString())
-                {
-                    case "Calculator":
-                        newitem.Title = "Calculator";
-                        newitem.FilePathOrURI = "calculator:";
-                        newitem.IconSource = "calc.png";
-                        newitem.EntryType = (int)ListEntryType.Normal;
-                        newitem.HostID = 0;
-                        break;
-                    case "Calendar":
-                        newitem.Title = "Calendar";
-                        newitem.FilePathOrURI = "outlookcal:";
-                        newitem.IconSource = "calendar.png";
-                        newitem.EntryType = (int)ListEntryType.Normal;
-                        newitem.HostID = 0;
-                        break;
-                    case "Email":
-                        newitem.Title = "Email";
-                        newitem.FilePathOrURI = "outlookmail:";
-                        newitem.IconSource = "mail.png";
-                        newitem.EntryType = (int)ListEntryType.Normal;
-                        newitem.HostID = 0;
-                        break;
-                    case "Solitaire":
-                        newitem.Title = "Solitaire Collection";
-                        newitem.FilePathOrURI = "xboxliveapp-1297287741:";
-                        newitem.IconSource = "cards.png";
-                        newitem.EntryType = (int)ListEntryType.Normal;
-                        newitem.HostID = 0;
-                        break;
-                    case "Weather":
-                        newitem.Title = "Weather";
-                        newitem.FilePathOrURI = "bingweather:";
-                        newitem.IconSource = "weather.png";
-                        newitem.EntryType = (int)ListEntryType.Normal;
-                        newitem.HostID = 0;
-                        break;
-                    case "Windows Settings":
-                        newitem.Title = "Windows Settings";
-                        newitem.FilePathOrURI = "ms-settings:";
-                        newitem.IconSource = "gear.png";
-                        newitem.EntryType = (int)ListEntryType.Normal;
-                        newitem.HostID = 0;
-                        break;
-                    case "Restart":
-                        newitem.Title = "Restart";
-                        newitem.FilePathOrURI = "shutdown.exe";
-                        newitem.Arguments = "/r /t 0";
-                        newitem.IconSource = "restart.png";
-                        newitem.EntryType = (int)ListEntryType.Normal;
-                        newitem.HostID = 0;
-                        break;
-                    case "Shutdown":
-                        newitem.Title = "Shutdown";
-                        newitem.FilePathOrURI = "shutdown.exe";
-                        newitem.Arguments = "/s /t 0";
-                        newitem.IconSource = "shutdown.png";
-                        newitem.EntryType = (int)ListEntryType.Normal;
-                        newitem.HostID = 0;
-                        break;
-                }
-                if (tbTitle.Text != string.Empty)
-                {
-                    EntryClass.Entries.Add(newitem);
-                    MaintListBox.SelectedIndex = MaintListBox.Items.Count - 1;
-                    MaintListBox.ScrollIntoView(MaintListBox.SelectedItem);
-                    _ = MaintListBox.Focus();
-                    EntriesChanged = true;
-                }
-            }
-        }
-        #endregion Add "special" app
-
-        #region Get an image for the selected item
-        private void IconFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dlgOpen = new()
-            {
-                Title = "Choose an Image File",
-                InitialDirectory = Path.Combine(AppInfo.AppDirectory, "Icons"),
-                Filter = "Image Files|*.png;*.ico;*.bmp;*.jpg;*.jpeg",
-                Multiselect = false,
-                CheckFileExists = true,
-                CheckPathExists = true
-            };
-            bool? result = dlgOpen.ShowDialog();
-            if (result == true && File.Exists(dlgOpen.FileName))
-            {
-                if (Path.GetDirectoryName(dlgOpen.FileName) == dlgOpen.InitialDirectory)
-                {
-                    tbIconFile.Text = Path.GetFileName(dlgOpen.FileName);
-                    EntryClass entry = (EntryClass)MaintListBox.SelectedItem;
-                    entry.IconSource = tbIconFile.Text;
-                }
-                else
-                {
-                    tbIconFile.Text = dlgOpen.FileName;
-                    EntryClass entry = (EntryClass)MaintListBox.SelectedItem;
-                    entry.IconSource = tbIconFile.Text;
-                }
-            }
-        }
-        #endregion Get an image for the selected item
-
-        #region ListBox selection changed
-        private void Listbox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (MaintListBox.SelectedItem == null)
-            {
-                MaintListBox.SelectedItem = PrevEntry;
-                return;
-            }
-            PrevEntry = MaintListBox.SelectedItem;
-
-            if (MaintListBox.SelectedItem != null)
-            {
-                int? x = (MaintListBox.SelectedItem as EntryClass)?.EntryType;
-                tbPath.IsEnabled = x != 1;
-                tbArgs.IsEnabled = x != 1;
-            }
-        }
-        #endregion ListBox selection changed
+    private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        SizeToContent = SizeToContent.Width;
+        Thread.Sleep(50);
+        SizeToContent = SizeToContent.Manual;
     }
 }

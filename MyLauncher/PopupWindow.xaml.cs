@@ -1,34 +1,35 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
+using System;
 namespace MyLauncher;
 
 public partial class PopupWindow : Window
 {
     #region Properties
     public string PopupTitle { get; set; }
-    public int HostID { get; set; }
+    public string PopupID { get; set; }
     #endregion Properties
 
-    public PopupWindow(string title, int hostID)
+    public PopupWindow(Child child)
     {
         InitializeComponent();
         DataContext = this;
 
-        InitPopUp(title, hostID);
+        InitPopUp(child);
 
-        PopulateListBox(hostID);
+        PopulateListBox(child);
     }
 
     #region Init Pop-up
-    private void InitPopUp(string title, int hostID)
+    private void InitPopUp(Child ch)
     {
-        PopupTitle = title;
-        HostID = hostID;
-        Title = "My Launcher - Pop-Up List";
+        PopupID = ch.ItemID;
+        PopupTitle = ch.Title;
+                Title = "My Launcher - Pop-Up List";
 
         // UI size
         double size = MainWindow.UIScale((MySize)UserSettings.Setting.UISize);
-        PMain.LayoutTransform = new ScaleTransform(size, size);
+        PopMain.LayoutTransform = new ScaleTransform(size, size);
 
         // Font
         SetFontWeight((Weight)UserSettings.Setting.ListBoxFontWeight);
@@ -37,7 +38,7 @@ public partial class PopupWindow : Window
         SetSpacing((Spacing)UserSettings.Setting.ListBoxSpacing);
 
         // Position & Size
-        PopupPosition(hostID);
+        PopupPosition();
         MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 100;
 
         // Settings change event
@@ -67,86 +68,65 @@ public partial class PopupWindow : Window
             case nameof(UserSettings.Setting.UISize):
                 int size = (int)newValue;
                 double newSize = MainWindow.UIScale((MySize)size);
-                PMain.LayoutTransform = new ScaleTransform(newSize, newSize);
+                PopMain.LayoutTransform = new ScaleTransform(newSize, newSize);
                 break;
         }
     }
     #endregion Setting changed
 
     #region Load the listbox
-    private void PopulateListBox(int hostID)
+    /// <summary>
+    /// Populate the ListBox with the Child items for this pop-up.
+    /// </summary>
+    /// <param name="ch"></param>
+    private void PopulateListBox(Child ch)
     {
-        BindingList<EntryClass> temp = new();
-
-        foreach (EntryClass entry in EntryClass.Entries)
-        {
-            if (entry.ChildOfHost == hostID)
-            {
-                temp.Add(entry);
-            }
-        }
-        MainWindow.GetIcons(temp);
-        PopupListBox.ItemsSource = temp;
+        IconHelpers.GetIcons(ch.ChildrenOfChild);
+        PopupListBox.ItemsSource = ch.ChildrenOfChild;
     }
     #endregion Load the listbox
 
-    #region Mouse Click Events
-    private void ListBoxItem_MouseClick(object sender, MouseButtonEventArgs e)
-    {
-        if (((ListBoxItem)sender).Content is not EntryClass || PopupListBox.SelectedItem == null)
-        {
-            return;
-        }
-        if (e.ChangedButton == MouseButton.Right && !UserSettings.Setting.AllowRightButton)
-        {
-            PopupListBox.SelectedItem = null;
-            return;
-        }
-        EntryClass entry = (EntryClass)PopupListBox.SelectedItem;
-        if (entry.EntryType == (int)ListEntryType.Popup)
-        {
-            _ = MainWindow.OpenPopup(entry);
-        }
-        else
-        {
-            MainWindow.LaunchApp(entry);
-        }
-        PopupListBox.SelectedIndex = -1;
-    }
-    #endregion Mouse Click Events
-
-    #region Button Events
-    private void Btn_Click_Cancel(object sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-    #endregion Button Events
-
     #region Window Events
+    /// <summary>
+    /// Remove the minimize and maximize buttons
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Window_SourceInitialized(object sender, EventArgs e)
+    {
+        IntPtr windowHandle = new WindowInteropHelper(this).Handle;
+        NativeMethods.DisableMinMaxButtons(windowHandle);
+    }
+
+    /// <summary>
+    /// Save the window position on closing.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Window_Closing(object sender, CancelEventArgs e)
     {
-        PopupAttributes item = PopupAttributes.Popups.Find(x => x.PopupID == HostID);
+        PopupAttributes pa = PopupAttributes.Popups.Find(x => x.PopupTitle == PopupTitle);
 
-        if (item != null)
+        if (pa != null)
         {
-            item.PopupHeight = Height;
-            item.PopupLeft = Left;
-            item.PopupTop = Top;
-            item.PopupWidth = Width;
-            item.PopupTitle = PopupTitle;
+            pa.PopupHeight = Height;
+            pa.PopupLeft = Left;
+            pa.PopupTop = Top;
+            pa.PopupWidth = Width;
+            pa.PopupTitle = PopupTitle;
         }
         else
         {
-            PopupAttributes pa = new()
+            PopupAttributes newpa = new()
             {
-                PopupID = HostID,
                 PopupTitle = PopupTitle,
                 PopupHeight = Height,
                 PopupWidth = Width,
                 PopupTop = Top,
-                PopupLeft = Left
+                PopupLeft = Left,
+                PopupItemID = PopupID
             };
-            PopupAttributes.Popups.Add(pa);
+            PopupAttributes.Popups.Add(newpa);
         }
 
         JsonSerializerOptions opts = new()
@@ -156,10 +136,32 @@ public partial class PopupWindow : Window
         };
         string json = JsonSerializer.Serialize(PopupAttributes.Popups, opts);
 
-        string jsonfile = MainWindow.GetJsonFile().Replace("MyLauncher.json", "Popups.json");
+        string jsonfile = JsonHelpers.GetMainListFile().Replace("MyLauncher.json", "Popups.json");
         File.WriteAllText(jsonfile, json);
     }
     #endregion Window Events
+
+    #region Set window size and position
+    /// <summary>
+    /// Set window size and position. Use saved settings if they exist, otherwise put the window in the center of the screen.
+    /// </summary>
+    private void PopupPosition()
+    {
+        PopupAttributes attributes = PopupAttributes.Popups.Find(x => x.PopupTitle == PopupTitle);
+        if (attributes != null)
+        {
+            Left = attributes.PopupLeft;
+            Top = attributes.PopupTop;
+            Height = attributes.PopupHeight;
+            Width = attributes.PopupWidth;
+        }
+        else
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            SizeToContent = SizeToContent.WidthAndHeight;
+        }
+    }
+    #endregion Set window size and position
 
     #region Set the font weight
     /// <summary>
@@ -189,33 +191,6 @@ public partial class PopupWindow : Window
     }
     #endregion Set the font weight
 
-    #region Remove minimize and maximize/restore buttons
-    private void Window_SourceInitialized(object sender, EventArgs e)
-    {
-        IntPtr windowHandle = new WindowInteropHelper(this).Handle;
-        NativeMethods.DisableMinMaxButtons(windowHandle);
-    }
-    #endregion Remove minimize and maximize/restore buttons
-
-    #region Set window size and position
-    private void PopupPosition(int hostID)
-    {
-        foreach (PopupAttributes attributes in PopupAttributes.Popups)
-        {
-            if (attributes != null && attributes.PopupID == hostID)
-            {
-                Left = attributes.PopupLeft;
-                Top = attributes.PopupTop;
-                Height = attributes.PopupHeight;
-                Width = attributes.PopupWidth;
-                return;
-            }
-        }
-        WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        SizeToContent = SizeToContent.WidthAndHeight;
-    }
-    #endregion Set window size and position
-
     #region Set the row spacing
     /// <summary>
     /// Sets the padding & margin around the items in the listbox
@@ -240,4 +215,13 @@ public partial class PopupWindow : Window
         }
     }
     #endregion Set the row spacing
+
+    private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        SizeToContent = SizeToContent.Width;
+        double width = ActualWidth;
+        Thread.Sleep(50);
+        SizeToContent = SizeToContent.Manual;
+        Width = width + 1;
+    }
 }

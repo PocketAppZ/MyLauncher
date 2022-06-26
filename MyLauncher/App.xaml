@@ -22,8 +22,8 @@
             <Style
                 x:Key="PageHeader"
                 TargetType="TextBlock">
-                <Setter Property="FontSize" Value="20" />
-                <Setter Property="FontWeight" Value="DemiBold" />
+                <Setter Property="FontSize" Value="17" />
+                <Setter Property="FontWeight" Value="Bold" />
                 <Setter Property="Padding" Value="10,2" />
             </Style>
             <!--#endregion-->
@@ -33,11 +33,11 @@
                 x:Key="ListBoxComfortable"
                 BasedOn="{StaticResource {x:Type ListBoxItem}}"
                 TargetType="ListBoxItem">
-                <Setter Property="Height" Value="60" />
+                <Setter Property="Height" Value="58" />
                 <Setter Property="Padding" Value="3,3,20,5" />
                 <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
                 <Setter Property="BorderThickness" Value="{Binding BorderWidth, Source={x:Static local:UserSettings.Setting}}" />
-                <Setter Property="Margin" Value="10,5,10,5" />
+                <Setter Property="Margin" Value="10,4,10,4" />
                 <Setter Property="Cursor" Value="Hand" />
             </Style>
 
@@ -54,16 +54,16 @@
                 x:Key="ListBoxCompact"
                 BasedOn="{StaticResource ResourceKey=ListBoxComfortable}"
                 TargetType="ListBoxItem">
-                <Setter Property="Height" Value="58" />
+                <Setter Property="Height" Value="55" />
                 <Setter Property="Padding" Value="3,2,15,1" />
-                <Setter Property="Margin" Value="8,3,5,3" />
+                <Setter Property="Margin" Value="8,2,5,2" />
             </Style>
 
             <Style
                 x:Key="ListBoxSpacious"
                 BasedOn="{StaticResource ResourceKey=ListBoxComfortable}"
                 TargetType="ListBoxItem">
-                <Setter Property="Height" Value="65" />
+                <Setter Property="Height" Value="62" />
                 <Setter Property="Padding" Value="3,5,17,5" />
                 <Setter Property="Margin" Value="11,8,11,8" />
             </Style>
