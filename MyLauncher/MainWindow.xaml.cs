@@ -21,11 +21,12 @@ public partial class MainWindow : Window
         ReadSettings();
 
         ResetListBox();
-
-        ReadPopupsJson();
     }
 
     #region Settings
+    /// <summary>
+    /// Read and apply settings
+    /// </summary>
     private void InitializeSettings()
     {
         stopwatch.Start();
@@ -164,6 +165,10 @@ public partial class MainWindow : Window
     #endregion Setting change
 
     #region Navigation
+    /// <summary>
+    /// Navigates to the requested dialog or window
+    /// </summary>
+    /// <param name="selectedIndex"></param>
     private void NavigateToPage(NavPage selectedIndex)
     {
         switch (selectedIndex)
@@ -174,13 +179,12 @@ public partial class MainWindow : Window
 
             case NavPage.Maintenance:
                 NavDrawer.IsLeftDrawerOpen = false;
-                Maintenance maintenance = new Maintenance();
-                maintenance.Show();
+                ShowWindow<Maintenance>();
                 break;
 
             case NavPage.Settings:
                 NavDrawer.IsLeftDrawerOpen = false;
-                DialogHelpers.ShowSettingsDialog();
+                ShowWindow<SettingsWindow>();
                 break;
 
             case NavPage.About:
@@ -202,223 +206,35 @@ public partial class MainWindow : Window
     #endregion Navigation
 
     #region Clear and repopulate the listbox
+    /// <summary>
+    /// Clears the ObservableCollection the rereads the JSON file and populates the main ListBox/>
+    /// </summary>
     public void ResetListBox()
     {
-        EntryClass.Entries?.Clear();
-        ReadJson();
-        GetIcons(EntryClass.Entries);
+        Child.Children?.Clear();
+        JsonHelpers.ReadJson();
+        IconHelpers.GetIcons(Child.Children);
         PopulateMainListBox();
     }
     #endregion Clear and repopulate the listbox
 
     #region Load the listbox
+    /// <summary>
+    /// Simply sets the ItemsSource of the MainListBox to the Child.Children ObservableCollection
+    /// </summary>
     public void PopulateMainListBox()
     {
-        BindingList<EntryClass> temp = new();
-        foreach (EntryClass entry in EntryClass.Entries)
-        {
-            if (entry.ChildOfHost == 0)
-            {
-                temp.Add(entry);
-            }
-        }
-        listboxEntries.ItemsSource = temp;
+        MainListBox.ItemsSource = Child.Children;
     }
     #endregion Load the listbox
 
-    #region Read Pop-ups file
-    public static void ReadPopupsJson()
-    {
-        string jsonfile = GetJsonFile().Replace("MyLauncher.json", "Popups.json");
-
-        if (!File.Exists(jsonfile))
-        {
-            File.WriteAllText(jsonfile, "[]");
-        }
-        string json = File.ReadAllText(jsonfile);
-        PopupAttributes.Popups = JsonSerializer.Deserialize<List<PopupAttributes>>(json);
-        log.Info($"Read {PopupAttributes.Popups.Count} entries from {jsonfile}");
-    }
-    #endregion Read Pop-ups file
-
-    #region Read the JSON file
-    public static void ReadJson()
-    {
-        string jsonfile = GetJsonFile();
-
-        if (!File.Exists(jsonfile))
-        {
-            CreateNewJson(jsonfile);
-        }
-
-        log.Debug($"Reading JSON file: {jsonfile}");
-        try
-        {
-            string json = File.ReadAllText(jsonfile);
-            EntryClass.Entries = JsonSerializer.Deserialize<BindingList<EntryClass>>(json);
-        }
-        catch (Exception ex) when (ex is DirectoryNotFoundException || ex is FileNotFoundException)
-        {
-            log.Error(ex, "File or Directory not found {0}", jsonfile);
-            SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"File or Directory not found:\n\n{ex.Message}\n\nUnable to continue.",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
-            Environment.Exit(1);
-        }
-        catch (Exception ex)
-        {
-            log.Error(ex, "Error reading file: {0}", jsonfile);
-            SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"Error reading file:\n\n{ex.Message}",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
-        }
-
-        if (EntryClass.Entries == null)
-        {
-            log.Error("File {0} is empty or is invalid", jsonfile);
-            SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"File {jsonfile} is empty or is invalid\n\nUnable to continue.",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
-            Environment.Exit(2);
-        }
-
-        if (EntryClass.Entries.Count == 1)
-        {
-            log.Info($"Read {EntryClass.Entries.Count} entry from {jsonfile}");
-        }
-        else
-        {
-            log.Info($"Read {EntryClass.Entries.Count} entries from {jsonfile}");
-        }
-    }
-    #endregion Read the JSON file
-
-    #region Get file icons
-    public static void GetIcons(BindingList<EntryClass> ec)
-    {
-        foreach (EntryClass item in ec)
-        {
-            if (!string.IsNullOrEmpty(item.FilePathOrURI) || item.EntryType == (int)ListEntryType.Popup)
-            {
-                if (!string.IsNullOrEmpty(item.IconSource))
-                {
-                    string image = Path.Combine(AppInfo.AppDirectory, "Icons", item.IconSource);
-                    if (File.Exists(image))
-                    {
-                        log.Debug($"Using image file {item.IconSource} for \"{item.Title}\".");
-                        BitmapImage bmi = new();
-                        bmi.BeginInit();
-                        bmi.UriSource = new Uri(image);
-                        bmi.EndInit();
-                        item.FileIcon = bmi;
-                        //log.Debug($"Image size is {bmi.PixelHeight} x {bmi.PixelWidth}");
-                        continue;
-                    }
-                    log.Debug($"Could not find file {image} to use for \"{item.Title}\".");
-                }
-
-                if (item.EntryType == (int)ListEntryType.Popup)
-                {
-                    string image = Path.Combine(AppInfo.AppDirectory, "Icons", "UpArrow.png");
-                    if (File.Exists(image))
-                    {
-                        log.Debug($"Using image file UpArrow.png for \"{item.Title}\".");
-                        BitmapImage bmi = new();
-                        bmi.BeginInit();
-                        bmi.UriSource = new Uri(image);
-                        bmi.EndInit();
-                        item.FileIcon = bmi;
-                        continue;
-                    }
-                    log.Debug($"Could not find file {image} to use for \"{item.Title}\".");
-                }
-
-                string filePath = item.FilePathOrURI.TrimEnd('\\');
-                if (File.Exists(filePath))
-                {
-                    if (filePath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
-                    {
-                        string shortcut = ((IWshShortcut)new WshShell().CreateShortcut(filePath)).TargetPath;
-                        Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(shortcut);
-                        item.FileIcon = IconToImageSource(temp);
-                        log.Debug($"Using extracted associated icon from shortcut to {item.FilePathOrURI}.");
-                    }
-                    else
-                    {
-                        Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
-                        item.FileIcon = IconToImageSource(temp);
-                        log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
-                    }
-                }
-                // expand environmental variables for folders
-                else if (Directory.Exists(Environment.ExpandEnvironmentVariables(filePath)))
-                {
-                    Icon temp = Properties.Resources.folder;
-                    item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"Using folder icon for {item.FilePathOrURI}.");
-                }
-                // if complete path wasn't supplied check the path
-                else if (filePath.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
-                {
-                    StringBuilder sb = new(filePath, 2048);
-                    bool found = NativeMethods.PathFindOnPath(sb, new string[] { null });
-                    if (found)
-                    {
-                        Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(sb.ToString());
-                        item.FileIcon = IconToImageSource(temp);
-                        log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
-                    }
-                    else
-                    {
-                        Icon temp = Properties.Resources.question;
-                        item.FileIcon = IconToImageSource(temp);
-                        log.Warn($"Icon for {item.FilePathOrURI} could not be located.");
-                    }
-                }
-                // maybe it's a url
-                else if (IsValidUrl(filePath))
-                {
-                    Icon temp = Properties.Resources.globe;
-                    item.FileIcon = IconToImageSource(temp);
-                    log.Debug($"Using globe icon for {item.FilePathOrURI}. It appears to be a valid URL.");
-                }
-                else
-                {
-                    Icon temp = Properties.Resources.question;
-                    item.FileIcon = IconToImageSource(temp);
-                    log.Warn($"Icon for {item.FilePathOrURI} could not be located.");
-                }
-            }
-            // this shouldn't happen
-            else
-            {
-                Icon temp = Properties.Resources.question;
-                item.FileIcon = IconToImageSource(temp);
-                log.Warn("Path is empty or null. Icon cannot be assigned.");
-            }
-        }
-    }
-
-    private static ImageSource IconToImageSource(Icon icon)
-    {
-        return Imaging.CreateBitmapSourceFromHIcon(
-            icon.Handle,
-            new Int32Rect(0, 0, icon.Width, icon.Height),
-            BitmapSizeOptions.FromEmptyOptions());
-    }
-    #endregion Get file icons
-
-    #region Check URL
-    private static bool IsValidUrl(string uriName)
-    {
-        const string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
-        Regex Rgx = new(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        return Rgx.IsMatch(uriName);
-    }
-    #endregion Check URL
-
     #region Launch app or URI
-    internal static bool LaunchApp(EntryClass item)
+    /// <summary>
+    /// Launch the application, folder or URI
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns>True if successful, False if not.</returns>
+    internal static bool LaunchApp(Child item)
     {
         using Process launch = new();
         try
@@ -427,8 +243,6 @@ public partial class MainWindow : Window
             launch.StartInfo.Arguments = Environment.ExpandEnvironmentVariables(item.Arguments);
             launch.StartInfo.UseShellExecute = true;
             _ = launch.Start();
-            log.Info($"Opening \"{item.Title}\"");
-            SnackbarMsg.QueueMessage($"{item.Title} launched", 2000);
             if (UserSettings.Setting.PlaySound)
             {
                 using SoundPlayer soundPlayer = new()
@@ -437,34 +251,41 @@ public partial class MainWindow : Window
                 };
                 soundPlayer.Play();
             }
+            log.Info($"Opening \"{item.Title}\"");
+            if (UserSettings.Setting.MainWindowMinimizeOnLaunch)
+            {
+                SnackbarMsg.QueueMessage($"{item.Title} launched", 2000);
+            }
             return true;
         }
         catch (Win32Exception w) when (w.NativeErrorCode == 2)
         {
             log.Error(w, "Open failed for \"{0}\" - \"{1}\"", item.Title, item.FilePathOrURI);
             SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"Error launching \"{item.Title}\"\n\nFile Not Found: {item.FilePathOrURI}", "ERROR", ButtonType.Ok).ShowDialog();
+            _ = new MDCustMsgBox($"Error launching \"{item.Title}\"\n\nFile Not Found: {item.FilePathOrURI}",
+                "ERROR", ButtonType.Ok).ShowDialog();
             return false;
         }
         catch (Exception ex)
         {
             log.Error(ex, "Open failed for \"{0}\" - \"{1}\"", item.Title, item.FilePathOrURI);
             SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"Error launching \"{item.Title}\" {item.FilePathOrURI}\n\n{ex.Message}", "ERROR", ButtonType.Ok).ShowDialog();
+            _ = new MDCustMsgBox($"Error launching \"{item.Title}\" {item.FilePathOrURI}\n\n{ex.Message}",
+                "ERROR", ButtonType.Ok).ShowDialog();
             return false;
         }
     }
-    #endregion Launch app or uri
+    #endregion Launch app or URI
 
     #region Open pop up list
-    public static bool OpenPopup(EntryClass entry)
+    /// <summary>
+    /// Open the selected pop-up window
+    /// </summary>
+    /// <param name="entry"></param>
+    /// <returns></returns>
+    public static bool OpenPopup(Child entry)
     {
-        if (entry.EntryType != (int)ListEntryType.Popup)
-        {
-            return false;
-        }
-
-        PopupWindow popup = new(entry.Title, entry.HostID);
+        PopupWindow popup = new(entry);
 
         popup.Show();
 
@@ -504,6 +325,10 @@ public partial class MainWindow : Window
     #endregion PopupBox button events
 
     #region Set light or dark theme
+    /// <summary>
+    /// Sets the theme
+    /// </summary>
+    /// <param name="mode">Light, Dark or System</param>
     private static void SetBaseTheme(ThemeType mode)
     {
         //Retrieve the app's existing theme
@@ -549,6 +374,10 @@ public partial class MainWindow : Window
     #endregion Set light or dark theme
 
     #region Set primary color
+    /// <summary>
+    /// Sets the MDIX primary accent color
+    /// </summary>
+    /// <param name="color">One of the 18 color values</param>
     private static void SetPrimaryColor(AccentColor color)
     {
         PaletteHelper paletteHelper = new();
@@ -625,6 +454,10 @@ public partial class MainWindow : Window
     #endregion Set primary color
 
     #region Set secondary color
+    /// <summary>
+    /// Sets the MDIX secondary accent color
+    /// </summary>
+    /// <param name="color">One of the 14 color values</param>
     private static void SetSecondaryColor(AccentColor color)
     {
         PaletteHelper paletteHelper = new();
@@ -702,16 +535,16 @@ public partial class MainWindow : Window
         switch (spacing)
         {
             case Spacing.Scrunched:
-                listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxScrunched") as Style;
+                MainListBox.ItemContainerStyle = Application.Current.FindResource("ListBoxScrunched") as Style;
                 break;
             case Spacing.Compact:
-                listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxCompact") as Style;
+                MainListBox.ItemContainerStyle = Application.Current.FindResource("ListBoxCompact") as Style;
                 break;
             case Spacing.Comfortable:
-                listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxComfortable") as Style;
+                MainListBox.ItemContainerStyle = Application.Current.FindResource("ListBoxComfortable") as Style;
                 break;
             case Spacing.Wide:
-                listboxEntries.ItemContainerStyle = Application.Current.FindResource("ListBoxSpacious") as Style;
+                MainListBox.ItemContainerStyle = Application.Current.FindResource("ListBoxSpacious") as Style;
                 break;
         }
     }
@@ -727,50 +560,58 @@ public partial class MainWindow : Window
         switch (weight)
         {
             case Weight.Thin:
-                listboxEntries.FontWeight = FontWeights.Thin;
+                MainListBox.FontWeight = FontWeights.Thin;
                 break;
             case Weight.Regular:
-                listboxEntries.FontWeight = FontWeights.Regular;
+                MainListBox.FontWeight = FontWeights.Regular;
                 break;
             case Weight.SemiBold:
-                listboxEntries.FontWeight = FontWeights.SemiBold;
+                MainListBox.FontWeight = FontWeights.SemiBold;
                 break;
             case Weight.Bold:
-                listboxEntries.FontWeight = FontWeights.Bold;
+                MainListBox.FontWeight = FontWeights.Bold;
                 break;
             default:
-                listboxEntries.FontWeight = FontWeights.Regular;
+                MainListBox.FontWeight = FontWeights.Regular;
                 break;
         }
     }
     #endregion Set the font weight
 
     #region UI scale converter
+    /// <summary>
+    /// Sets the value for UI scaling
+    /// </summary>
+    /// <param name="size">One of 7 values</param>
+    /// <returns>double used by LayoutTransform</returns>
     internal static double UIScale(MySize size)
     {
         switch (size)
         {
             case MySize.Smallest:
-                return 0.60;
+                return 0.7;
             case MySize.Smaller:
-                return 0.70;
+                return 0.8;
             case MySize.Small:
-                return 0.80;
-            case MySize.Default:
                 return 0.9;
-            case MySize.Large:
+            case MySize.Default:
                 return 1.0;
+            case MySize.Large:
+                return 1.1;
             case MySize.Larger:
-                return 1.15;
+                return 1.2;
             case MySize.Largest:
                 return 1.3;
             default:
-                return 0.9;
+                return 1.0;
         }
     }
     #endregion UI scale converter
 
     #region Keyboard Events
+    /// <summary>
+    /// Keyboard events
+    /// </summary>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
         // With Ctrl
@@ -791,15 +632,7 @@ public partial class MainWindow : Window
             }
             if (e.Key == Key.OemComma)
             {
-                if (!DialogHost.IsDialogOpen("MainDialogHost"))
-                {
-                    DialogHelpers.ShowSettingsDialog();
-                }
-                else
-                {
-                    DialogHost.Close("MainDialogHost");
-                    DialogHelpers.ShowSettingsDialog();
-                }
+                NavigateToPage(NavPage.Settings);
             }
         }
         // Ctrl and Shift
@@ -864,6 +697,9 @@ public partial class MainWindow : Window
     #endregion Keyboard Events
 
     #region Smaller/Larger
+    /// <summary>
+    /// Scale the UI according to user preference
+    /// </summary>
     private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
     {
         if (Keyboard.Modifiers != ModifierKeys.Control)
@@ -955,6 +791,9 @@ public partial class MainWindow : Window
         // Dispose of the tray icon
         tbIcon.Dispose();
 
+        // Save the JSON on file
+        JsonHelpers.SaveJson();
+
         // Save settings
         UserSettings.Setting.WindowLeft = Math.Floor(Left);
         UserSettings.Setting.WindowTop = Math.Floor(Top);
@@ -987,33 +826,6 @@ public partial class MainWindow : Window
         NavigateToPage(NavPage.Maintenance);
     }
     #endregion Tray icon menu events
-
-    #region Get the menu JSON file name
-    public static string GetJsonFile()
-    {
-        return Path.Combine(AppInfo.AppDirectory, "MyLauncher.json");
-    }
-    #endregion Get the menu JSON file name
-
-    #region Create starter JSON file
-    private static void CreateNewJson(string file)
-    {
-        StringBuilder sb = new();
-        _ = sb.AppendLine("[")
-            .AppendLine("  {")
-            .AppendLine("    \"Arguments\": \"\",")
-            .AppendLine("    \"ChildOfHost\": 0,")
-            .AppendLine("    \"EntryType\": 0,")
-            .AppendLine("    \"FilePathOrURI\": \"calc.exe\",")
-            .AppendLine("    \"HostID\": -1,")
-            .AppendLine("    \"IconSource\": \"\",")
-            .AppendLine("    \"Title\": \"Calculator\" ")
-            .AppendLine("  }")
-            .AppendLine("]");
-        File.WriteAllText(file, sb.ToString());
-        log.Debug($"Creating new JSON file with one entry - {file}");
-    }
-    #endregion Create starter JSON file
 
     #region Mouse enter/leave shadow effect
     private void Card_MouseEnter(object sender, MouseEventArgs e)
@@ -1049,6 +861,9 @@ public partial class MainWindow : Window
     #endregion Show Main window
 
     #region Add/Remove from registry
+    /// <summary>
+    /// Add a registry entry to start My Launcher with Windows
+    /// </summary>
     private void AddStartToRegistry()
     {
         if (IsLoaded && !RegRun.RegRunEntry("MyLauncher"))
@@ -1069,6 +884,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Remove the registry entry
+    /// </summary>
     private void RemoveStartFromRegistry()
     {
         if (IsLoaded)
@@ -1091,7 +909,12 @@ public partial class MainWindow : Window
     #endregion
 
     #region Unhandled Exception Handler
-    private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
+    /// <summary>
+    /// Handles any exceptions that weren't caught by a try-catch statement
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
     {
         log.Error("Unhandled Exception");
         Exception e = (Exception)args.ExceptionObject;
@@ -1108,51 +931,57 @@ public partial class MainWindow : Window
     #endregion Unhandled Exception Handler
 
     #region ListBox mouse and key events
+    /// <summary>
+    /// Opens the app or pop-up and optionally closes the pop-up
+    /// or minimizes the main window.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ListBoxMouseButtonUp(object sender, MouseButtonEventArgs e)
     {
         ListBoxItem lbi = sender as ListBoxItem;
         ListBox box = WindowHelpers.FindParent<ListBox>(lbi);
 
-        if (box is null or not ListBox || box.Name == "MaintListBox")
-        {
-            return;
-        }
-
-        if (lbi.Content is EntryClass entry)
+        if (lbi.Content is Child entry && box is not null)
         {
             if (!UserSettings.Setting.AllowRightButton && e.ChangedButton != MouseButton.Left)
             {
                 return;
             }
-            if (entry.EntryType == (int)ListEntryType.Popup)
+
+            _ = entry.EntryType == ListEntryType.Popup
+                ? OpenPopup(entry)
+                : LaunchApp(entry);
+            box.SelectedItem = null;
+
+            if (box.Name == "PopupListBox" && UserSettings.Setting.PopupCloseAfterLaunch)
             {
-                _ = OpenPopup(entry);
+                Window window = WindowHelpers.FindParent<Window>(box);
+                window.Close();
             }
-            else
+            if (box.Name == "MainListBox" && UserSettings.Setting.MainWindowMinimizeOnLaunch)
             {
-                _ = LaunchApp(entry);
+                WindowState = WindowState.Minimized;
             }
-            listboxEntries.SelectedItem = null;
         }
     }
 
+    // Todo this needs work
     private void ListBoxKeyDown(object sender, KeyEventArgs e)
     {
         ListBoxItem lbi = sender as ListBoxItem;
-        if (lbi.Content is EntryClass entry && e.Key == Key.Enter)
+        if (lbi.Content is Child entry && e.Key == Key.Enter)
         {
-            if (entry.EntryType == (int)ListEntryType.Popup)
-            {
-                _ = OpenPopup(entry);
-            }
-            else
-            {
-                _ = LaunchApp(entry);
-            }
-            listboxEntries.SelectedItem = null;
+            _ = entry.EntryType == ListEntryType.Popup
+                ? OpenPopup(entry)
+                : LaunchApp(entry);
+            MainListBox.SelectedItem = null;
         }
     }
 
+    /// <summary>
+    /// These event handlers affect the entire application!
+    /// </summary>
     private void RegisterEventHandlers()
     {
         EventManager.RegisterClassHandler(typeof(ListBoxItem),
@@ -1164,4 +993,41 @@ public partial class MainWindow : Window
             new KeyEventHandler(ListBoxKeyDown));
     }
     #endregion ListBox mouse and key events
+
+    #region Show a single instance of a window
+    /// <summary>
+    /// Show a single instance of a window. If window is already shown, set its state to Normal and Activate it.
+    /// </summary>
+    /// <typeparam name="T">window type</typeparam>
+    /// https://stackoverflow.com/a/64353092/15237757
+    public static void ShowWindow<T>() where T : Window, new()
+    {
+        T existingWindow = Application.Current.Windows.OfType<T>().SingleOrDefault();
+
+        if (existingWindow == null)
+        {
+            new T().Show();
+            return;
+        }
+
+        existingWindow.WindowState = WindowState.Normal;
+        existingWindow.Activate();
+    }
+    #endregion Show a single instance of a window
+
+    #region Double click ColorZone
+    /// <summary>
+    /// Double click the ColorZone to set optimal width
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        SizeToContent = SizeToContent.Width;
+        double width = ActualWidth;
+        Thread.Sleep(50);
+        SizeToContent = SizeToContent.Manual;
+        Width = width + 1;
+    }
+    #endregion Double click ColorZone
 }

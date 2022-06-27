@@ -10,10 +10,11 @@
     MinWidth="200"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
-    FontSize="15"
+    FontSize="12"
     KeyDown="Window_KeyDown"
     Loaded="Window_Loaded"
     MouseWheel="Window_MouseWheel"
+    SizeToContent="Width"
     StateChanged="Window_StateChanged"
     Style="{StaticResource MaterialDesignWindow}"
     TextElement.FontWeight="Regular"
@@ -29,7 +30,6 @@
             BasedOn="{StaticResource {x:Type materialDesign:SnackbarMessage}}"
             TargetType="{x:Type materialDesign:SnackbarMessage}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="30" />
         </Style>
     </Window.Resources>
     <!--#endregion-->
@@ -95,7 +95,8 @@
                     Padding="0,0,0,3"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
                     CornerRadius="4"
-                    Mode="PrimaryMid">
+                    Mode="PrimaryMid"
+                    MouseDoubleClick="ColorZone_MouseDoubleClick">
                     <Grid>
                         <StackPanel Orientation="Horizontal">
                             <ToggleButton
@@ -108,10 +109,10 @@
                                 ToolTip="Click to navigate" />
                             <TextBlock
                                 x:Name="PageTitle"
-                                Margin="6,0,0,0"
+                                Margin="6,4,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                FontSize="20"
+                                FontSize="18"
                                 FontWeight="DemiBold"
                                 Text="{Binding TitleText, Source={x:Static local:UserSettings.Setting}}" />
                         </StackPanel>
@@ -133,15 +134,15 @@
                                         <Button
                                             Click="BtnReadme_Click"
                                             Content="View ReadMe"
-                                            FontSize="16" />
+                                            FontSize="13" />
                                         <Button
                                             Click="BtnLog_Click"
                                             Content="View Log File"
-                                            FontSize="16" />
+                                            FontSize="13" />
                                         <Button
                                             Click="BtnData_Click"
                                             Content="View Data File"
-                                            FontSize="16" />
+                                            FontSize="13" />
                                         <Separator
                                             Margin="0"
                                             Padding="1"
@@ -149,7 +150,7 @@
                                         <Button
                                             HorizontalContentAlignment="Left"
                                             Content="Cancel"
-                                            FontSize="16"
+                                            FontSize="13"
                                             Style="{StaticResource MaterialDesignFlatAccentButton}" />
                                     </StackPanel>
                                 </Grid>
@@ -174,7 +175,7 @@
                         Margin="0,16,0,16"
                         HorizontalAlignment="Left"
                         Cursor="Hand"
-                        FontSize="18"
+                        FontSize="14"
                         SelectionChanged="NavListBox_SelectionChanged"
                         Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
                         <ListBoxItem>
@@ -254,15 +255,15 @@
                         x:Name="MainCard"
                         Grid.Row="0"
                         Margin="10,5"
-                        Padding="10"
+                        Padding="2,5,10,5"
                         HorizontalAlignment="Stretch"
                         materialDesign:ShadowAssist.ShadowDepth="Depth2"
                         MouseEnter="Card_MouseEnter"
                         MouseLeave="Card_MouseLeave"
                         UniformCornerRadius="7">
                         <ListBox
-                            x:Name="listboxEntries"
-                            Margin="10,0"
+                            x:Name="MainListBox"
+                            Margin="0"
                             d:ItemsSource="{d:SampleData ItemCount=5}"
                             materialDesign:ListBoxItemAssist.ShowSelection="True"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -289,13 +290,13 @@
                                         </Grid.ColumnDefinitions>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="55" />
+                                                <ColumnDefinition Width="auto" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <Image
-                                                Width="32"
-                                                Height="32"
-                                                Margin="8,0,0,0"
+                                                Width="28"
+                                                Height="28"
+                                                Margin="10,0,0,0"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center"
                                                 SnapsToDevicePixels="True"
@@ -303,10 +304,11 @@
                                                 Visibility="{Binding ShowFileIcons, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}" />
                                             <TextBlock
                                                 Grid.Column="1"
+                                                Margin="10,0,0,0"
                                                 Padding="1"
                                                 VerticalAlignment="Center"
                                                 FontFamily="Segoe UI"
-                                                FontSize="18"
+                                                FontSize="14"
                                                 Text="{Binding Title}" />
                                         </Grid>
                                     </Grid>
@@ -329,7 +331,7 @@
                             Margin="10,0"
                             Click="BtnExit_Click"
                             Content="Exit"
-                            FontSize="18"
+                            FontSize="15"
                             FontWeight="Bold"
                             IsDefault="True"
                             Style="{DynamicResource MaterialDesignRaisedButton}" />
