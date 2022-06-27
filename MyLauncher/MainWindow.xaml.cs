@@ -610,10 +610,14 @@ public partial class MainWindow : Window
 
     #region Keyboard Events
     /// <summary>
-    /// Keyboard events
+    /// Keyboard events for window
     /// </summary>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
+    private void WindowPreview_KeyUp(object sender, KeyEventArgs e)
     {
+        Debug.WriteLine($"Sender: {sender.GetType()} - Key: {e.Key} - Modifiers: {e.KeyboardDevice.Modifiers}");
+        var foc = FocusManager.GetFocusedElement(this);
+        Debug.WriteLine($"{foc} has focus");
+
         // With Ctrl
         if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
         {
@@ -633,6 +637,19 @@ public partial class MainWindow : Window
             if (e.Key == Key.OemComma)
             {
                 NavigateToPage(NavPage.Settings);
+            }
+
+            if (e.Key >= Key.D1 && e.Key <= Key.D9)
+            {
+                int k = (int)e.Key - 35;
+                if (k <= (MainListBox.Items.Count - 1))
+                {
+                    var item = MainListBox.Items[k] as Child;
+                    _ = item.EntryType == ListEntryType.Popup
+                        ? OpenPopup(item)
+                        : LaunchApp(item);
+                    MainListBox.SelectedItem = null;
+                }
             }
         }
         // Ctrl and Shift
@@ -692,6 +709,24 @@ public partial class MainWindow : Window
                 DialogHost.Close("MainDialogHost");
                 DialogHelpers.ShowAboutDialog();
             }
+        }
+    }
+
+    /// <summary>
+    /// Keyboard events for ListBox
+    /// </summary>
+    private void ListBox_KeyUp(object sender, KeyEventArgs e)
+    {
+        if (MainListBox.SelectedItem != null && e.Key == Key.Enter && MainListBox.SelectedItem is Child item)
+        {
+            _ = item.EntryType == ListEntryType.Popup
+                ? OpenPopup(item)
+                : LaunchApp(item);
+            MainListBox.SelectedItem = null;
+        }
+        if (MainListBox.SelectedItem != null && e.Key == Key.Escape)
+        {
+            MainListBox.SelectedItem = null;
         }
     }
     #endregion Keyboard Events
@@ -930,10 +965,10 @@ public partial class MainWindow : Window
     }
     #endregion Unhandled Exception Handler
 
-    #region ListBox mouse and key events
+    #region ListBox mouse events
     /// <summary>
-    /// Opens the app or pop-up and optionally closes the pop-up
-    /// or minimizes the main window.
+    /// Opens the app or pop-up and
+    /// optionally closes the pop-up or minimizes the main window.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -966,19 +1001,6 @@ public partial class MainWindow : Window
         }
     }
 
-    // Todo this needs work
-    private void ListBoxKeyDown(object sender, KeyEventArgs e)
-    {
-        ListBoxItem lbi = sender as ListBoxItem;
-        if (lbi.Content is Child entry && e.Key == Key.Enter)
-        {
-            _ = entry.EntryType == ListEntryType.Popup
-                ? OpenPopup(entry)
-                : LaunchApp(entry);
-            MainListBox.SelectedItem = null;
-        }
-    }
-
     /// <summary>
     /// These event handlers affect the entire application!
     /// </summary>
@@ -987,10 +1009,6 @@ public partial class MainWindow : Window
         EventManager.RegisterClassHandler(typeof(ListBoxItem),
             MouseUpEvent,
             new MouseButtonEventHandler(ListBoxMouseButtonUp));
-
-        EventManager.RegisterClassHandler(typeof(ListBoxItem),
-            KeyDownEvent,
-            new KeyEventHandler(ListBoxKeyDown));
     }
     #endregion ListBox mouse and key events
 
@@ -1030,4 +1048,9 @@ public partial class MainWindow : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
+
+    private void Window_Activated(object sender, EventArgs e)
+    {
+        _ = MainListBox.Focus();
+    }
 }

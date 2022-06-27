@@ -8,12 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tb="http://www.hardcodet.net/taskbar"
     MinWidth="200"
+    Activated="Window_Activated"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
     FontSize="12"
-    KeyDown="Window_KeyDown"
+    PreviewKeyUp="WindowPreview_KeyUp"
     Loaded="Window_Loaded"
-    MouseWheel="Window_MouseWheel"
+    PreviewMouseWheel="Window_MouseWheel"
     SizeToContent="Width"
     StateChanged="Window_StateChanged"
     Style="{StaticResource MaterialDesignWindow}"
@@ -37,6 +38,7 @@
     <materialDesign:DialogHost
         CloseOnClickAway="False"
         DialogTheme="Inherit"
+        Focusable="False"
         Identifier="MainDialogHost">
 
         <Grid x:Name="MainGrid">
@@ -120,6 +122,7 @@
                         <materialDesign:PopupBox
                             Margin="1,0"
                             Padding="0"
+                            Focusable="False"
                             HorizontalAlignment="Right"
                             PlacementMode="LeftAndAlignTopEdges">
                             <Border
@@ -268,6 +271,7 @@
                             materialDesign:ListBoxItemAssist.ShowSelection="True"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                            PreviewKeyUp="ListBox_KeyUp"
                             Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -346,6 +350,7 @@
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
+                Focusable="False"
                 Background="#FF202020"
                 FontWeight="DemiBold"
                 Foreground="White"

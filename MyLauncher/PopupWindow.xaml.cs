@@ -21,6 +21,10 @@ public partial class PopupWindow : Window
     }
 
     #region Init Pop-up
+    /// <summary>
+    /// Sets UI elements according to the settings value
+    /// </summary>
+    /// <param name="child"></param>
     private void InitPopUp(Child child)
     {
         ThisPopup = child;
@@ -100,6 +104,16 @@ public partial class PopupWindow : Window
     }
 
     /// <summary>
+    /// Sets focus to the ListBox
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Window_Activated(object sender, EventArgs e)
+    {
+        _ = PopupListBox.Focus();
+    }
+
+    /// <summary>
     /// Save the window position on closing.
     /// </summary>
     /// <param name="sender"></param>
@@ -111,7 +125,6 @@ public partial class PopupWindow : Window
     #endregion Window Events
 
     #region Save pop-up size and position
-
     /// <summary>
     /// Save the pop-up window size and position
     /// </summary>
@@ -200,6 +213,11 @@ public partial class PopupWindow : Window
     #endregion Set the row spacing
 
     #region Double click ColorZone
+    /// <summary>
+    /// Set optimal window width
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         SizeToContent = SizeToContent.Width;
@@ -209,4 +227,42 @@ public partial class PopupWindow : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
+
+    #region Keyboard Events
+    /// <summary>
+    /// Keyboard events for ListBox
+    /// </summary>
+    private void ListBox_KeyUp(object sender, KeyEventArgs e)
+    {
+        if (PopupListBox.SelectedItem != null && e.Key == Key.Enter && PopupListBox.SelectedItem is Child item)
+        {
+            _ = item.EntryType == ListEntryType.Popup
+                ? MainWindow.OpenPopup(item)
+                : MainWindow.LaunchApp(item);
+            PopupListBox.SelectedItem = null;
+        }
+
+        if (PopupListBox.SelectedItem != null && e.Key == Key.Escape)
+        {
+            PopupListBox.SelectedItem = null;
+        }
+
+        // With Ctrl
+        if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+        {
+            if (e.Key >= Key.D1 && e.Key <= Key.D9)
+            {
+                int k = (int)e.Key - 35;
+                if (k <= (PopupListBox.Items.Count - 1))
+                {
+                    Child child = PopupListBox.Items[k] as Child;
+                    _ = child.EntryType == ListEntryType.Popup
+                        ? MainWindow.OpenPopup(child)
+                        : MainWindow.LaunchApp(child);
+                    PopupListBox.SelectedItem = null;
+                }
+            }
+        }
+    }
+    #endregion Keyboard Events
 }

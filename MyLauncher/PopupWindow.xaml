@@ -68,6 +68,7 @@
                 Margin="0,5"
                 d:ItemsSource="{d:SampleData ItemCount=3}"
                 materialDesign:ListBoxItemAssist.ShowSelection="True"
+                PreviewKeyUp="ListBox_KeyUp"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                 Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
