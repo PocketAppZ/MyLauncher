@@ -236,9 +236,14 @@ public partial class PopupWindow : Window
     {
         if (PopupListBox.SelectedItem != null && e.Key == Key.Enter && PopupListBox.SelectedItem is Child item)
         {
-            _ = item.EntryType == ListEntryType.Popup
-                ? MainWindow.OpenPopup(item)
-                : MainWindow.LaunchApp(item);
+            if (item.EntryType == ListEntryType.Popup)
+            {
+                MainWindow.OpenPopup(item);
+            }
+            else
+            {
+                MainWindow.LaunchApp(item);
+            }
             PopupListBox.SelectedItem = null;
         }
 
@@ -256,9 +261,14 @@ public partial class PopupWindow : Window
                 if (k <= (PopupListBox.Items.Count - 1))
                 {
                     Child child = PopupListBox.Items[k] as Child;
-                    _ = child.EntryType == ListEntryType.Popup
-                        ? MainWindow.OpenPopup(child)
-                        : MainWindow.LaunchApp(child);
+                    if (child.EntryType == ListEntryType.Popup)
+                    {
+                        MainWindow.OpenPopup(child);
+                    }
+                    else
+                    {
+                        MainWindow.LaunchApp(child);
+                    }
                     PopupListBox.SelectedItem = null;
                 }
             }

@@ -232,7 +232,7 @@ public partial class MainWindow : Window
     /// <summary>
     /// Launch the application, folder or URI
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item">Child object to open</param>
     /// <returns>True if successful, False if not.</returns>
     internal static bool LaunchApp(Child item)
     {
@@ -281,15 +281,12 @@ public partial class MainWindow : Window
     /// <summary>
     /// Open the selected pop-up window
     /// </summary>
-    /// <param name="entry"></param>
-    /// <returns></returns>
-    public static bool OpenPopup(Child entry)
+    /// <param name="item">Child object to open</param>
+    public static void OpenPopup(Child item)
     {
-        PopupWindow popup = new(entry);
+        PopupWindow popup = new(item);
 
         popup.Show();
-
-        return true;
     }
     #endregion Open pop up list
 
@@ -645,9 +642,14 @@ public partial class MainWindow : Window
                 if (k <= (MainListBox.Items.Count - 1))
                 {
                     var item = MainListBox.Items[k] as Child;
-                    _ = item.EntryType == ListEntryType.Popup
-                        ? OpenPopup(item)
-                        : LaunchApp(item);
+                    if (item.EntryType == ListEntryType.Popup)
+                    {
+                        OpenPopup(item);
+                    }
+                    else
+                    {
+                        LaunchApp(item);
+                    }
                     MainListBox.SelectedItem = null;
                 }
             }
@@ -719,9 +721,14 @@ public partial class MainWindow : Window
     {
         if (MainListBox.SelectedItem != null && e.Key == Key.Enter && MainListBox.SelectedItem is Child item)
         {
-            _ = item.EntryType == ListEntryType.Popup
-                ? OpenPopup(item)
-                : LaunchApp(item);
+            if (item.EntryType == ListEntryType.Popup)
+            {
+                OpenPopup(item);
+            }
+            else
+            {
+                LaunchApp(item);
+            }
             MainListBox.SelectedItem = null;
         }
         if (MainListBox.SelectedItem != null && e.Key == Key.Escape)
@@ -897,7 +904,7 @@ public partial class MainWindow : Window
 
     #region Add/Remove from registry
     /// <summary>
-    /// Add a registry entry to start My Launcher with Windows
+    /// Add a registry item to start My Launcher with Windows
     /// </summary>
     private void AddStartToRegistry()
     {
@@ -920,7 +927,7 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Remove the registry entry
+    /// Remove the registry item
     /// </summary>
     private void RemoveStartFromRegistry()
     {
@@ -984,9 +991,14 @@ public partial class MainWindow : Window
                 return;
             }
 
-            _ = entry.EntryType == ListEntryType.Popup
-                ? OpenPopup(entry)
-                : LaunchApp(entry);
+            if (entry.EntryType == ListEntryType.Popup)
+            {
+                OpenPopup(entry);
+            }
+            else
+            {
+                LaunchApp(entry);
+            }
             box.SelectedItem = null;
 
             if (box.Name == "PopupListBox" && UserSettings.Setting.PopupCloseAfterLaunch)
