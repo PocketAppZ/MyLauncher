@@ -102,6 +102,26 @@ public class Child : INotifyPropertyChanged, IDropTarget
     }
 
     /// <summary>
+    /// Pop-up window location
+    /// </summary>
+    public double PopupTop { get; set; }
+
+    /// <summary>
+    /// Pop-up window location
+    /// </summary>
+    public double PopupLeft { get; set; }
+
+    /// <summary>
+    /// Pop-up window height
+    /// </summary>
+    public double PopupHeight { get; set; }
+
+    /// <summary>
+    /// Pop-up window width
+    /// </summary>
+    public double PopupWidth { get; set; }
+
+    /// <summary>
     /// Observable collection containing the entries
     /// </summary>
     [JsonPropertyName("Children")]

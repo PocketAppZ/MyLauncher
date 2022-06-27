@@ -21,11 +21,12 @@ public partial class MainWindow : Window
         ReadSettings();
 
         ResetListBox();
-
-        ReadPopupsJson();
     }
 
     #region Settings
+    /// <summary>
+    /// Read and apply settings
+    /// </summary>
     private void InitializeSettings()
     {
         stopwatch.Start();
@@ -164,6 +165,10 @@ public partial class MainWindow : Window
     #endregion Setting change
 
     #region Navigation
+    /// <summary>
+    /// Navigates to the requested dialog or window
+    /// </summary>
+    /// <param name="selectedIndex"></param>
     private void NavigateToPage(NavPage selectedIndex)
     {
         switch (selectedIndex)
@@ -201,38 +206,34 @@ public partial class MainWindow : Window
     #endregion Navigation
 
     #region Clear and repopulate the listbox
+    /// <summary>
+    /// Clears the ObservableCollection the rereads the JSON file and populates the main ListBox/>
+    /// </summary>
     public void ResetListBox()
     {
         Child.Children?.Clear();
-        JsonHelpers.ReadJson(this);
+        JsonHelpers.ReadJson();
         IconHelpers.GetIcons(Child.Children);
         PopulateMainListBox();
     }
     #endregion Clear and repopulate the listbox
 
     #region Load the listbox
+    /// <summary>
+    /// Simply sets the ItemsSource of the MainListBox to the Child.Children ObservableCollection
+    /// </summary>
     public void PopulateMainListBox()
     {
         MainListBox.ItemsSource = Child.Children;
     }
     #endregion Load the listbox
 
-    #region Read Pop-ups file
-    public static void ReadPopupsJson()
-    {
-        string jsonfile = JsonHelpers.GetMainListFile().Replace("MyLauncher.json", "Popups.json");
-
-        if (!File.Exists(jsonfile))
-        {
-            File.WriteAllText(jsonfile, "[]");
-        }
-        string json = File.ReadAllText(jsonfile);
-        PopupAttributes.Popups = JsonSerializer.Deserialize<List<PopupAttributes>>(json);
-        log.Info($"Read {PopupAttributes.Popups.Count} entries from {jsonfile}");
-    }
-    #endregion Read Pop-ups file
-
     #region Launch app or URI
+    /// <summary>
+    /// Launch the application, folder or URI
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns>True if successful, False if not.</returns>
     internal static bool LaunchApp(Child item)
     {
         using Process launch = new();
@@ -277,6 +278,11 @@ public partial class MainWindow : Window
     #endregion Launch app or URI
 
     #region Open pop up list
+    /// <summary>
+    /// Open the selected pop-up window
+    /// </summary>
+    /// <param name="entry"></param>
+    /// <returns></returns>
     public static bool OpenPopup(Child entry)
     {
         PopupWindow popup = new(entry);
@@ -319,6 +325,10 @@ public partial class MainWindow : Window
     #endregion PopupBox button events
 
     #region Set light or dark theme
+    /// <summary>
+    /// Sets the theme
+    /// </summary>
+    /// <param name="mode">Light, Dark or System</param>
     private static void SetBaseTheme(ThemeType mode)
     {
         //Retrieve the app's existing theme
@@ -364,6 +374,10 @@ public partial class MainWindow : Window
     #endregion Set light or dark theme
 
     #region Set primary color
+    /// <summary>
+    /// Sets the MDIX primary accent color
+    /// </summary>
+    /// <param name="color">One of the 18 color values</param>
     private static void SetPrimaryColor(AccentColor color)
     {
         PaletteHelper paletteHelper = new();
@@ -440,6 +454,10 @@ public partial class MainWindow : Window
     #endregion Set primary color
 
     #region Set secondary color
+    /// <summary>
+    /// Sets the MDIX secondary accent color
+    /// </summary>
+    /// <param name="color">One of the 14 color values</param>
     private static void SetSecondaryColor(AccentColor color)
     {
         PaletteHelper paletteHelper = new();
@@ -561,6 +579,11 @@ public partial class MainWindow : Window
     #endregion Set the font weight
 
     #region UI scale converter
+    /// <summary>
+    /// Sets the value for UI scaling
+    /// </summary>
+    /// <param name="size">One of 7 values</param>
+    /// <returns>double used by LayoutTransform</returns>
     internal static double UIScale(MySize size)
     {
         switch (size)
@@ -586,6 +609,9 @@ public partial class MainWindow : Window
     #endregion UI scale converter
 
     #region Keyboard Events
+    /// <summary>
+    /// Keyboard events
+    /// </summary>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
         // With Ctrl
@@ -671,6 +697,9 @@ public partial class MainWindow : Window
     #endregion Keyboard Events
 
     #region Smaller/Larger
+    /// <summary>
+    /// Scale the UI according to user preference
+    /// </summary>
     private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
     {
         if (Keyboard.Modifiers != ModifierKeys.Control)
@@ -762,6 +791,9 @@ public partial class MainWindow : Window
         // Dispose of the tray icon
         tbIcon.Dispose();
 
+        // Save the JSON on file
+        JsonHelpers.SaveJson();
+
         // Save settings
         UserSettings.Setting.WindowLeft = Math.Floor(Left);
         UserSettings.Setting.WindowTop = Math.Floor(Top);
@@ -829,6 +861,9 @@ public partial class MainWindow : Window
     #endregion Show Main window
 
     #region Add/Remove from registry
+    /// <summary>
+    /// Add a registry entry to start My Launcher with Windows
+    /// </summary>
     private void AddStartToRegistry()
     {
         if (IsLoaded && !RegRun.RegRunEntry("MyLauncher"))
@@ -849,6 +884,9 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Remove the registry entry
+    /// </summary>
     private void RemoveStartFromRegistry()
     {
         if (IsLoaded)
@@ -871,6 +909,11 @@ public partial class MainWindow : Window
     #endregion
 
     #region Unhandled Exception Handler
+    /// <summary>
+    /// Handles any exceptions that weren't caught by a try-catch statement
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
     private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
     {
         log.Error("Unhandled Exception");
@@ -888,6 +931,12 @@ public partial class MainWindow : Window
     #endregion Unhandled Exception Handler
 
     #region ListBox mouse and key events
+    /// <summary>
+    /// Opens the app or pop-up and optionally closes the pop-up
+    /// or minimizes the main window.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ListBoxMouseButtonUp(object sender, MouseButtonEventArgs e)
     {
         ListBoxItem lbi = sender as ListBoxItem;
@@ -900,7 +949,9 @@ public partial class MainWindow : Window
                 return;
             }
 
-            _ = entry.EntryType == ListEntryType.Popup ? OpenPopup(entry) : LaunchApp(entry);
+            _ = entry.EntryType == ListEntryType.Popup
+                ? OpenPopup(entry)
+                : LaunchApp(entry);
             box.SelectedItem = null;
 
             if (box.Name == "PopupListBox" && UserSettings.Setting.PopupCloseAfterLaunch)
@@ -921,20 +972,15 @@ public partial class MainWindow : Window
         ListBoxItem lbi = sender as ListBoxItem;
         if (lbi.Content is Child entry && e.Key == Key.Enter)
         {
-            if (entry.EntryType == ListEntryType.Popup)
-            {
-                _ = OpenPopup(entry);
-            }
-            else
-            {
-                _ = LaunchApp(entry);
-            }
+            _ = entry.EntryType == ListEntryType.Popup
+                ? OpenPopup(entry)
+                : LaunchApp(entry);
             MainListBox.SelectedItem = null;
         }
     }
 
     /// <summary>
-    /// These event handlers affect the entire application
+    /// These event handlers affect the entire application!
     /// </summary>
     private void RegisterEventHandlers()
     {
@@ -970,11 +1016,18 @@ public partial class MainWindow : Window
     #endregion Show a single instance of a window
 
     #region Double click ColorZone
+    /// <summary>
+    /// Double click the ColorZone to set optimal width
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         SizeToContent = SizeToContent.Width;
+        double width = ActualWidth;
         Thread.Sleep(50);
         SizeToContent = SizeToContent.Manual;
+        Width = width + 1;
     }
     #endregion Double click ColorZone
 }

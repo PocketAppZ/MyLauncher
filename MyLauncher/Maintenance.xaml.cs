@@ -61,7 +61,7 @@ public partial class Maintenance : Window
 
     #region Setting changed
     /// <summary>
-    /// Handle relevent settings changes
+    /// Handle relevant settings changes
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -83,7 +83,7 @@ public partial class Maintenance : Window
     #region Window events
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        // Select the first item in the treeview
+        // Select the first item in the TreeView
         _ = TvMaint.Focus();
         if (TvMaint.Items.Count > 0)
         {
@@ -124,7 +124,7 @@ public partial class Maintenance : Window
 
     #region Check for "untitled" entries in the list box
     /// <summary>
-    /// Checks the obserable collection for any Title equal to "untitled"
+    /// Checks the observable collection for any Title equal to "untitled"
     /// </summary>
     /// <returns>True if not found. False if found.</returns>
     private static bool CheckForUntitled()
@@ -193,7 +193,7 @@ public partial class Maintenance : Window
 
     #region Delete an item
     /// <summary>
-    /// Calles RemoveByID to delete an item from the list
+    /// Calls RemoveByID to delete an item from the list
     /// </summary>
     private void DeleteItem()
     {
@@ -210,7 +210,6 @@ public partial class Maintenance : Window
                     return;
                 }
             }
-
             RemoveByID(Child.Children, itemToDelete);
         }
         else
@@ -220,9 +219,24 @@ public partial class Maintenance : Window
     }
     #endregion Delete an item
 
+    #region Discard changes
+    /// <summary>
+    /// Discard any changes make since the last time the file was changed
+    /// </summary>
+    private void DiscardChanges()
+    {
+        JsonHelpers.ReadJson();
+        (Application.Current.MainWindow as MainWindow)?.ResetListBox();
+        LoadTreeView();
+        TvMaint.Items.Refresh();
+        EntriesChanged = false;
+        btnDiscard.IsEnabled = false;
+    }
+    #endregion Discard changes
+
     #region Remove an item from the list
     /// <summary>
-    /// Deletes a single item from the list.
+    /// Removes a single item from the list.
     /// </summary>
     /// <param name="children">ObservableCollection to search</param>
     /// <param name="delItem">Child object to remove</param>
@@ -336,24 +350,19 @@ public partial class Maintenance : Window
 
     private void Discard_Click(object sender, RoutedEventArgs e)
     {
-        JsonHelpers.ReadJson(this);
-        (Application.Current.MainWindow as MainWindow)?.ResetListBox();
-        LoadTreeView();
-        TvMaint.Items.Refresh();
-        EntriesChanged = false;
-        btnDiscard.IsEnabled = false;
+        DiscardChanges();
     }
 
     private void BtnBackup_Click(object sender, RoutedEventArgs e)
     {
-        JsonHelpers.CreateBackupFile(this);
+        JsonHelpers.CreateBackupFile();
     }
 
     private void BtnClose_Click(object sender, RoutedEventArgs e)
     {
         if (EntriesChanged)
         {
-            JsonHelpers.SaveJson(this);
+            JsonHelpers.SaveJson();
             (Application.Current.MainWindow as MainWindow)?.ResetListBox();
             ClearAndQueueMessage("List saved", 1000);
         }
@@ -545,10 +554,19 @@ public partial class Maintenance : Window
     }
     #endregion Clear message queue then queue a snackbar message and set duration
 
+    #region Double click ColorZone
+    /// <summary>
+    /// Double click the ColorZone to set optimal width
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         SizeToContent = SizeToContent.Width;
+        double width = ActualWidth;
         Thread.Sleep(50);
         SizeToContent = SizeToContent.Manual;
+        Width = width + 1;
     }
+    #endregion Double click ColorZone
 }

@@ -10,11 +10,11 @@ internal static class JsonHelpers
     private static readonly Logger log = LogManager.GetCurrentClassLogger();
     #endregion NLog Instance
 
-    #region Read the JSON file
+    #region Read the JSON file for the main list
     /// <summary>
     /// Read the JSON file and deserialize it into the ObservableCollection
     /// </summary>
-    public static void ReadJson(Window owner)
+    public static void ReadJson()
     {
         string jsonfile = GetMainListFile();
 
@@ -63,13 +63,13 @@ internal static class JsonHelpers
             log.Info($"Read {Child.Children.Count} entries from {jsonfile}");
         }
     }
-    #endregion Read the JSON file
+    #endregion Read the JSON file for the main list
 
     #region Save the JSON file
     /// <summary>
     ///  Serialize the ObservableCollection and write it to a JSON file
     /// </summary>
-    public static void SaveJson(Window owner)
+    public static void SaveJson()
     {
         List<Child> tempCollection = new();
 
@@ -87,6 +87,10 @@ internal static class JsonHelpers
                     EntryType = item.EntryType,
                     ChildrenOfChild = item.ChildrenOfChild,
                     ItemID = item.ItemID,
+                    PopupHeight = item.PopupHeight,
+                    PopupLeft = item.PopupLeft,
+                    PopupTop = item.PopupTop,
+                    PopupWidth = item.PopupWidth,
                 };
                 tempCollection.Add(ch);
             }
@@ -113,7 +117,11 @@ internal static class JsonHelpers
     #endregion Save the JSON file
 
     #region Create a backup for the list file
-    public static void CreateBackupFile(Window owner)
+    /// <summary>
+    /// Creates a backup of the list file by copying the current file
+    /// to a location of the user's choosing.
+    /// </summary>
+    public static void CreateBackupFile()
     {
         string tStamp = string.Format("{0:yyyyMMdd_HHmm}", DateTime.Now);
         SaveFileDialog dlgSave = new()
@@ -144,7 +152,7 @@ internal static class JsonHelpers
 
     #region Create starter JSON file
     /// <summary>
-    /// Creates a new JSON file containing an entry for the Windows calculator
+    /// Creates a new JSON file containing entries for the Windows calculator and notepad
     /// </summary>
     /// <param name="file">Name of the main list file</param>
     private static void CreateNewJson(string file)
@@ -157,6 +165,13 @@ internal static class JsonHelpers
             .AppendLine("    \"FilePathOrURI\": \"calc.exe\",")
             .AppendLine("    \"IconSource\": \"\",")
             .AppendLine("    \"Title\": \"Calculator\" ")
+            .AppendLine("  },")
+            .AppendLine("  {")
+            .AppendLine("    \"Arguments\": \"\",")
+            .AppendLine("    \"EntryType\": 0,")
+            .AppendLine("    \"FilePathOrURI\": \"notepad.exe\",")
+            .AppendLine("    \"IconSource\": \"\",")
+            .AppendLine("    \"Title\": \"Notepad\" ")
             .AppendLine("  }")
             .AppendLine("]");
         File.WriteAllText(file, sb.ToString());

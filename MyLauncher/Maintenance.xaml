@@ -147,7 +147,9 @@
                         <HierarchicalDataTemplate
                             DataType="{x:Type local:Child}"
                             ItemsSource="{Binding ChildrenOfChild}">
-                            <TextBlock Text="{Binding Title}" Margin="0" />
+                            <TextBlock
+                                Margin="0"
+                                Text="{Binding Title}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                     <TreeView.Resources>

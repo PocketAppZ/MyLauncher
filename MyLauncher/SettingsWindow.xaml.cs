@@ -2,9 +2,6 @@
 
 namespace MyLauncher;
 
-/// <summary>
-/// Interaction logic for SettingsWindow.xaml
-/// </summary>
 public partial class SettingsWindow : Window
 {
     public SettingsWindow()
@@ -80,6 +77,7 @@ public partial class SettingsWindow : Window
         IntPtr windowHandle = new WindowInteropHelper(this).Handle;
         NativeMethods.DisableMinMaxButtons(windowHandle);
     }
+
     private void Window_Closing(object sender, CancelEventArgs e)
     {
         // Save window position
@@ -90,10 +88,19 @@ public partial class SettingsWindow : Window
     }
     #endregion Window events
 
+    #region Double click ColorZone
+    /// <summary>
+    /// Double click the ColorZone to set optimal width
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         SizeToContent = SizeToContent.Width;
+        double width = ActualWidth;
         Thread.Sleep(50);
         SizeToContent = SizeToContent.Manual;
+        Width = width + 1;
     }
+    #endregion Double click ColorZone
 }

@@ -12,6 +12,10 @@ internal static class IconHelpers
     #endregion NLog Instance
 
     #region Get the images (icons)
+    /// <summary>
+    /// Find a suitable image for the item
+    /// </summary>
+    /// <param name="ch"></param>
     public static void GetIcons(ObservableCollection<Child> ch)
     {
         if (ch is not null)
@@ -122,6 +126,11 @@ internal static class IconHelpers
     #endregion Get the images (icons)
 
     #region Convert icon to image source
+    /// <summary>
+    /// Converts an Icon to ImageSource
+    /// </summary>
+    /// <param name="icon">The icon to be converted</param>
+    /// <returns>ImageSource image</returns>
     private static ImageSource IconToImageSource(Icon icon)
     {
         return Imaging.CreateBitmapSourceFromHIcon(
@@ -132,6 +141,11 @@ internal static class IconHelpers
     #endregion Convert icon to image source
 
     #region Check URL
+    /// <summary>
+    /// Rudimentary method to validate a URL
+    /// </summary>
+    /// <param name="uriName"></param>
+    /// <returns></returns>
     private static bool IsValidUrl(string uriName)
     {
         const string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";

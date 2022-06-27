@@ -1,6 +1,5 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
-using System;
 namespace MyLauncher;
 
 public partial class PopupWindow : Window
@@ -8,6 +7,7 @@ public partial class PopupWindow : Window
     #region Properties
     public string PopupTitle { get; set; }
     public string PopupID { get; set; }
+    public Child ThisPopup { get; set; }
     #endregion Properties
 
     public PopupWindow(Child child)
@@ -21,11 +21,12 @@ public partial class PopupWindow : Window
     }
 
     #region Init Pop-up
-    private void InitPopUp(Child ch)
+    private void InitPopUp(Child child)
     {
-        PopupID = ch.ItemID;
-        PopupTitle = ch.Title;
-                Title = "My Launcher - Pop-Up List";
+        ThisPopup = child;
+        PopupID = ThisPopup.ItemID;
+        PopupTitle = ThisPopup.Title;
+        Title = "My Launcher - Pop-Up List";
 
         // UI size
         double size = MainWindow.UIScale((MySize)UserSettings.Setting.UISize);
@@ -78,11 +79,11 @@ public partial class PopupWindow : Window
     /// <summary>
     /// Populate the ListBox with the Child items for this pop-up.
     /// </summary>
-    /// <param name="ch"></param>
-    private void PopulateListBox(Child ch)
+    /// <param name="child"></param>
+    private void PopulateListBox(Child child)
     {
-        IconHelpers.GetIcons(ch.ChildrenOfChild);
-        PopupListBox.ItemsSource = ch.ChildrenOfChild;
+        IconHelpers.GetIcons(child.ChildrenOfChild);
+        PopupListBox.ItemsSource = child.ChildrenOfChild;
     }
     #endregion Load the listbox
 
@@ -105,41 +106,24 @@ public partial class PopupWindow : Window
     /// <param name="e"></param>
     private void Window_Closing(object sender, CancelEventArgs e)
     {
-        PopupAttributes pa = PopupAttributes.Popups.Find(x => x.PopupTitle == PopupTitle);
-
-        if (pa != null)
-        {
-            pa.PopupHeight = Height;
-            pa.PopupLeft = Left;
-            pa.PopupTop = Top;
-            pa.PopupWidth = Width;
-            pa.PopupTitle = PopupTitle;
-        }
-        else
-        {
-            PopupAttributes newpa = new()
-            {
-                PopupTitle = PopupTitle,
-                PopupHeight = Height,
-                PopupWidth = Width,
-                PopupTop = Top,
-                PopupLeft = Left,
-                PopupItemID = PopupID
-            };
-            PopupAttributes.Popups.Add(newpa);
-        }
-
-        JsonSerializerOptions opts = new()
-        {
-            ReadCommentHandling = JsonCommentHandling.Skip,
-            WriteIndented = true
-        };
-        string json = JsonSerializer.Serialize(PopupAttributes.Popups, opts);
-
-        string jsonfile = JsonHelpers.GetMainListFile().Replace("MyLauncher.json", "Popups.json");
-        File.WriteAllText(jsonfile, json);
+        SavePopupPosition(ThisPopup);
     }
     #endregion Window Events
+
+    #region Save pop-up size and position
+
+    /// <summary>
+    /// Save the pop-up window size and position
+    /// </summary>
+    /// <param name="child"></param>
+    public void SavePopupPosition(Child child)
+    {
+        child.PopupHeight = Height;
+        child.PopupLeft = Left;
+        child.PopupTop = Top;
+        child.PopupWidth = Width;
+    }
+    #endregion Save pop-up size and position
 
     #region Set window size and position
     /// <summary>
@@ -147,13 +131,12 @@ public partial class PopupWindow : Window
     /// </summary>
     private void PopupPosition()
     {
-        PopupAttributes attributes = PopupAttributes.Popups.Find(x => x.PopupTitle == PopupTitle);
-        if (attributes != null)
+        if (ThisPopup.PopupWidth != 0)
         {
-            Left = attributes.PopupLeft;
-            Top = attributes.PopupTop;
-            Height = attributes.PopupHeight;
-            Width = attributes.PopupWidth;
+            Left = ThisPopup.PopupLeft;
+            Top = ThisPopup.PopupTop;
+            Height = ThisPopup.PopupHeight;
+            Width = ThisPopup.PopupWidth;
         }
         else
         {
@@ -216,6 +199,7 @@ public partial class PopupWindow : Window
     }
     #endregion Set the row spacing
 
+    #region Double click ColorZone
     private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         SizeToContent = SizeToContent.Width;
@@ -224,4 +208,5 @@ public partial class PopupWindow : Window
         SizeToContent = SizeToContent.Manual;
         Width = width + 1;
     }
+    #endregion Double click ColorZone
 }
