@@ -587,7 +587,7 @@
                                 TabIndex="4"
                                 ToolTip="Make a backup copy of the current list" />
                             <Button
-                                Click="BtnClose_Click"
+                                Click="BtnSaveClose_Click"
                                 Content="Save &amp; Close"
                                 Style="{StaticResource BottomButtonRow}"
                                 TabIndex="4"

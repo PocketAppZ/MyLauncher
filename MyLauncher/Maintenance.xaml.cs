@@ -358,18 +358,11 @@ public partial class Maintenance : Window
         JsonHelpers.CreateBackupFile();
     }
 
-    private void BtnClose_Click(object sender, RoutedEventArgs e)
+    private void BtnSaveClose_Click(object sender, RoutedEventArgs e)
     {
-        if (EntriesChanged)
-        {
-            JsonHelpers.SaveJson();
-            (Application.Current.MainWindow as MainWindow)?.ResetListBox();
-            ClearAndQueueMessage("List saved", 1000);
-        }
-        else
-        {
-            Debug.WriteLine("list wasn't saved");
-        }
+        JsonHelpers.SaveJson();
+        (Application.Current.MainWindow as MainWindow)?.ResetListBox();
+        ClearAndQueueMessage("List saved", 1000);
         Close();
     }
 
