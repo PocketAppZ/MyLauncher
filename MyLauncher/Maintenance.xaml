@@ -132,8 +132,8 @@
                 UniformCornerRadius="1">
                 <TreeView
                     x:Name="TvMaint"
-                    Margin="1,2"
-                    Padding="1"
+
+                    d:ItemsSource="{d:SampleData ItemCount=10}"
                     dd:DragDrop.DragHandler="{Binding}"
                     dd:DragDrop.DropHandler="{Binding}"
                     dd:DragDrop.IsDragSource="True"
@@ -142,16 +142,21 @@
                     AllowDrop="True"
                     BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                     BorderThickness="2"
-                    ScrollViewer.CanContentScroll="True">
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    ScrollViewer.CanContentScroll="True" UseLayoutRounding="False" FontWeight="Normal" FontStyle="Normal">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate
                             DataType="{x:Type local:Child}"
                             ItemsSource="{Binding ChildrenOfChild}">
                             <TextBlock
-                                Margin="0"
                                 Text="{Binding Title}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
+                    <TreeView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Margin="0,15,0,5" />
+                        </ItemsPanelTemplate>
+                    </TreeView.ItemsPanel>
                     <TreeView.Resources>
                         <Style
                             BasedOn="{StaticResource MaterialDesignTreeViewItem}"
@@ -170,7 +175,7 @@
                         <Style
                             BasedOn="{StaticResource {x:Type TreeViewItem}}"
                             TargetType="TreeViewItem">
-                            <Setter Property="Margin" Value="8,2,10,0" />
+                            <Setter Property="Margin" Value="8,0,10,0" />
                             <Setter Property="Padding" Value="5" />
                         </Style>
                     </TreeView.ItemContainerStyle>
@@ -305,7 +310,10 @@
                                                         FontWeight="DemiBold"
                                                         Text="Special Apps"
                                                         TextAlignment="Left" />
-                                                    <Separator Background="{DynamicResource PrimaryHueDarkBrush}" />
+                                                    <Separator
+                                                        Margin="0"
+                                                        Padding="1"
+                                                        Background="{DynamicResource PrimaryHueDarkBrush}" />
                                                     <Button
                                                         Height="35"
                                                         Padding="15,0,15,10"
@@ -342,7 +350,10 @@
                                                         VerticalContentAlignment="Center"
                                                         Click="BtnSpecial_Click"
                                                         Content="Windows Settings" />
-                                                    <Separator Background="{DynamicResource PrimaryHueDarkBrush}" />
+                                                    <Separator
+                                                        Margin="0"
+                                                        Padding="1"
+                                                        Background="{DynamicResource PrimaryHueDarkBrush}" />
                                                     <Button
                                                         Height="35"
                                                         Padding="15,0,15,10"
