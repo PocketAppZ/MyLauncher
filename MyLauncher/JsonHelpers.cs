@@ -33,24 +33,42 @@ internal static class JsonHelpers
         {
             log.Error(ex, "File or Directory not found {0}", jsonfile);
             SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"File or Directory not found:\n\n{ex.Message}\n\nUnable to continue.",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
+            MDCustMsgBox mbox = new($"File or Directory not found:\n\n{ex.Message}\n\nUnable to continue.",
+                                "My Launcher Error",
+                                ButtonType.Ok,
+                                true,
+                                true,
+                                null,
+                                true);
+            _ = mbox.ShowDialog();
             Environment.Exit(1);
         }
         catch (Exception ex)
         {
             log.Error(ex, "Error reading file: {0}", jsonfile);
             SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"Error reading file:\n\n{ex.Message}",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
+            MDCustMsgBox mbox = new($"Error reading file:\n\n{ex.Message}",
+                                "My Launcher Error",
+                                ButtonType.Ok,
+                                true,
+                                true,
+                                null,
+                                true);
+            _ = mbox.ShowDialog();
         }
 
         if (Child.Children == null)
         {
             log.Error("File {0} is empty or is invalid", jsonfile);
             SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"File {jsonfile} is empty or is invalid\n\nUnable to continue.",
-                "My Launcher Error", ButtonType.Ok).ShowDialog();
+            MDCustMsgBox mbox = new($"File {jsonfile} is empty or is invalid\n\nUnable to continue.",
+                                "My Launcher Error",
+                                ButtonType.Ok,
+                                true,
+                                true,
+                                null,
+                                true);
+            _ = mbox.ShowDialog();
             Environment.Exit(2);
         }
 
@@ -110,8 +128,14 @@ internal static class JsonHelpers
         {
             log.Error(ex, "Error saving file.");
             SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"Error saving file.\n{ex.Message}.",
-                "ERROR", ButtonType.Ok).ShowDialog();
+            MDCustMsgBox mbox = new ($"Error saving file.\n{ex.Message}.",
+                                "ERROR",
+                                ButtonType.Ok,
+                                true,
+                                true,
+                                null,
+                                true);
+            _ = mbox.ShowDialog();
         }
     }
     #endregion Save the JSON file
@@ -142,9 +166,16 @@ internal static class JsonHelpers
             }
             catch (Exception ex)
             {
-                _ = new MDCustMsgBox($"Backup failed.\n{ex.Message}.",
-                    "ERROR", ButtonType.Ok).ShowDialog();
                 log.Error(ex, "Backup failed.");
+                SystemSounds.Exclamation.Play();
+                MDCustMsgBox mbox = new($"Backup failed.\n{ex.Message}.",
+                                    "ERROR",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    null,
+                                    true);
+                _ = mbox.ShowDialog();
             }
         }
     }

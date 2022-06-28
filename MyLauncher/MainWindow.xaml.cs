@@ -262,16 +262,28 @@ public partial class MainWindow : Window
         {
             log.Error(w, "Open failed for \"{0}\" - \"{1}\"", item.Title, item.FilePathOrURI);
             SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"Error launching \"{item.Title}\"\n\nFile Not Found: {item.FilePathOrURI}",
-                "ERROR", ButtonType.Ok).ShowDialog();
+            MDCustMsgBox mbox = new($"Error launching \"{item.Title}\"\n\nFile Not Found: {item.FilePathOrURI}",
+                                    "My Launcher Error",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    null,
+                                    true);
+            _ = mbox.ShowDialog();
             return false;
         }
         catch (Exception ex)
         {
             log.Error(ex, "Open failed for \"{0}\" - \"{1}\"", item.Title, item.FilePathOrURI);
             SystemSounds.Exclamation.Play();
-            _ = new MDCustMsgBox($"Error launching \"{item.Title}\" {item.FilePathOrURI}\n\n{ex.Message}",
-                "ERROR", ButtonType.Ok).ShowDialog();
+            MDCustMsgBox mbox = new($"Error launching \"{item.Title}\" {item.FilePathOrURI}\n\n{ex.Message}",
+                                    "My Launcher Error",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    null,
+                                    true);
+            _ = mbox.ShowDialog();
             return false;
         }
     }
@@ -806,6 +818,11 @@ public partial class MainWindow : Window
         }
     }
 
+    private void Window_Activated(object sender, EventArgs e)
+    {
+        _ = MainListBox.Focus();
+    }
+
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         if (UserSettings.Setting.StartMinimized)
@@ -914,14 +931,26 @@ public partial class MainWindow : Window
             if (result == "OK")
             {
                 log.Info(@"MyLauncher added to HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
-                _ = new MDCustMsgBox("My Launcher will now start with Windows.",
-                                    "My Launcher", ButtonType.Ok).ShowDialog();
+                MDCustMsgBox mbox = new("My Launcher will now start with Windows.",
+                                    "My Launcher",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    false);
+                _ = mbox.ShowDialog();
             }
             else
             {
                 log.Error($"MyLauncher add to startup failed: {result}");
-                _ = new MDCustMsgBox("An error has occurred. See the log file",
-                                     "My Launcher Error", ButtonType.Ok).ShowDialog();
+                MDCustMsgBox mbox = new("An error has occurred. See the log file.",
+                                    "My Launcher Error",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    true);
+                _ = mbox.ShowDialog();
             }
         }
     }
@@ -937,14 +966,27 @@ public partial class MainWindow : Window
             if (result == "OK")
             {
                 log.Info(@"MyLauncher removed from HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
-                _ = new MDCustMsgBox("My Launcher was removed from Windows startup.",
-                                    "My Launcher", ButtonType.Ok).ShowDialog();
+
+                MDCustMsgBox mbox = new("My Launcher was removed from Windows startup.",
+                                    "My Launcher",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    false);
+                _ = mbox.ShowDialog();
             }
             else
             {
                 log.Error($"MyLauncher remove from startup failed: {result}");
-                _ = new MDCustMsgBox("An error has occurred. See the log file",
-                                     "My Launcher Error", ButtonType.Ok).ShowDialog();
+                MDCustMsgBox mbox = new("An error has occurred. See the log file.",
+                                    "My Launcher Error",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    true);
+                _ = mbox.ShowDialog();
             }
         }
     }
@@ -966,9 +1008,14 @@ public partial class MainWindow : Window
             log.Error(e.InnerException.ToString());
         }
         log.Error(e.StackTrace);
-
-        _ = new MDCustMsgBox("An error has occurred. See the log file",
-            "My Launcher Error", ButtonType.Ok).ShowDialog();
+        MDCustMsgBox mbox = new("An error has occurred. See the log file.",
+                            "My Launcher Error",
+                            ButtonType.Ok,
+                            true,
+                            true,
+                            null,
+                            true);
+        _ = mbox.ShowDialog();
     }
     #endregion Unhandled Exception Handler
 
@@ -1060,9 +1107,4 @@ public partial class MainWindow : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
-
-    private void Window_Activated(object sender, EventArgs e)
-    {
-        _ = MainListBox.Focus();
-    }
 }

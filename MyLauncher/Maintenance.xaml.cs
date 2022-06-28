@@ -127,14 +127,20 @@ public partial class Maintenance : Window
     /// Checks the observable collection for any Title equal to "untitled"
     /// </summary>
     /// <returns>True if not found. False if found.</returns>
-    private static bool CheckForUntitled()
+    private bool CheckForUntitled()
     {
         // Loop through the list backwards checking for "untitled" entries
         if (Child.Children.Any(x => string.Equals(x.Title, "untitled", StringComparison.OrdinalIgnoreCase)))
         {
             log.Error("New item prohibited, \"untitled\" entry in list");
-            _ = new MDCustMsgBox("Please update or delete the \"untitled\" entry before adding another new entry.",
-                "ERROR", ButtonType.Ok).ShowDialog();
+            MDCustMsgBox mbox = new("Please update or delete the \"untitled\" entry before adding another new entry.",
+                                    "ERROR",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    true);
+            mbox.ShowDialog();
             return false;
         }
         return true;
@@ -203,8 +209,14 @@ public partial class Maintenance : Window
 
             if (itemToDelete?.ChildrenOfChild is not null && itemToDelete.ChildrenOfChild.Count > 0)
             {
-                _ = new MDCustMsgBox($"Remove {itemToDelete.Title} and all {itemToDelete.ChildrenOfChild.Count} of its child items?",
-                    "Delete All?", ButtonType.YesNo, false).ShowDialog();
+                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.ChildrenOfChild.Count} of its child items?",
+                                        "Delete All?",
+                                        ButtonType.YesNo,
+                                        true,
+                                        true,
+                                        this,
+                                        false);
+                    mbox.ShowDialog();
                 if (MDCustMsgBox.CustResult != CustResultType.Yes)
                 {
                     return;

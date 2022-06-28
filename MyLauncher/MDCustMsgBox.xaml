@@ -129,7 +129,7 @@
                     Grid.Column="2"
                     Width="100"
                     Margin="5"
-                   Click="Btn_Click_Cancel"
+                    Click="Btn_Click_Cancel"
                     Content="Cancel"
                     Style="{StaticResource MaterialDesignRaisedButton}" />
                 <Button
