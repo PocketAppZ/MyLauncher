@@ -12,8 +12,8 @@
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
     FontSize="12"
-    PreviewKeyUp="WindowPreview_KeyUp"
     Loaded="Window_Loaded"
+    PreviewKeyUp="WindowPreview_KeyUp"
     PreviewMouseWheel="Window_MouseWheel"
     SizeToContent="Width"
     StateChanged="Window_StateChanged"
@@ -87,7 +87,7 @@
             </tb:TaskbarIcon>
             <!--#endregion-->
 
-            <!--#region ColorZone with navigation icon-->
+            <!--#region ColorZone with navigation icon and PopupBox-->
             <DockPanel
                 Grid.Row="0"
                 LastChildFill="True">
@@ -122,9 +122,10 @@
                         <materialDesign:PopupBox
                             Margin="1,0"
                             Padding="0"
-                            Focusable="False"
                             HorizontalAlignment="Right"
-                            PlacementMode="LeftAndAlignTopEdges">
+                            Focusable="False"
+                            PlacementMode="LeftAndAlignTopEdges"
+                            ToolTip="View Files">
                             <Border
                                 Padding="3"
                                 BorderBrush="{DynamicResource PrimaryHueMidBrush}"
@@ -137,15 +138,15 @@
                                         <Button
                                             Click="BtnReadme_Click"
                                             Content="View ReadMe"
-                                            FontSize="13" />
+                                            FontSize="14" />
                                         <Button
                                             Click="BtnLog_Click"
                                             Content="View Log File"
-                                            FontSize="13" />
+                                            FontSize="14" />
                                         <Button
                                             Click="BtnData_Click"
                                             Content="View Data File"
-                                            FontSize="13" />
+                                            FontSize="14" />
                                         <Separator
                                             Margin="0"
                                             Padding="1"
@@ -153,8 +154,7 @@
                                         <Button
                                             HorizontalContentAlignment="Left"
                                             Content="Cancel"
-                                            FontSize="13"
-                                            Style="{StaticResource MaterialDesignFlatAccentButton}" />
+                                            FontSize="14" />
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -269,9 +269,9 @@
                             Margin="0"
                             d:ItemsSource="{d:SampleData ItemCount=5}"
                             materialDesign:ListBoxItemAssist.ShowSelection="True"
+                            PreviewKeyUp="ListBox_KeyUp"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                            PreviewKeyUp="ListBox_KeyUp"
                             Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -350,8 +350,8 @@
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
-                Focusable="False"
                 Background="#FF202020"
+                Focusable="False"
                 FontWeight="DemiBold"
                 Foreground="White"
                 MessageQueue="{materialDesign:MessageQueue}" />
