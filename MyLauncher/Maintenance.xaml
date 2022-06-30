@@ -85,7 +85,7 @@
         </Grid.RowDefinitions>
         <!--#endregion-->
 
-        <!--#region ColorZone with close button-->
+        <!--#region ColorZone for page header-->
         <materialDesign:ColorZone
             Height="33"
             Margin="10"
@@ -252,7 +252,7 @@
                                         </materialDesign:PopupBox.ToggleContent>
                                         <Border
                                             Padding="3"
-                                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                            BorderBrush="{DynamicResource SecondaryHueMidBrush}"
                                             BorderThickness="2">
                                             <Grid
                                                 Width="410"
@@ -310,13 +310,12 @@
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock
                                                         Margin="15,10,0,10"
+                                                        FontSize="16"
                                                         FontWeight="DemiBold"
+                                                        Foreground="{DynamicResource SecondaryHueMidBrush}"
                                                         Text="Special Apps"
                                                         TextAlignment="Left" />
-                                                    <Separator
-                                                        Margin="0"
-                                                        Padding="1"
-                                                        Background="{DynamicResource PrimaryHueDarkBrush}" />
+                                                    <Separator Background="{DynamicResource PrimaryHueDarkBrush}" />
                                                     <Button
                                                         Height="35"
                                                         Padding="15,0,15,10"
@@ -546,6 +545,7 @@
                                                         Margin="15,10,0,10"
                                                         FontSize="16"
                                                         FontWeight="SemiBold"
+                                                        Foreground="{DynamicResource SecondaryHueMidBrush}"
                                                         Text="New Item Type"
                                                         TextAlignment="Left" />
                                                     <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
