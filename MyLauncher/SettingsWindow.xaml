@@ -6,10 +6,11 @@
     xmlns:local="clr-namespace:MyLauncher"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=local:UserSettings}"
     Title="My Launcher"
     MinWidth="300"
     MinHeight="300"
-    d:DataContext="{d:DesignInstance Type=local:UserSettings}"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
     SizeToContent="Width"
@@ -18,8 +19,7 @@
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
-    TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d">
+    TextOptions.TextRenderingMode="Auto">
 
     <Grid x:Name="SettingsGrid">
         <!--#region Row definitions-->
@@ -40,8 +40,7 @@
             Mode="PrimaryMid"
             MouseDoubleClick="ColorZone_MouseDoubleClick">
             <Grid>
-                <TextBlock
-                    x:Name="tbHeader"
+                <TextBlock x:Name="tbHeader"
                     Margin="5,2"
                     Style="{StaticResource PageHeader}"
                     Text="SETTINGS" />
@@ -100,13 +99,13 @@
                             <Label
                                 Width="70"
                                 Content="Theme" />
-                            <ComboBox
-                                x:Name="cbxMode"
+                            <ComboBox x:Name="cbxMode"
                                 Width="110"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Left"
                                 materialDesign:HintAssist.Hint="Theme"
-                                SelectedIndex="{Binding DarkMode, Source={x:Static local:UserSettings.Setting}}"
+                                SelectedIndex="{Binding DarkMode,
+                                                        Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignComboBox}"
                                 TabIndex="0">
                                 <ComboBox.Items>
@@ -124,14 +123,14 @@
                             <Label
                                 Width="70"
                                 Content="Color" />
-                            <ComboBox
-                                x:Name="cbxColor"
+                            <ComboBox x:Name="cbxColor"
                                 Width="110"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Left"
                                 materialDesign:HintAssist.Hint="Color"
                                 MaxDropDownHeight="170"
-                                SelectedIndex="{Binding PrimaryColor, Source={x:Static local:UserSettings.Setting}}"
+                                SelectedIndex="{Binding PrimaryColor,
+                                                        Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignComboBox}"
                                 TabIndex="1">
                                 <ComboBox.Items>
@@ -165,14 +164,14 @@
                             <Label
                                 Width="70"
                                 Content="Accent" />
-                            <ComboBox
-                                x:Name="cbxAccentColor"
+                            <ComboBox x:Name="cbxAccentColor"
                                 Width="110"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Left"
                                 materialDesign:HintAssist.Hint="Accent Color"
                                 MaxDropDownHeight="170"
-                                SelectedIndex="{Binding SecondaryColor, Source={x:Static local:UserSettings.Setting}}"
+                                SelectedIndex="{Binding SecondaryColor,
+                                                        Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignComboBox}"
                                 TabIndex="1">
                                 <ComboBox.Items>
@@ -203,13 +202,13 @@
                             <Label
                                 Width="70"
                                 Content="UI Size" />
-                            <ComboBox
-                                x:Name="cbxSize"
+                            <ComboBox x:Name="cbxSize"
                                 Width="110"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Left"
                                 materialDesign:HintAssist.Hint="Size"
-                                SelectedIndex="{Binding UISize, Source={x:Static local:UserSettings.Setting}}"
+                                SelectedIndex="{Binding UISize,
+                                                        Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignComboBox}"
                                 TabIndex="3">
                                 <ComboBox.Items>
@@ -231,14 +230,14 @@
                             <Label
                                 Width="110"
                                 Content="Font Weight" />
-                            <ComboBox
-                                x:Name="cbxFW"
+                            <ComboBox x:Name="cbxFW"
                                 Width="110"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Left"
                                 materialDesign:HintAssist.Hint="Font Weight"
                                 MaxDropDownHeight="170"
-                                SelectedIndex="{Binding ListBoxFontWeight, Source={x:Static local:UserSettings.Setting}}"
+                                SelectedIndex="{Binding ListBoxFontWeight,
+                                                        Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignComboBox}"
                                 TabIndex="4">
                                 <ComboBox.Items>
@@ -257,14 +256,14 @@
                             <Label
                                 Width="110"
                                 Content="Spacing" />
-                            <ComboBox
-                                x:Name="cbxSpacing"
+                            <ComboBox x:Name="cbxSpacing"
                                 Width="110"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Left"
                                 materialDesign:HintAssist.Hint="Spacing"
                                 MaxDropDownHeight="170"
-                                SelectedIndex="{Binding ListBoxSpacing, Source={x:Static local:UserSettings.Setting}}"
+                                SelectedIndex="{Binding ListBoxSpacing,
+                                                        Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignComboBox}"
                                 TabIndex="5">
                                 <ComboBox.Items>
@@ -289,7 +288,8 @@
                                 HorizontalAlignment="Left"
                                 materialDesign:HintAssist.Hint="Width"
                                 MaxDropDownHeight="170"
-                                SelectedIndex="{Binding BorderWidth, Source={x:Static local:UserSettings.Setting}}"
+                                SelectedIndex="{Binding BorderWidth,
+                                                        Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignComboBox}"
                                 TabIndex="6">
                                 <ComboBox.Items>
@@ -315,7 +315,8 @@
                                 HorizontalAlignment="Left"
                                 materialDesign:HintAssist.Hint="Font Size"
                                 MaxDropDownHeight="170"
-                                SelectedIndex="{Binding TrayMenuSize, Source={x:Static local:UserSettings.Setting}}"
+                                SelectedIndex="{Binding TrayMenuSize,
+                                                        Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignComboBox}"
                                 TabIndex="7">
                                 <ComboBox.Items>
@@ -356,7 +357,9 @@
                             VerticalContentAlignment="Bottom"
                             materialDesign:HintAssist.Hint="The text that is displayed at the top of the main page. "
                             Style="{StaticResource MaterialDesignTextBox}"
-                            Text="{Binding TitleText, Source={x:Static local:UserSettings.Setting}, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding TitleText,
+                                           Source={x:Static local:UserSettings.Setting},
+                                           UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </materialDesign:Card>
                 <!--#endregion-->
@@ -395,7 +398,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding ShowFileIcons, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding ShowFileIcons,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -408,7 +412,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding ShowExitButton, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding ShowExitButton,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -421,7 +426,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding AllowRightButton, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding AllowRightButton,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -434,7 +440,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding PlaySound, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding PlaySound,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -447,7 +454,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding KeepOnTop, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding KeepOnTop,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -460,7 +468,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding PopupCloseAfterLaunch, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding PopupCloseAfterLaunch,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -473,7 +482,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding MainWindowMinimizeOnLaunch, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding MainWindowMinimizeOnLaunch,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -488,7 +498,8 @@
                             <ToggleButton
                                 Name="tgbMinimize"
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding MinimizeToTray, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding MinimizeToTray,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -501,7 +512,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding StartMinimized, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding StartMinimized,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -514,7 +526,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding StartWithWindows, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding StartWithWindows,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -527,7 +540,8 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding IncludeDebug, Source={x:Static local:UserSettings.Setting}}"
+                                IsChecked="{Binding IncludeDebug,
+                                                    Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"

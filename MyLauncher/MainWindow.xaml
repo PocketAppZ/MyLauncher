@@ -7,6 +7,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tb="http://www.hardcodet.net/taskbar"
+    mc:Ignorable="d"
     MinWidth="200"
     MinHeight="200"
     Activated="Window_Activated"
@@ -22,8 +23,7 @@
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
-    TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d">
+    TextOptions.TextRenderingMode="Auto">
 
     <!--#region Window resources-->
     <Window.Resources>
@@ -57,8 +57,7 @@
             <!--#endregion-->
 
             <!--#region Icon with context menu in system tray-->
-            <tb:TaskbarIcon
-                x:Name="tbIcon"
+            <tb:TaskbarIcon x:Name="tbIcon"
                 IconSource="/Images/ML.ico"
                 MenuActivation="RightClick"
                 TrayLeftMouseDown="TbIconShowMainWindow_Click"
@@ -67,7 +66,8 @@
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu
                         Name="trayMenu"
-                        FontSize="{Binding TrayMenuSize, Source={x:Static local:UserSettings.Setting}}">
+                        FontSize="{Binding TrayMenuSize,
+                                           Source={x:Static local:UserSettings.Setting}}">
                         <ContextMenu.ItemContainerStyle>
                             <Style
                                 BasedOn="{StaticResource MaterialDesignMenuItem}"
@@ -116,17 +116,18 @@
                                 Height="30"
                                 Margin="5,2"
                                 Cursor="Hand"
-                                IsChecked="{Binding IsLeftDrawerOpen, ElementName=NavDrawer}"
+                                IsChecked="{Binding IsLeftDrawerOpen,
+                                                    ElementName=NavDrawer}"
                                 Style="{DynamicResource MaterialDesignHamburgerToggleButton}"
                                 ToolTip="Click to navigate" />
-                            <TextBlock
-                                x:Name="PageTitle"
+                            <TextBlock x:Name="PageTitle"
                                 Margin="6,4,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 FontSize="18"
                                 FontWeight="DemiBold"
-                                Text="{Binding TitleText, Source={x:Static local:UserSettings.Setting}}" />
+                                Text="{Binding TitleText,
+                                               Source={x:Static local:UserSettings.Setting}}" />
                         </StackPanel>
 
                         <materialDesign:PopupBox
@@ -171,15 +172,13 @@
             </DockPanel>
             <!--#endregion-->
 
-            <materialDesign:DrawerHost
-                x:Name="NavDrawer"
+            <materialDesign:DrawerHost x:Name="NavDrawer"
                 Grid.Row="1"
                 LeftDrawerBackground="{DynamicResource MaterialDesignPaper}">
 
                 <!--#region Navigation Drawer Content-->
                 <materialDesign:DrawerHost.LeftDrawerContent>
-                    <ListBox
-                        x:Name="NavListBox"
+                    <ListBox x:Name="NavListBox"
                         Width="auto"
                         Margin="0,16,0,16"
                         HorizontalAlignment="Left"
@@ -269,8 +268,7 @@
                     <!--#endregion-->
 
                     <!--#region ListBox in Card-->
-                    <materialDesign:Card
-                        x:Name="MainCard"
+                    <materialDesign:Card x:Name="MainCard"
                         Grid.Row="0"
                         Margin="10,5"
                         Padding="2,5,10,5"
@@ -279,8 +277,7 @@
                         MouseEnter="Card_MouseEnter"
                         MouseLeave="Card_MouseLeave"
                         UniformCornerRadius="7">
-                        <ListBox
-                            x:Name="MainListBox"
+                        <ListBox x:Name="MainListBox"
                             Margin="0"
                             d:ItemsSource="{d:SampleData ItemCount=5}"
                             materialDesign:ListBoxItemAssist.ShowSelection="True"
@@ -320,7 +317,9 @@
                                                 VerticalAlignment="Center"
                                                 SnapsToDevicePixels="True"
                                                 Source="{Binding FileIcon}"
-                                                Visibility="{Binding ShowFileIcons, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}" />
+                                                Visibility="{Binding ShowFileIcons,
+                                                                     Source={x:Static local:UserSettings.Setting},
+                                                                     Converter={StaticResource BoolVisConverter}}" />
                                             <TextBlock
                                                 Grid.Column="1"
                                                 Margin="10,0,0,0"
@@ -342,9 +341,10 @@
                         Grid.Row="1"
                         Margin="0,15"
                         HorizontalAlignment="Center"
-                        Visibility="{Binding ShowExitButton, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}">
-                        <Button
-                            x:Name="btnExit"
+                        Visibility="{Binding ShowExitButton,
+                                             Source={x:Static local:UserSettings.Setting},
+                                             Converter={StaticResource BoolVisConverter}}">
+                        <Button x:Name="btnExit"
                             Width="110"
                             Height="auto"
                             Margin="10,0"
@@ -360,8 +360,7 @@
             </materialDesign:DrawerHost>
 
             <!--#region SnackBar-->
-            <materialDesign:Snackbar
-                x:Name="SnackBar1"
+            <materialDesign:Snackbar x:Name="SnackBar1"
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"

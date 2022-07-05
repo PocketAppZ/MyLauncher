@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:MyLauncher"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
     Title="PopupWindow"
     MinWidth="200"
     MinHeight="200"
@@ -14,8 +15,7 @@
     SnapsToDevicePixels="True"
     SourceInitialized="Window_SourceInitialized"
     Style="{StaticResource MaterialDesignWindow}"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-    mc:Ignorable="d">
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}">
 
     <!--#region Window resources-->
     <Window.Resources>
@@ -43,15 +43,15 @@
             CornerRadius="4,4,4,4"
             Mode="PrimaryMid"
             MouseDoubleClick="ColorZone_MouseDoubleClick">
-            <TextBlock
-                x:Name="PageTitle"
+            <TextBlock x:Name="PageTitle"
                 Margin="6,0,6,0"
                 Padding="0,0,0,2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="18"
                 FontWeight="DemiBold"
-                Text="{Binding PopupTitle, FallbackValue='Pop-up'}" />
+                Text="{Binding PopupTitle,
+                               FallbackValue='Pop-up'}" />
         </materialDesign:ColorZone>
         <!--#endregion-->
 
@@ -63,8 +63,7 @@
             HorizontalAlignment="Stretch"
             materialDesign:ShadowAssist.ShadowDepth="Depth2"
             UniformCornerRadius="7">
-            <ListBox
-                x:Name="PopupListBox"
+            <ListBox x:Name="PopupListBox"
                 Margin="0,5"
                 d:ItemsSource="{d:SampleData ItemCount=3}"
                 materialDesign:ListBoxItemAssist.ShowSelection="True"
@@ -103,7 +102,9 @@
                                     VerticalAlignment="Center"
                                     SnapsToDevicePixels="True"
                                     Source="{Binding FileIcon}"
-                                    Visibility="{Binding ShowFileIcons, Source={x:Static local:UserSettings.Setting}, Converter={StaticResource BoolVisConverter}}" />
+                                    Visibility="{Binding ShowFileIcons,
+                                                         Source={x:Static local:UserSettings.Setting},
+                                                         Converter={StaticResource BoolVisConverter}}" />
                                 <TextBlock
                                     Grid.Column="1"
                                     Margin="10,0,0,0"

@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:MyLauncher"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
     Title="List Maintenance"
     MinWidth="300"
     MinHeight="300"
@@ -17,8 +18,7 @@
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
-    TextOptions.TextRenderingMode="Auto"
-    mc:Ignorable="d">
+    TextOptions.TextRenderingMode="Auto">
 
     <!--#region Window resources (styles)-->
     <Window.Resources>
@@ -96,8 +96,7 @@
             Mode="PrimaryMid"
             MouseDoubleClick="ColorZone_MouseDoubleClick">
             <Grid>
-                <TextBlock
-                    x:Name="tbHeader"
+                <TextBlock x:Name="tbHeader"
                     Margin="5,2"
                     Style="{StaticResource PageHeader}"
                     Text="MENU MAINTENANCE" />
@@ -167,8 +166,7 @@
                 MouseEnter="Card_MouseEnter"
                 MouseLeave="Card_MouseLeave"
                 UniformCornerRadius="1">
-                <TreeView
-                    x:Name="TvMenuMaint"
+                <TreeView x:Name="TvMenuMaint"
                     d:ItemsSource="{d:SampleData ItemCount=8}"
                     dd:DragDrop.DragHandler="{Binding}"
                     dd:DragDrop.DropHandler="{Binding}"
@@ -254,8 +252,7 @@
                         <Grid>
                             <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                 <Grid>
-                                    <TextBlock
-                                        x:Name="x31"
+                                    <TextBlock x:Name="x31"
                                         Margin="10,5">
                                         <TextBlock.Style>
                                             <Style
@@ -277,8 +274,7 @@
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <materialDesign:PopupBox
-                                        x:Name="pbxInfo"
+                                    <materialDesign:PopupBox x:Name="pbxInfo"
                                         Margin="0,0,15,0"
                                         Padding="0"
                                         HorizontalAlignment="Right"
@@ -288,7 +284,8 @@
                                             <materialDesign:PackIcon
                                                 Width="24"
                                                 Height="24"
-                                                Foreground="{Binding ElementName=x31, Path=Foreground}"
+                                                Foreground="{Binding ElementName=x31,
+                                                                     Path=Foreground}"
                                                 Kind="InfoVariant" />
                                         </materialDesign:PopupBox.ToggleContent>
                                         <Border
@@ -307,19 +304,25 @@
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock
                                                         Margin="15,10,0,0"
-                                                        Text="{Binding Title, StringFormat='Title: {0}', FallbackValue='Please select an item'}"
+                                                        Text="{Binding Title,
+                                                                       StringFormat='Title: {0}',
+                                                                       FallbackValue='Please select an item'}"
                                                         TextAlignment="Left" />
                                                     <TextBlock
                                                         Margin="15,5,0,0"
-                                                        Text="{Binding ItemType, StringFormat='Type: {0}'}"
+                                                        Text="{Binding ItemType,
+                                                                       StringFormat='Type: {0}'}"
                                                         TextAlignment="Left" />
                                                     <TextBlock
                                                         Margin="15,5,0,0"
-                                                        Text="{Binding SubMenuItems.Count, StringFormat='Children: {0}', FallbackValue='Children: None'}"
+                                                        Text="{Binding SubMenuItems.Count,
+                                                                       StringFormat='Children: {0}',
+                                                                       FallbackValue='Children: None'}"
                                                         TextAlignment="Left" />
                                                     <TextBlock
                                                         Margin="15,5,0,5"
-                                                        Text="{Binding ItemID, StringFormat='ID: {0}'}"
+                                                        Text="{Binding ItemID,
+                                                                       StringFormat='ID: {0}'}"
                                                         TextAlignment="Left" />
                                                 </StackPanel>
                                             </Grid>
@@ -328,13 +331,13 @@
 
                                 </Grid>
                             </materialDesign:ColorZone>
-                            <TextBox
-                                x:Name="tbTitle"
+                            <TextBox x:Name="tbTitle"
                                 materialDesign:HintAssist.Hint="The text you want to see in the list."
                                 PreviewKeyDown="Textbox_KeyDown"
                                 Style="{StaticResource EntryTextBox}"
                                 TabIndex="1"
-                                Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding Title,
+                                               UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </materialDesign:Card>
                     <!--#endregion-->
@@ -360,7 +363,8 @@
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
-                                            Foreground="{Binding ElementName=x31, Path=Foreground}"
+                                            Foreground="{Binding ElementName=x31,
+                                                                 Path=Foreground}"
                                             Kind="FileDocumentOutline" />
                                     </Button>
                                     <Button
@@ -372,19 +376,20 @@
                                         <materialDesign:PackIcon
                                             Width="24"
                                             Height="24"
-                                            Foreground="{Binding ElementName=x31, Path=Foreground}"
+                                            Foreground="{Binding ElementName=x31,
+                                                                 Path=Foreground}"
                                             Kind="FolderOpenOutline" />
                                     </Button>
                                 </Grid>
                             </materialDesign:ColorZone>
-                            <TextBox
-                                x:Name="tbPath"
+                            <TextBox x:Name="tbPath"
                                 materialDesign:HintAssist.Hint="Enter the complete path to the document, application, or URL"
                                 materialDesign:TextBlockAssist.AutoToolTip="True"
                                 PreviewKeyDown="Textbox_KeyDown"
                                 Style="{StaticResource EntryTextBox}"
                                 TabIndex="2"
-                                Text="{Binding FilePathOrURI, UpdateSourceTrigger=LostFocus}" />
+                                Text="{Binding FilePathOrURI,
+                                               UpdateSourceTrigger=LostFocus}" />
                         </Grid>
                     </materialDesign:Card>
                     <!--#endregion-->
@@ -403,13 +408,13 @@
                                         Text="Arguments" />
                                 </Grid>
                             </materialDesign:ColorZone>
-                            <TextBox
-                                x:Name="tbArgs"
+                            <TextBox x:Name="tbArgs"
                                 materialDesign:HintAssist.Hint="Enter any arguments here. "
                                 PreviewKeyDown="Textbox_KeyDown"
                                 Style="{StaticResource EntryTextBox}"
                                 TabIndex="3"
-                                Text="{Binding Arguments, UpdateSourceTrigger=Default}" />
+                                Text="{Binding Arguments,
+                                               UpdateSourceTrigger=Default}" />
                         </Grid>
                     </materialDesign:Card>
                     <!--#endregion-->
@@ -427,16 +432,17 @@
                                 TabIndex="5"
                                 ToolTip="Add a new item to the bottom of the list">
                                 <Grid>
-                                    <materialDesign:PopupBox
-                                        x:Name="pbxNewItem"
+                                    <materialDesign:PopupBox x:Name="pbxNewItem"
                                         Padding="0"
                                         PlacementMode="TopAndAlignCentres"
                                         PopupMode="Click"
                                         PopupVerticalOffset="-5">
                                         <materialDesign:PopupBox.ToggleContent>
                                             <TextBlock
-                                                FontWeight="{Binding ElementName=btnDiscard, Path=FontWeight}"
-                                                Foreground="{Binding ElementName=btnDiscard, Path=Foreground}"
+                                                FontWeight="{Binding ElementName=btnDiscard,
+                                                                     Path=FontWeight}"
+                                                Foreground="{Binding ElementName=btnDiscard,
+                                                                     Path=Foreground}"
                                                 Text="New Item"
                                                 TextAlignment="Center" />
                                         </materialDesign:PopupBox.ToggleContent>
@@ -503,8 +509,7 @@
                                 Style="{StaticResource BottomButtonRow}"
                                 TabIndex="7"
                                 ToolTip="Make a backup copy of the current list" />
-                            <Button
-                                x:Name="btnDiscard"
+                            <Button x:Name="btnDiscard"
                                 Click="Discard_Click"
                                 Content="Discard &amp; Close"
                                 Style="{StaticResource BottomButtonRow}"
@@ -524,8 +529,7 @@
             <!--#endregion-->
         </Grid>
         <!--#region SnackBar-->
-        <materialDesign:Snackbar
-            x:Name="SnackBarMenuMaint"
+        <materialDesign:Snackbar x:Name="SnackBarMenuMaint"
             Grid.Row="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
