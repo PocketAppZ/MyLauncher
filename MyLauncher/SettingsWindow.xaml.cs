@@ -63,6 +63,13 @@ public partial class SettingsWindow : Window
                     RemoveStartFromRegistry();
                 }
                 break;
+
+                case nameof(UserSettings.Setting.MinimizeToTray):
+                if (!(bool)newValue)
+                {
+                    UserSettings.Setting.MinimizeToTrayOnClose = false;
+                }
+                break;
         }
     }
     #endregion Setting changed

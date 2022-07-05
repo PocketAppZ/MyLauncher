@@ -195,6 +195,17 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public bool MinimizeToTrayOnClose
+    {
+        get => minimizeToTrayOnClose;
+        set
+        {
+            minimizeToTrayOnClose = value;
+            OnPropertyChanged();
+        }
+    }
+
+
     public bool PlaySound
     {
         get => playSound;
@@ -415,6 +426,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private double menuMaintWindowTop = 100;
     private double menuMaintWindowWidth = 850;
     private bool minimizeToTray = false;
+    private bool minimizeToTrayOnClose = false;
     private bool playSound = true;
     private bool popupCloseAfterLaunch = true;
     private int primaryColor = (int)AccentColor.Blue;

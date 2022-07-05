@@ -197,6 +197,7 @@ public partial class MainWindow : Window
                 break;
 
             case NavPage.Exit:
+                App.ExplicitClose = true;
                 Application.Current.Shutdown();
                 break;
         }
@@ -300,6 +301,7 @@ public partial class MainWindow : Window
         // Exit the app
         else if (myMenuItem.ItemType == MenuItemType.ExitML)
         {
+            App.ExplicitClose = true;
             Application.Current.Shutdown();
         }
         // Show the main window
@@ -832,6 +834,17 @@ public partial class MainWindow : Window
         }
     }
 
+    private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        // Catching Alt+F4 apparently needs to be done on the key down event
+        if (e.Key == Key.System && e.SystemKey == Key.F4)
+        {
+            Debug.WriteLine("Gotcha");
+            App.ExplicitClose = true;
+            Application.Current.Shutdown();
+        }
+    }
+
     /// <summary>
     /// Keyboard events for ListBox
     /// </summary>
@@ -909,7 +922,6 @@ public partial class MainWindow : Window
         {
             if (UserSettings.Setting.MinimizeToTray)
             {
-                //tbIcon.ToolTipText = $"My Launcher {AppInfo.TitleVersion}\nLeft Click to Show Main Window\nRight Click for Menu";
                 Hide();
             }
         }
@@ -928,22 +940,6 @@ public partial class MainWindow : Window
     private void Window_Activated(object sender, EventArgs e)
     {
         _ = MainListBox.Focus();
-    }
-
-    private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-        //tbIcon.ToolTipText = $"My Launcher {AppInfo.TitleVersion}\nLeft Click to Show Main Window\nRight Click for Menu";
-        //if (UserSettings.Setting.StartMinimized)
-        //{
-        //    if (UserSettings.Setting.MinimizeToTray)
-        //    {
-        //        Hide();
-        //    }
-        //    else
-        //    {
-        //        WindowState = WindowState.Minimized;
-        //    }
-        //}
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)
@@ -966,6 +962,58 @@ public partial class MainWindow : Window
         UserSettings.Setting.WindowWidth = Math.Floor(Width);
         UserSettings.Setting.WindowHeight = Math.Floor(Height);
         UserSettings.SaveSettings();
+    }
+
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        // Skip this if Windows is shutting down
+        if (!App.WindowsLogoffOrShutdown)
+        {
+            // Intercept close from the X in the title bar or from the task bar or Alt+F4
+            // in case user didn't really mean to exit.
+            if (!App.ExplicitClose && UserSettings.Setting.MinimizeToTray)
+            {
+                // Is option set to minimize to tray?
+                if (UserSettings.Setting.MinimizeToTrayOnClose)
+                {
+                    Hide();
+                    e.Cancel = true;
+                }
+                else
+                {
+                    // Ask user
+                    MDCustMsgBox mbox = new("Do you want to exit My Launcher?",
+                        "Exit My Launcher",
+                        ButtonType.YesNo,
+                        true,
+                        true,
+                        null,
+                        false);
+                    _ = mbox.ShowDialog();
+                    if (MDCustMsgBox.CustResult == CustResultType.No)
+                    {
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        //clean up notify icon (would otherwise stay after application finishes)
+                        tbIcon.Dispose();
+                        base.OnClosing(e);
+                    }
+                }
+            }
+            // Exit selected from menu so don't ask intention
+            else
+            {
+                log.Debug("Explicit exit from menu");
+                tbIcon.Dispose();
+                base.OnClosing(e);
+            }
+        }
+        else
+        {
+            log.Info("My Launcher is closing due to user log off or Windows shutdown");
+        }
     }
     #endregion Window Events
 
@@ -1008,8 +1056,6 @@ public partial class MainWindow : Window
         Topmost = UserSettings.Setting.KeepOnTop;
     }
     #endregion Show Main window
-
-
 
     #region Unhandled Exception Handler
     /// <summary>

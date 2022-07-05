@@ -4,13 +4,22 @@ namespace MyLauncher;
 
 public partial class App : Application
 {
-    public Mutex Mutex;
+    #region Properties
+    internal static bool ExplicitClose { get; set; }
+
+    internal static bool WindowsLogoffOrShutdown { get; set; }
+
     public static string[] Args { get; set; }
+
+    public Mutex Mutex;
+    #endregion Properties
+
     public App()
     {
         SingleInstanceCheck();
     }
 
+    #region Splash screen
     protected override void OnStartup(StartupEventArgs e)
     {
         // Show splash screen unless command line argument "NoSplash" is specified
@@ -24,7 +33,9 @@ public partial class App : Application
 
         base.OnStartup(e);
     }
+    #endregion Splash screen
 
+    #region Single instance of the app
     public void SingleInstanceCheck()
     {
         Mutex = new Mutex(true, "MyLauncher", out bool isOnlyInstance);
@@ -55,4 +66,12 @@ public partial class App : Application
             Environment.Exit(0);
         }
     }
+    #endregion Single instance of the app
+
+    #region Session ending
+    private void Application_SessionEnding(object sender, SessionEndingCancelEventArgs e)
+    {
+        WindowsLogoffOrShutdown = true;
+    }
+    #endregion Session ending
 }
