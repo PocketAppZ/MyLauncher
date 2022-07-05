@@ -4,6 +4,10 @@ namespace MyLauncher;
 
 public partial class SettingsWindow : Window
 {
+    #region NLog Instance
+    private static readonly Logger log = LogManager.GetCurrentClassLogger();
+    #endregion NLog Instance
+
     public SettingsWindow()
     {
         InitializeComponent();
@@ -47,6 +51,17 @@ public partial class SettingsWindow : Window
                 int size = (int)newValue;
                 double newSize = MainWindow.UIScale((MySize)size);
                 SettingsGrid.LayoutTransform = new ScaleTransform(newSize, newSize);
+                break;
+
+            case nameof(UserSettings.Setting.StartWithWindows):
+                if ((bool)newValue)
+                {
+                    AddStartToRegistry();
+                }
+                else
+                {
+                    RemoveStartFromRegistry();
+                }
                 break;
         }
     }
@@ -103,4 +118,77 @@ public partial class SettingsWindow : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
+
+    #region Add/Remove from registry
+    /// <summary>
+    /// Add a registry item to start My Launcher with Windows
+    /// </summary>
+    private void AddStartToRegistry()
+    {
+        if (IsLoaded && !RegRun.RegRunEntry("MyLauncher"))
+        {
+            string result = RegRun.AddRegEntry("MyLauncher", AppInfo.AppPath);
+            if (result == "OK")
+            {
+                log.Info(@"MyLauncher added to HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
+                MDCustMsgBox mbox = new("My Launcher will now start with Windows.",
+                                    "My Launcher",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    false);
+                _ = mbox.ShowDialog();
+            }
+            else
+            {
+                log.Error($"MyLauncher add to startup failed: {result}");
+                MDCustMsgBox mbox = new("An error has occurred. See the log file.",
+                                    "My Launcher Error",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    true);
+                _ = mbox.ShowDialog();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Remove the registry item
+    /// </summary>
+    private void RemoveStartFromRegistry()
+    {
+        if (IsLoaded)
+        {
+            string result = RegRun.RemoveRegEntry("MyLauncher");
+            if (result == "OK")
+            {
+                log.Info(@"MyLauncher removed from HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
+
+                MDCustMsgBox mbox = new("My Launcher was removed from Windows startup.",
+                                    "My Launcher",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    false);
+                _ = mbox.ShowDialog();
+            }
+            else
+            {
+                log.Error($"MyLauncher remove from startup failed: {result}");
+                MDCustMsgBox mbox = new("An error has occurred. See the log file.",
+                                    "My Launcher Error",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    this,
+                                    true);
+                _ = mbox.ShowDialog();
+            }
+        }
+    }
+    #endregion
 }

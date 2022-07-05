@@ -21,6 +21,8 @@ public partial class MainWindow : Window
         ReadSettings();
 
         ResetListBox();
+
+        ResetTrayMenu();
     }
 
     #region Settings
@@ -78,6 +80,9 @@ public partial class MainWindow : Window
         // Spacing
         SetSpacing((Spacing)UserSettings.Setting.ListBoxSpacing);
 
+        // Menu font size
+        SetMenuSize((MenuSize)UserSettings.Setting.TrayMenuSize);
+
         // UI size
         double size = UIScale((MySize)UserSettings.Setting.UISize);
         MainGrid.LayoutTransform = new ScaleTransform(size, size);
@@ -86,13 +91,14 @@ public partial class MainWindow : Window
         if (UserSettings.Setting.MinimizeToTray)
         {
             tbIcon.Visibility = Visibility.Visible;
+            tbIcon.ToolTipText = $"My Launcher {AppInfo.TitleVersion}";
         }
 
         // Start minimized
         if (UserSettings.Setting.StartMinimized)
         {
-            //Hide();
-            WindowState = WindowState.Minimized;
+            Hide();
+            //WindowState = WindowState.Minimized;
             Debug.WriteLine("Minimized via settings");
         }
 
@@ -150,15 +156,8 @@ public partial class MainWindow : Window
                 MainGrid.LayoutTransform = new ScaleTransform(newSize, newSize);
                 break;
 
-            case nameof(UserSettings.Setting.StartWithWindows):
-                if ((bool)newValue)
-                {
-                    AddStartToRegistry();
-                }
-                else
-                {
-                    RemoveStartFromRegistry();
-                }
+            case nameof(UserSettings.Setting.TrayMenuSize):
+                SetMenuSize((MenuSize)newValue);
                 break;
         }
     }
@@ -177,9 +176,14 @@ public partial class MainWindow : Window
                 NavDrawer.IsLeftDrawerOpen = false;
                 break;
 
-            case NavPage.Maintenance:
+            case NavPage.ListMaintenance:
                 NavDrawer.IsLeftDrawerOpen = false;
                 ShowWindow<Maintenance>();
+                break;
+
+            case NavPage.MenuMaintenance:
+                NavDrawer.IsLeftDrawerOpen = false;
+                ShowWindow<MenuMaint>();
                 break;
 
             case NavPage.Settings:
@@ -218,6 +222,49 @@ public partial class MainWindow : Window
     }
     #endregion Clear and repopulate the listbox
 
+    #region Clear and repopulate the menu
+    /// <summary>
+    /// Clears the ObservableCollection the rereads the JSON file and populates the tray menu/>
+    /// </summary>
+    public void ResetTrayMenu()
+    {
+        MyMenuItem.MLMenuItems?.Clear();
+        JsonHelpers.ReadMenuJson();
+        PopulateTrayMenu();
+    }
+    #endregion Clear and repopulate the menu
+
+    #region Load the tray menu
+    /// <summary>
+    /// Uses a CompositeCollection to add the static menu items to the ItemsSource
+    /// </summary>
+    private void PopulateTrayMenu()
+    {
+        MyMenuItem trayMainWindow = new()
+        {
+            Title = "Show Main Window",
+            ItemType = MenuItemType.ShowMainWindow
+        };
+        MyMenuItem trayExit = new()
+        {
+            Title = "Exit My Launcher",
+            ItemType = MenuItemType.ExitML
+        };
+        MyMenuItem traySeperator = new()
+        {
+            Title = "-",
+            ItemType = MenuItemType.Separator
+        };
+        trayMenu.ItemsSource = (CompositeCollection)(new()
+        {
+            new CollectionContainer { Collection = MyMenuItem.MLMenuItems },
+            traySeperator,
+            trayMainWindow,
+            trayExit
+        });
+    }
+    #endregion Load the tray menu
+
     #region Load the listbox
     /// <summary>
     /// Simply sets the ItemsSource of the MainListBox to the Child.Children ObservableCollection
@@ -227,6 +274,42 @@ public partial class MainWindow : Window
         MainListBox.ItemsSource = Child.Children;
     }
     #endregion Load the listbox
+
+    #region Tray menu clicked
+    /// <summary>
+    /// Click event handler for the tray menu
+    /// Launches the app/document/folder/website and handles special cases
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TrayMenu_Click(object sender, RoutedEventArgs e)
+    {
+        MenuItem mi = e.Source as MenuItem;
+        MyMenuItem myMenuItem = mi.Tag as MyMenuItem;
+        // Launch app/document/folder/website
+        if (myMenuItem.ItemType == MenuItemType.MenuItem)
+        {
+            Child ch = new()
+            {
+                FilePathOrURI = myMenuItem.FilePathOrURI,
+                Arguments = myMenuItem.Arguments,
+                Title = myMenuItem.Title
+            };
+            _ = LaunchApp(ch);
+        }
+        // Exit the app
+        else if (myMenuItem.ItemType == MenuItemType.ExitML)
+        {
+            Application.Current.Shutdown();
+        }
+        // Show the main window
+        else if (myMenuItem.ItemType == MenuItemType.ShowMainWindow)
+        {
+            ShowMainWindow();
+        }
+        e.Handled = true;
+    }
+    #endregion Tray menu clicked
 
     #region Launch app or URI
     /// <summary>
@@ -252,7 +335,7 @@ public partial class MainWindow : Window
                 soundPlayer.Play();
             }
             log.Info($"Opening \"{item.Title}\"");
-            if (UserSettings.Setting.MainWindowMinimizeOnLaunch)
+            if (UserSettings.Setting.MainWindowMinimizeOnLaunch && !UserSettings.Setting.MainWindowMinimizeOnLaunch)
             {
                 SnackbarMsg.QueueMessage($"{item.Title} launched", 2000);
             }
@@ -303,13 +386,6 @@ public partial class MainWindow : Window
     #endregion Open pop up list
 
     #region PopupBox button events
-
-    private void BtnData_Click(object sender, RoutedEventArgs e)
-    {
-        string dir = AppInfo.AppDirectory;
-        TextFileViewer.ViewTextFile(Path.Combine(dir, "MyLauncher.json"));
-    }
-
     private void BtnLog_Click(object sender, RoutedEventArgs e)
     {
         TextFileViewer.ViewTextFile(NLHelpers.GetLogfileName());
@@ -587,6 +663,31 @@ public partial class MainWindow : Window
     }
     #endregion Set the font weight
 
+    #region Set menu size
+    /// <summary>
+    /// Sets the font size of the tray menu
+    /// </summary>
+    /// <param name="size">small, medium (default), large or jumbo</param>
+    private void SetMenuSize(MenuSize size)
+    {
+        switch (size)
+        {
+            case MenuSize.Small:
+                trayMenu.FontSize = 11;
+                break;
+            case MenuSize.Medium:
+                trayMenu.FontSize = 13;
+                break;
+            case MenuSize.Large:
+                trayMenu.FontSize = 15;
+                break;
+            case MenuSize.Jumbo:
+                trayMenu.FontSize = 17;
+                break;
+        }
+    }
+    #endregion Set menu size
+
     #region UI scale converter
     /// <summary>
     /// Sets the value for UI scaling
@@ -632,7 +733,12 @@ public partial class MainWindow : Window
         {
             if (e.Key == Key.L)
             {
-                NavigateToPage(NavPage.Maintenance);
+                NavigateToPage(NavPage.ListMaintenance);
+            }
+
+            if (e.Key == Key.M)
+            {
+                NavigateToPage(NavPage.MenuMaintenance);
             }
 
             if (e.Key == Key.Add)
@@ -647,7 +753,7 @@ public partial class MainWindow : Window
             {
                 NavigateToPage(NavPage.Settings);
             }
-
+            // Ctrl + numbers 1 - 9
             if (e.Key >= Key.D1 && e.Key <= Key.D9)
             {
                 int k = (int)e.Key - 35;
@@ -803,6 +909,7 @@ public partial class MainWindow : Window
         {
             if (UserSettings.Setting.MinimizeToTray)
             {
+                //tbIcon.ToolTipText = $"My Launcher {AppInfo.TitleVersion}\nLeft Click to Show Main Window\nRight Click for Menu";
                 Hide();
             }
         }
@@ -825,18 +932,18 @@ public partial class MainWindow : Window
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        if (UserSettings.Setting.StartMinimized)
-        {
-            if (UserSettings.Setting.MinimizeToTray)
-            {
-                Hide();
-                tbIcon.ToolTipText = $"My Launcher {AppInfo.TitleVersion}\nClick to Show Main Window";
-            }
-            else
-            {
-                WindowState = WindowState.Minimized;
-            }
-        }
+        //tbIcon.ToolTipText = $"My Launcher {AppInfo.TitleVersion}\nLeft Click to Show Main Window\nRight Click for Menu";
+        //if (UserSettings.Setting.StartMinimized)
+        //{
+        //    if (UserSettings.Setting.MinimizeToTray)
+        //    {
+        //        Hide();
+        //    }
+        //    else
+        //    {
+        //        WindowState = WindowState.Minimized;
+        //    }
+        //}
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)
@@ -851,7 +958,7 @@ public partial class MainWindow : Window
         tbIcon.Dispose();
 
         // Save the JSON on file
-        JsonHelpers.SaveJson();
+        JsonHelpers.SaveMainJson();
 
         // Save settings
         UserSettings.Setting.WindowLeft = Math.Floor(Left);
@@ -866,23 +973,6 @@ public partial class MainWindow : Window
     internal void TbIconShowMainWindow_Click(object sender, RoutedEventArgs e)
     {
         ShowMainWindow();
-    }
-
-    private void TbIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        ShowMainWindow();
-    }
-
-    private void TbIconSettings_Click(object sender, RoutedEventArgs e)
-    {
-        ShowMainWindow();
-        NavigateToPage(NavPage.Settings);
-    }
-
-    private void TbIconMaintenance_Click(object sender, RoutedEventArgs e)
-    {
-        ShowMainWindow();
-        NavigateToPage(NavPage.Maintenance);
     }
     #endregion Tray icon menu events
 
@@ -919,78 +1009,7 @@ public partial class MainWindow : Window
     }
     #endregion Show Main window
 
-    #region Add/Remove from registry
-    /// <summary>
-    /// Add a registry item to start My Launcher with Windows
-    /// </summary>
-    private void AddStartToRegistry()
-    {
-        if (IsLoaded && !RegRun.RegRunEntry("MyLauncher"))
-        {
-            string result = RegRun.AddRegEntry("MyLauncher", AppInfo.AppPath);
-            if (result == "OK")
-            {
-                log.Info(@"MyLauncher added to HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
-                MDCustMsgBox mbox = new("My Launcher will now start with Windows.",
-                                    "My Launcher",
-                                    ButtonType.Ok,
-                                    true,
-                                    true,
-                                    this,
-                                    false);
-                _ = mbox.ShowDialog();
-            }
-            else
-            {
-                log.Error($"MyLauncher add to startup failed: {result}");
-                MDCustMsgBox mbox = new("An error has occurred. See the log file.",
-                                    "My Launcher Error",
-                                    ButtonType.Ok,
-                                    true,
-                                    true,
-                                    this,
-                                    true);
-                _ = mbox.ShowDialog();
-            }
-        }
-    }
 
-    /// <summary>
-    /// Remove the registry item
-    /// </summary>
-    private void RemoveStartFromRegistry()
-    {
-        if (IsLoaded)
-        {
-            string result = RegRun.RemoveRegEntry("MyLauncher");
-            if (result == "OK")
-            {
-                log.Info(@"MyLauncher removed from HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
-
-                MDCustMsgBox mbox = new("My Launcher was removed from Windows startup.",
-                                    "My Launcher",
-                                    ButtonType.Ok,
-                                    true,
-                                    true,
-                                    this,
-                                    false);
-                _ = mbox.ShowDialog();
-            }
-            else
-            {
-                log.Error($"MyLauncher remove from startup failed: {result}");
-                MDCustMsgBox mbox = new("An error has occurred. See the log file.",
-                                    "My Launcher Error",
-                                    ButtonType.Ok,
-                                    true,
-                                    true,
-                                    this,
-                                    true);
-                _ = mbox.ShowDialog();
-            }
-        }
-    }
-    #endregion
 
     #region Unhandled Exception Handler
     /// <summary>

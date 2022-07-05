@@ -15,15 +15,16 @@ internal static class IconHelpers
     /// <summary>
     /// Find a suitable image for the item
     /// </summary>
-    /// <param name="ch"></param>
-    public static void GetIcons(ObservableCollection<Child> ch)
+    /// <param name="collection">An ObservableCollection of type Child</param>
+    public static void GetIcons(ObservableCollection<Child> collection)
     {
-        if (ch is not null)
+        if (collection is not null)
         {
-            foreach (Child item in ch)
+            foreach (Child item in collection)
             {
                 if (!string.IsNullOrEmpty(item.FilePathOrURI) || item.EntryType == ListEntryType.Popup)
                 {
+                    // If an image file was specified
                     if (!string.IsNullOrEmpty(item.IconSource))
                     {
                         string image = Path.Combine(AppInfo.AppDirectory, "Icons", item.IconSource);
@@ -35,12 +36,12 @@ internal static class IconHelpers
                             bmi.UriSource = new Uri(image);
                             bmi.EndInit();
                             item.FileIcon = bmi;
-                            //log.Debug($"Image size is {bmi.PixelHeight} x {bmi.PixelWidth}");
                             continue;
                         }
                         log.Debug($"Could not find file {image} to use for \"{item.Title}\".");
                     }
 
+                    // If it's a pop-up
                     if (item.EntryType == ListEntryType.Popup)
                     {
                         string image = Path.Combine(AppInfo.AppDirectory, "Icons", "UpArrow.png");
@@ -57,19 +58,20 @@ internal static class IconHelpers
                         log.Debug($"Could not find file {image} to use for \"{item.Title}\".");
                     }
 
+                    // If it's a file get the associated icon
                     string filePath = item.FilePathOrURI.TrimEnd('\\');
                     if (File.Exists(filePath))
                     {
                         if (filePath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
                         {
                             string shortcut = ((IWshShortcut)new WshShell().CreateShortcut(filePath)).TargetPath;
-                            Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(shortcut);
+                            Icon temp = Icon.ExtractAssociatedIcon(shortcut);
                             item.FileIcon = IconToImageSource(temp);
                             log.Debug($"Using extracted associated icon from shortcut to {item.FilePathOrURI}.");
                         }
                         else
                         {
-                            Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(filePath);
+                            Icon temp = Icon.ExtractAssociatedIcon(filePath);
                             item.FileIcon = IconToImageSource(temp);
                             log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
                         }
@@ -81,14 +83,14 @@ internal static class IconHelpers
                         item.FileIcon = IconToImageSource(temp);
                         log.Debug($"Using folder icon for {item.FilePathOrURI}.");
                     }
-                    // if complete path wasn't supplied check the path
+                    // if complete path wasn't supplied check the system PATH
                     else if (filePath.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
                     {
                         StringBuilder sb = new(filePath, 2048);
                         bool found = NativeMethods.PathFindOnPath(sb, new string[] { null });
                         if (found)
                         {
-                            Icon temp = System.Drawing.Icon.ExtractAssociatedIcon(sb.ToString());
+                            Icon temp = Icon.ExtractAssociatedIcon(sb.ToString());
                             item.FileIcon = IconToImageSource(temp);
                             log.Debug($"Using extracted associated icon for {item.FilePathOrURI}.");
                         }

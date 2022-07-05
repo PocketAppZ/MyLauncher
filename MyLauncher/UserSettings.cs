@@ -2,6 +2,9 @@
 
 namespace MyLauncher;
 
+/// <summary>
+/// Persists settings available for the end user to change.
+/// </summary>
 public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChanged
 {
     #region Properties
@@ -78,7 +81,15 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
 
     public bool MaintFistRun { get; set; } = true;
 
-    public double MaintWindowHeight { get; set; } = 540;
+    public double MaintWindowHeight
+    {
+        get => maintWindowHeight;
+        set
+        {
+            maintWindowHeight = value;
+            OnPropertyChanged();
+        }
+    }
 
     public double MaintWindowLeft
     {
@@ -97,6 +108,64 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     {
         get
         {
+            if (menuMaintWindowTop < 0)
+            {
+                menuMaintWindowTop = 0;
+            }
+            return menuMaintWindowTop;
+        }
+        set => menuMaintWindowTop = value;
+    }
+
+    public double MaintWindowWidth
+    {
+        get => maintWindowWidth;
+        set
+        {
+            maintWindowWidth = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool MainWindowMinimizeOnLaunch
+    {
+        get => mainWindowMinimizeOnLaunch;
+        set
+        {
+            mainWindowMinimizeOnLaunch = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool MenuMaintFistRun { get; set; } = true;
+
+    public double MenuMaintWindowHeight
+    {
+        get => menuMaintWindowHeight;
+        set
+        {
+            menuMaintWindowHeight = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double MenuMaintWindowLeft
+    {
+        get
+        {
+            if (menuMaintWindowLeft < 0)
+            {
+                menuMaintWindowLeft = 0;
+            }
+            return menuMaintWindowLeft;
+        }
+        set => menuMaintWindowLeft = value;
+    }
+
+    public double MenuMaintWindowTop
+    {
+        get
+        {
             if (maintWindowTop < 0)
             {
                 maintWindowTop = 0;
@@ -106,15 +175,15 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         set => maintWindowTop = value;
     }
 
-
-    public bool MainWindowMinimizeOnLaunch
+    public double MenuMaintWindowWidth
     {
-        get { return mainWindowMinimizeOnLaunch; }
-        set { mainWindowMinimizeOnLaunch = value; OnPropertyChanged(); }
+        get => menuMaintWindowWidth;
+        set
+        {
+            menuMaintWindowWidth = value;
+            OnPropertyChanged();
+        }
     }
-
-
-    public double MaintWindowWidth { get; set; } = 850;
 
     public bool MinimizeToTray
     {
@@ -255,6 +324,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public int TrayMenuSize
+    {
+        get => trayMenuSize;
+        set
+        {
+            trayMenuSize = value;
+            OnPropertyChanged();
+        }
+    }
+
     public int UISize
     {
         get => uiSize;
@@ -327,8 +406,14 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private int listBoxFontWeight = (int)Weight.Regular;
     private int listBoxSpacing = (int)Spacing.Comfortable;
     private bool mainWindowMinimizeOnLaunch = false;
+    private double maintWindowHeight = 540;
     private double maintWindowLeft = 100;
     private double maintWindowTop = 100;
+    private double maintWindowWidth = 850;
+    private double menuMaintWindowHeight = 420;
+    private double menuMaintWindowLeft = 100;
+    private double menuMaintWindowTop = 100;
+    private double menuMaintWindowWidth = 850;
     private bool minimizeToTray = false;
     private bool playSound = true;
     private bool popupCloseAfterLaunch = true;
@@ -342,6 +427,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool startMinimized = false;
     private bool startWithWindows = false;
     private string titleText = "Click on any App Below to Open it";
+    private int trayMenuSize = (int)MenuSize.Medium;
     private int uiSize = (int)MySize.Default;
     private double windowHeight = 550;
     private double windowLeft = 100;

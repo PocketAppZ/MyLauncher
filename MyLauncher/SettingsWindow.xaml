@@ -229,7 +229,7 @@
                             Grid.Column="1"
                             Orientation="Horizontal">
                             <Label
-                                Width="100"
+                                Width="110"
                                 Content="Font Weight" />
                             <ComboBox
                                 x:Name="cbxFW"
@@ -255,7 +255,7 @@
                             Grid.Column="1"
                             Orientation="Horizontal">
                             <Label
-                                Width="100"
+                                Width="110"
                                 Content="Spacing" />
                             <ComboBox
                                 x:Name="cbxSpacing"
@@ -281,7 +281,7 @@
                             Grid.Column="1"
                             Orientation="Horizontal">
                             <Label
-                                Width="100"
+                                Width="110"
                                 Content="Border Width" />
                             <ComboBox
                                 Width="110"
@@ -300,6 +300,32 @@
                                     <ComboBoxItem Content="Jumbo" />
                                 </ComboBox.Items>
                             </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="110"
+                                Content="Tray Menu" />
+                            <ComboBox
+                                Width="110"
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Left"
+                                materialDesign:HintAssist.Hint="Font Size"
+                                MaxDropDownHeight="170"
+                                SelectedIndex="{Binding TrayMenuSize, Source={x:Static local:UserSettings.Setting}}"
+                                Style="{StaticResource MaterialDesignComboBox}"
+                                TabIndex="7">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Small" />
+                                    <ComboBoxItem Content="Default" />
+                                    <ComboBoxItem Content="Large" />
+                                    <ComboBoxItem Content="Jumbo" />
+                                </ComboBox.Items>
+                            </ComboBox>
+
                         </StackPanel>
                     </Grid>
                 </materialDesign:Card>
@@ -386,7 +412,7 @@
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}" />
                             <Label
                                 Margin="10,-1,0,0"
-                                Content="Show Exit button at bottom" />
+                                Content="Show Exit button at bottom of main window" />
                         </StackPanel>
 
                         <StackPanel

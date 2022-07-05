@@ -164,6 +164,7 @@ public partial class Maintenance : Window
         if (TvMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
         {
             tvi.IsSelected = true;
+            tvi.BringIntoView();
         }
         _ = tbTitle.Focus();
         tbTitle.SelectAll();
@@ -239,10 +240,7 @@ public partial class Maintenance : Window
     {
         JsonHelpers.ReadJson();
         (Application.Current.MainWindow as MainWindow)?.ResetListBox();
-        LoadTreeView();
-        TvMaint.Items.Refresh();
-        EntriesChanged = false;
-        btnDiscard.IsEnabled = false;
+        Close();
     }
     #endregion Discard changes
 
@@ -372,9 +370,8 @@ public partial class Maintenance : Window
 
     private void BtnSaveClose_Click(object sender, RoutedEventArgs e)
     {
-        JsonHelpers.SaveJson();
+        JsonHelpers.SaveMainJson();
         (Application.Current.MainWindow as MainWindow)?.ResetListBox();
-        ClearAndQueueMessage("List saved", 1000);
         Close();
     }
 
@@ -535,7 +532,6 @@ public partial class Maintenance : Window
     private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         EntriesChanged = true;
-        btnDiscard.IsEnabled = true;
         Debug.WriteLine($"List changed, action was: {e.Action} {e.OldStartingIndex} {e.NewStartingIndex}");
     }
     #endregion Collection changed event
@@ -574,4 +570,19 @@ public partial class Maintenance : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
+
+    private void BtnData_Click(object sender, RoutedEventArgs e)
+    {
+        TextFileViewer.ViewTextFile(JsonHelpers.GetMainListFile());
+    }
+
+    private void BtnFolder_Click(object sender, RoutedEventArgs e)
+    {
+        Child child = new()
+        {
+            Title = "App Folder",
+            FilePathOrURI = AppInfo.AppDirectory
+        };
+        MainWindow.LaunchApp(child);
+    }
 }
