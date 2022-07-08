@@ -20,63 +20,6 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto">
 
-    <!--#region Window resources (styles)-->
-    <Window.Resources>
-        <Style
-            BasedOn="{StaticResource {x:Type TreeViewItem}}"
-            TargetType="TreeViewItem">
-            <Setter Property="Cursor" Value="Hand" />
-        </Style>
-        <Style
-            x:Key="CardStyle"
-            TargetType="materialDesign:Card">
-            <Setter Property="Height" Value="70" />
-            <Setter Property="Margin" Value="5,0" />
-            <Setter Property="UniformCornerRadius" Value="7" />
-            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth2" />
-        </Style>
-        <Style
-            x:Key="SectionHeader"
-            TargetType="materialDesign:ColorZone">
-            <Setter Property="Mode" Value="PrimaryMid" />
-            <Setter Property="Height" Value="33" />
-            <Setter Property="CornerRadius" Value="7,7,0,0" />
-            <Setter Property="Padding" Value="0,0,0,3" />
-            <Setter Property="Margin" Value="0,1,0,0" />
-            <Setter Property="FontWeight" Value="DemiBold" />
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="SnapsToDevicePixels" Value="True" />
-        </Style>
-        <Style
-            x:Key="EntryTextBox"
-            BasedOn="{StaticResource MaterialDesignTextBox}"
-            TargetType="TextBox">
-            <Setter Property="Margin" Value="10,5,10,7" />
-            <Setter Property="Padding" Value="0,2,0,1" />
-            <Setter Property="VerticalAlignment" Value="Bottom" />
-            <Setter Property="VerticalContentAlignment" Value="Bottom" />
-            <Setter Property="FontWeight" Value="Regular" />
-            <Setter Property="FontSize" Value="14" />
-        </Style>
-        <Style
-            x:Key="BottomButtonRow"
-            BasedOn="{StaticResource MaterialDesignRaisedButton}"
-            TargetType="Button">
-            <Setter Property="FontWeight" Value="DemiBold" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Width" Value="120" />
-            <Setter Property="Padding" Value="0,0,0,2" />
-            <Setter Property="Margin" Value="5,10" />
-        </Style>
-        <Style
-            BasedOn="{StaticResource {x:Type materialDesign:SnackbarMessage}}"
-            TargetType="{x:Type materialDesign:SnackbarMessage}">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-        </Style>
-    </Window.Resources>
-    <!--#endregion-->
-
     <Grid x:Name="MenuMaintGrid">
         <!--#region Row definitions-->
         <Grid.RowDefinitions>
@@ -189,36 +132,6 @@
                             <TextBlock Text="{Binding Title}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
-                    <TreeView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Margin="0,15,0,5" />
-                        </ItemsPanelTemplate>
-                    </TreeView.ItemsPanel>
-                    <TreeView.Resources>
-                        <Style
-                            BasedOn="{StaticResource MaterialDesignTreeViewItem}"
-                            TargetType="TreeViewItem">
-                            <Setter Property="materialDesign:TreeViewAssist.ExpanderSize" Value="20" />
-                        </Style>
-                        <Style
-                            BasedOn="{StaticResource MaterialDesignScrollBar}"
-                            TargetType="ScrollBar">
-                            <Setter Property="Margin" Value="10,4,2,4" />
-                            <Setter Property="materialDesign:ScrollBarAssist.ButtonsVisibility" Value="Collapsed" />
-                            <Setter Property="materialDesign:ScrollBarAssist.ThumbWidth" Value="10" />
-                        </Style>
-                    </TreeView.Resources>
-                    <TreeView.ItemContainerStyle>
-                        <Style
-                            BasedOn="{StaticResource {x:Type TreeViewItem}}"
-                            TargetType="TreeViewItem">
-                            <Setter Property="Margin" Value="8,0,10,0" />
-                            <Setter Property="Padding" Value="5" />
-                        </Style>
-                    </TreeView.ItemContainerStyle>
-                    <TreeView.DataContext>
-                        <local:MyMenuItem />
-                    </TreeView.DataContext>
                 </TreeView>
             </materialDesign:Card>
             <!--#endregion-->
@@ -248,7 +161,7 @@
                         Grid.Row="0"
                         MouseEnter="Card_MouseEnter"
                         MouseLeave="Card_MouseLeave"
-                        Style="{StaticResource CardStyle}">
+                        Style="{StaticResource MaintCardStyle}">
                         <Grid>
                             <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                 <Grid>
@@ -347,7 +260,7 @@
                         Grid.Row="1"
                         MouseEnter="Card_MouseEnter"
                         MouseLeave="Card_MouseLeave"
-                        Style="{StaticResource CardStyle}">
+                        Style="{StaticResource MaintCardStyle}">
                         <Grid>
                             <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                 <Grid>
@@ -399,7 +312,7 @@
                         Grid.Row="2"
                         MouseEnter="Card_MouseEnter"
                         MouseLeave="Card_MouseLeave"
-                        Style="{StaticResource CardStyle}">
+                        Style="{StaticResource MaintCardStyle}">
                         <Grid>
                             <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                 <Grid>
@@ -528,10 +441,11 @@
             </Grid>
             <!--#endregion-->
         </Grid>
+
         <!--#region SnackBar-->
         <materialDesign:Snackbar x:Name="SnackBarMenuMaint"
             Grid.Row="0"
-            HorizontalAlignment="Stretch"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="#FF303030"
             FontWeight="DemiBold"

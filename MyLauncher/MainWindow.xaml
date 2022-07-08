@@ -59,9 +59,11 @@
             <tb:TaskbarIcon x:Name="tbIcon"
                 IconSource="/Images/ML.ico"
                 MenuActivation="RightClick"
+                ToolTipText="My Launcher"
                 TrayLeftMouseDown="TbIconShowMainWindow_Click"
                 TrayMouseDoubleClick="TbIconShowMainWindow_Click"
                 Visibility="Collapsed">
+                <!-- TrayToolTip is broken in Windows 11, see https://github.com/hardcodet/wpf-notifyicon/issues/65 -->
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu
                         Name="trayMenu"
@@ -291,11 +293,12 @@
                                         Orientation="Vertical" />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
-
                             <ListBox.Resources>
                                 <Style
                                     BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"
-                                    TargetType="ScrollBar" />
+                                    TargetType="ScrollBar">
+                                    <Setter Property="Margin" Value="15,0" />
+                                </Style>
                             </ListBox.Resources>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>

@@ -726,10 +726,6 @@ public partial class MainWindow : Window
     /// </summary>
     private void WindowPreview_KeyUp(object sender, KeyEventArgs e)
     {
-        Debug.WriteLine($"Sender: {sender.GetType()} - Key: {e.Key} - Modifiers: {e.KeyboardDevice.Modifiers}");
-        var foc = FocusManager.GetFocusedElement(this);
-        Debug.WriteLine($"{foc} has focus");
-
         // With Ctrl
         if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
         {

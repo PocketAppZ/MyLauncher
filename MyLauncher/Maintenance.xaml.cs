@@ -461,14 +461,14 @@ public partial class Maintenance : Window
                     newitem.EntryType = (int)ListEntryType.Normal;
                     break;
                 case "Restart":
-                    newitem.Title = "Restart";
+                    newitem.Title = "Restart (Immediate)";
                     newitem.FilePathOrURI = "shutdown.exe";
                     newitem.Arguments = "/r /t 0";
                     newitem.IconSource = "restart.png";
                     newitem.EntryType = (int)ListEntryType.Normal;
                     break;
                 case "Shutdown":
-                    newitem.Title = "Shutdown";
+                    newitem.Title = "Shutdown (Immediate)";
                     newitem.FilePathOrURI = "shutdown.exe";
                     newitem.Arguments = "/s /t 0";
                     newitem.IconSource = "shutdown.png";
@@ -483,6 +483,7 @@ public partial class Maintenance : Window
                 if (TvMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
                 {
                     tvi.IsSelected = true;
+                    tvi.BringIntoView();
                 }
                 _ = tbTitle.Focus();
                 tbTitle.SelectAll();
