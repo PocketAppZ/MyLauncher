@@ -1,0 +1,68 @@
+﻿The TLDataToMLData ReadMe file
+
+
+Introduction
+============
+TLDataToMLData is part of My Launcher. It is used to convert Tray Launcher data to either My Launcher
+list data or menu data or both.
+
+
+Using TLDataToMLData
+====================
+After starting TLDataToMLData, enter the file name of the Tray Launcher menu data file in the upper
+text box. Clicking the file icon on the right will bring up an open file dialog that will start in the
+default Tray Launcher folder. The filename for the menu data is MenuItems.xml. If Tray Launcher is not
+installed in the default location or if you wish to use a backup, navigate to the appropriate location
+and select the menu .XML file.
+
+Next, enter the name of the My Launcher data file. Clicking the file icon on the right will bring up an
+open file dialog that will start in the desktop folder. Choose a filename that is appropriate for the
+type of data you are converting to, either list or menu.
+
+Then click the button corresponding to the type of data you are converting to. The area below the buttons
+will display a log of the conversion process. Any error messages will be displayed there as well.
+
+When converting to menu data, Tray Launcher Section Heading entries will be skipped as there is no analogous
+feature in My Launcher menus. When converting to list data, Section Heading and Separators are skipped as
+well.
+
+Once the conversion process is complete, copy the .json output file(s) to the My Launcher program folder,
+renaming as needed.
+
+Start My Launcher and navigate to the appropriate maintenance type and verify the data has been converted
+to your liking. The conversion process may not be flawless, make any changes that you see fit and the save
+the data file.
+
+
+Uninstalling
+============
+To uninstall TLDataToMLData, uninstall My Launcher via Windows add/remove programs feature.
+
+
+Notices and License
+===================
+TLDataToMLData was written in C# by Tim Kennedy and requires .Net 6.
+
+TLDataToMLData uses the following icons & packages:
+
+* Material Design in XAML Toolkit https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit
+
+
+
+MIT License
+Copyright (c) 2022 Tim Kennedy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject
+to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial
+portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

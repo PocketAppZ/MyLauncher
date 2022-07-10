@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>annotations</Nullable>
+    <UseWPF>true</UseWPF>
+	<AssemblyVersion>0.1.0.0</AssemblyVersion>
+	<FileVersion>0.1.0</FileVersion>
+	<Version>$(AssemblyVersion)</Version>
+	<Description>Tray Launcher to My Launcher data conversion</Description>
+	<Product>My Launcher</Product>
+	<Company>T_K</Company>
+	<Copyright>Copyright © $([System.DateTime]::UtcNow.Year) Tim Kennedy</Copyright>
+	<ApplicationIcon>ML.ico</ApplicationIcon>
+	<AssemblyName>TLDataToMLData</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\MyLauncher\Enums.cs" Link="Enums.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<Content Include="Conversion.txt">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="ML.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\ML.png" />
+    <Resource Include="Images\Splash256.png" />
+  </ItemGroup>
+
+</Project>
