@@ -13,6 +13,7 @@
     Activated="Window_Activated"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
+    IsVisibleChanged="Window_IsVisibleChanged"
     FontSize="12"
     PreviewKeyDown="Window_PreviewKeyDown"
     PreviewKeyUp="WindowPreview_KeyUp"

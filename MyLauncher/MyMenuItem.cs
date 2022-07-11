@@ -75,7 +75,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     }
 
     /// <summary>
-    /// Identifier for the entry
+    /// Unique Identifier for the item
     /// </summary>
     public string ItemID
     {
@@ -92,11 +92,23 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     /// </summary>
     [JsonPropertyName("MenuItems")]
     public ObservableCollection<MyMenuItem> SubMenuItems { get; set; }
+
+    /// <summary>
+    /// This property is part of a workaround to select an item in the TreeView
+    /// It is also ignored since we don't want it in the JSON file
+    /// </summary>
+    [JsonIgnore]
+    public bool IsSelected
+    {
+        get { return isSelected; }
+        set { isSelected = value; OnPropertyChanged(); }
+    }
     #endregion Properties
 
     #region Private backing fields
     private string arguments = string.Empty;
     private string filePathOrURI;
+    private bool isSelected;
     private string itemID;
     private MenuItemType itemType = MenuItemType.MenuItem;
     private string title;

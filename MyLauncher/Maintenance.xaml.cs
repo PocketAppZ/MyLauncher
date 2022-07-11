@@ -1,5 +1,6 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
+using System;
 namespace MyLauncher;
 
 public partial class Maintenance : Window
@@ -158,16 +159,11 @@ public partial class Maintenance : Window
             Title = "untitled",
             FilePathOrURI = string.Empty,
             EntryType = (int)ListEntryType.Normal,
-            ItemID = Guid.NewGuid().ToString()
+            ItemID = Guid.NewGuid().ToString(),
+            IsSelected = true,
         };
         Child.Children.Add(newitem);
-        if (TvMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
-        {
-            tvi.IsSelected = true;
-            tvi.BringIntoView();
-        }
         _ = tbTitle.Focus();
-        tbTitle.SelectAll();
         ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
     }
     #endregion Add New item
@@ -186,14 +182,10 @@ public partial class Maintenance : Window
             ChildrenOfChild = new ObservableCollection<Child>(),
             EntryType = ListEntryType.Popup,
             ItemID = Guid.NewGuid().ToString(),
+            IsSelected= true,
         };
         Child.Children.Add(newitem);
-        if (TvMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
-        {
-            tvi.IsSelected = true;
-        }
         _ = tbTitle.Focus();
-        tbTitle.SelectAll();
         ClearAndQueueMessage("New \"untitled\" pop-up list was created.", 3000);
     }
     #endregion Add New Pop-Up
@@ -478,15 +470,10 @@ public partial class Maintenance : Window
             if (newitem.Title != string.Empty)
             {
                 newitem.ItemID = Guid.NewGuid().ToString();
+                newitem.IsSelected = true;
                 Child.Children.Add(newitem);
                 EntriesChanged = true;
-                if (TvMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
-                {
-                    tvi.IsSelected = true;
-                    tvi.BringIntoView();
-                }
                 _ = tbTitle.Focus();
-                tbTitle.SelectAll();
                 ClearAndQueueMessage($"New \"{newitem.Title}\" item was created.", 3000);
             }
         }
@@ -585,5 +572,13 @@ public partial class Maintenance : Window
             FilePathOrURI = AppInfo.AppDirectory
         };
         MainWindow.LaunchApp(child);
+    }
+
+    private void TvMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+        if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
+        {
+            tbTitle.Dispatcher.BeginInvoke(new Action(() => tbTitle.SelectAll()));
+        }
     }
 }

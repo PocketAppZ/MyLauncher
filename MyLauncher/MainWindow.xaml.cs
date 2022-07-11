@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
+using System;
 namespace MyLauncher;
 
 public partial class MainWindow : Window
@@ -1046,10 +1047,10 @@ public partial class MainWindow : Window
     {
         Show();
         WindowState = WindowState.Normal;
-        Topmost = true;
-        Focus();
-        Thread.Sleep(50);
-        Topmost = UserSettings.Setting.KeepOnTop;
+        //Topmost = true;
+        //Focus();
+        //Thread.Sleep(50);
+        //Topmost = UserSettings.Setting.KeepOnTop;
     }
     #endregion Show Main window
 
@@ -1168,4 +1169,25 @@ public partial class MainWindow : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
+
+    private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        Debug.WriteLine($"Vis chg  -  new value {e.NewValue}");
+        // e.NewValue - True is visible - False is not
+        if ((bool)e.NewValue)
+        {
+            Top = UserSettings.Setting.WindowTop;
+            Left = UserSettings.Setting.WindowLeft;
+            Height = UserSettings.Setting.WindowHeight;
+            Width = UserSettings.Setting.WindowWidth;
+            Topmost = UserSettings.Setting.KeepOnTop;
+        }
+        else
+        {
+            UserSettings.Setting.WindowLeft = Math.Floor(Left);
+            UserSettings.Setting.WindowTop = Math.Floor(Top);
+            UserSettings.Setting.WindowWidth = Math.Floor(Width);
+            UserSettings.Setting.WindowHeight = Math.Floor(Height);
+        }
+    }
 }

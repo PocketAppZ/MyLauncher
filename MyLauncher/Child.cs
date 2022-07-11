@@ -31,14 +31,18 @@ public class Child : INotifyPropertyChanged, IDropTarget
         }
     }
 
-    private string itemID;
-
+    /// <summary>
+    /// Unique Identifier for the item
+    /// </summary>
     public string ItemID
     {
-        get { return itemID; }
-        set { itemID = value; OnPropertyChanged(); }
+        get => itemID;
+        set
+        {
+            itemID = value;
+            OnPropertyChanged();
+        }
     }
-
 
     /// <summary>
     /// Entry type, 0 = normal item, 1 = pop-up
@@ -143,6 +147,21 @@ public class Child : INotifyPropertyChanged, IDropTarget
             }
         }
     }
+
+    /// <summary>
+    /// This property is part of a workaround to select an item in the TreeView
+    /// It is also ignored since we don't want it in the JSON file
+    /// </summary>
+    [JsonIgnore]
+    public bool IsSelected
+    {
+        get => isSelected;
+        set
+        {
+            isSelected = value;
+            OnPropertyChanged();
+        }
+    }
     #endregion Properties
 
     #region Private backing fields
@@ -151,6 +170,8 @@ public class Child : INotifyPropertyChanged, IDropTarget
     private ImageSource fileIcon;
     private string filePathOrURI;
     private string iconSource = string.Empty;
+    private bool isSelected;
+    private string itemID;
     private string title;
     #endregion Private backing fields
 

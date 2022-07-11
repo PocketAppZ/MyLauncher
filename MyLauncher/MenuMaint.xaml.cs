@@ -1,5 +1,6 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
+using System;
 namespace MyLauncher;
 
 /// <summary>
@@ -127,16 +128,11 @@ public partial class MenuMaint : Window
             Title = "untitled",
             FilePathOrURI = string.Empty,
             ItemType = MenuItemType.MenuItem,
-            ItemID = Guid.NewGuid().ToString()
+            ItemID = Guid.NewGuid().ToString(),
+            IsSelected = true
         };
         MyMenuItem.MLMenuItems.Add(newitem);
-        if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
-        {
-            tvi.IsSelected = true;
-            tvi.BringIntoView();
-        }
         _ = tbTitle.Focus();
-        tbTitle.SelectAll();
         ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
     }
     #endregion Add new normal item
@@ -153,6 +149,7 @@ public partial class MenuMaint : Window
             FilePathOrURI = string.Empty,
             ItemType = MenuItemType.SubMenu,
             ItemID = Guid.NewGuid().ToString(),
+            IsSelected = true,
             SubMenuItems = new ObservableCollection<MyMenuItem>()
         };
         MyMenuItem.MLMenuItems.Add(newitem);
@@ -162,7 +159,6 @@ public partial class MenuMaint : Window
             tvi.BringIntoView();
         }
         _ = tbTitle.Focus();
-        tbTitle.SelectAll();
         ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
     }
     #endregion Add new submenu
@@ -179,14 +175,10 @@ public partial class MenuMaint : Window
             FilePathOrURI = string.Empty,
             ItemType = MenuItemType.Separator,
             ItemID = Guid.NewGuid().ToString(),
+            IsSelected= true,
             SubMenuItems = null
         };
         MyMenuItem.MLMenuItems.Add(newitem);
-        if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
-        {
-            tvi.IsSelected = true;
-            tvi.BringIntoView();
-        }
         _ = tbTitle.Focus();
         ClearAndQueueMessage("New Separator item was created.", 3000);
     }
@@ -474,5 +466,23 @@ public partial class MenuMaint : Window
             FilePathOrURI = AppInfo.AppDirectory
         };
         MainWindow.LaunchApp(child);
+    }
+
+    private void TvMenuMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+        Debug.WriteLine("Selected Item Changed");
+        //if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
+        //{
+        //    tbTitle.SelectAll();
+        //}
+    }
+
+    private void TvMenuMaint_Selected(object sender, RoutedEventArgs e)
+    {
+        Debug.WriteLine("Item Selected");
+        if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
+        {
+            tbTitle.SelectAll();
+        }
     }
 }

@@ -123,6 +123,7 @@
                     FontWeight="Normal"
                     ScrollViewer.CanContentScroll="True"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    SelectedItemChanged="TvMaint_SelectedItemChanged"
                     TabIndex="0"
                     UseLayoutRounding="False">
                     <TreeView.ItemTemplate>
@@ -555,7 +556,7 @@
                                 Content="Discard &amp; Close"
                                 Style="{StaticResource BottomButtonRow}"
                                 TabIndex="8"
-                                ToolTip="Discard any changes and closes the window" />
+                                ToolTip="Discard any changes and close the window" />
                             <Button
                                 Click="BtnSaveClose_Click"
                                 Content="Save &amp; Close"
@@ -573,7 +574,7 @@
         <!--#region SnackBar-->
         <materialDesign:Snackbar x:Name="SnackBarMaint"
             Grid.Row="0"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="#FF303030"
             FontWeight="DemiBold"
