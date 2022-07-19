@@ -3,43 +3,78 @@
 
 Introduction
 ============
+My Launcher started as an application that my 98 year-old mother could use to launch a small handful
+of applications easily without trying to find them in the Windows Start menu. I made the font sizes
+big, the borders colorful, the spacing wide, and limited the things that could be changed from the
+main window. As development continued, I made those things customizable and added new features such
+as pop-up windows and the system tray menu from the Tray Launcher app. You don't need to be a
+nonagenarian to use My Launcher.
 
 
+Getting Started
+===============
+When you first start My Launcher, you will see the main window with a single entry for Calculator.
+Clicking on the Navigation menu (the hamburger icon at the left end of the colored bar) will bring
+up choices for List Maintenance, Menu Maintenance, App Settings, About and Exit.
 
 
+List Maintenance
+================
+On the left side of the List Maintenance page you will see a tree view similar to the left side of
+File Explorer. This tree view represents the items in the Launcher page. When you click on an item
+in the list, the text boxes on the right side of the window are populated with the details of that
+list item. To update an item, simply make any changes in the appropriate text box and then press
+the tab key or the enter key.
 
+To add a new item, click the New Item button. You will see a pop-up menu with three item types.
 
+  - Normal item. This item type can be an application, a document, a folder or a website.
 
+  - Pop-Up List. This item type is a window that can contain normal items and other pop-up lists.
 
-	List Maintenance
-	----------------
-	On the left side of the List Maintenance page you will see a scrollable list. This list represents
-	the items in the Launcher page. When you click on an item in the list, the text boxes on the right side
-	of the window are populated with the details of that list item. To update an item, simply make any
-	changes in the appropriate text box and then press the tab key or the enter key.
+  - Special Apps. This is a small set of predefined	apps that can added quickly to My Launcher.
+	In addition to being commonly used apps, they can also serve as guides to launching apps by
+	URI, specifying a custom icon, and using arguments, which are covered later.
 
-	To arrange list items, simply drag an entry to a new position in the list.
+An new entry, temporarily named "untitled", except in the case of Special Apps, is added to the
+bottom of the list in the tree view. The text boxes on the right will have some instructional
+text. That instructional text will be removed when you select that text box. Note that there can
+only be one untitled entry.
 
-	To add a new item, click the New Item button. An new entry, temporarily named "untitled", is added
-	to the bottom of the list on the list. The text boxes on the right will have some instructional
-	text. That instructional text will be removed when you select that text box.
+The Title text box is where you will enter the text that you want to see in the list in the main
+window. It can say anything you want, perhaps Aunt Sally's Secret Buttermilk Biscuit Recipe.
 
-	The Title text box is where you will enter the text that you want to see in the list in the main
-	window. It can say anything you want, perhaps Aunt Sally's Secret Buttermilk Biscuit Recipe.
+The Path or URL text box is where you will enter the complete path to the file, folder
+application, or website URL that you wish to open. For documents, folders and applications, you
+may use environmental variables in the path. For example %temp% for the temp folder. For website
+URLs, begin the URL with either http:\\ or preferably, https:\\.
 
-	The Path or URL text box is where you will enter the complete path to the file, folder
-	application, or website URL that you wish to open. For documents, folders and applications, you
-	may use environmental variables in the path. For example %temp% for the temp folder. For website
-	URLs, begin the URL with either http:\\ or preferably, https:\\.
+The Arguments text box is where you can specify optional arguments. For example, it you want to
+open Aunt Sally's Secret Buttermilk Biscuit Recipe in notepad, you would enter notepad.exe in the
+Path or URL text box and C:\Recipes\SecretBiscuits.txt in the Arguments textbox.
 
+The Icon File text box is where you can specify a custom icon. My Launcher attempts to find a
+suitable icon, but if it can't or you would prefer a different icon this is where you can specify
+your own. Acceptable image file types are .ico, .png, .bmp, .jpg and .jpeg.
 
-	To delete an item from the list, highlight that item in the list on the left side of the page and
-	then click the Delete Item button.
+To arrange list items, simply drag an entry to a new position in the list. Normal items and pop-up
+items can be dropped on pop-ups create the pop-up windows. When doing so, the drop indicator turns
+into an outline. Once a pop-up has items in it a chevron will appear to its left. Use the chevron
+to expand the list as you would in File Explorer.
 
-	When you have finished updating the list, click the Save button. The list will also be saved when
-	you navigate away from the List Maintenance page.
+To delete an item from the list, highlight that item in the list on the left side of the page and
+then click the Delete Item button. If you attempt to delete a pop-up that has child items, you will
+be asked to confirm the deletion.
 
-	You can revert back to the last saved list by clicking on the Discard Changes button.
+When you have finished updating the list, click the Save & Close button. Even though you can see
+changes in the main window, the list is not actually saved until the Save & Close button has been
+clicked or the List Maintenance window is closed.
+
+If you wish to undo and changes, additions or deletions, click the Discard & Close button before
+clicking the Save & Close button or closing the window.
+
+There is also a Backup List button which will copy the list file to a location of your choice.
+
 
 
 	Settings
@@ -63,15 +98,20 @@ Introduction
 
 Keys
 ====
-These keyboard shortcuts are available:
+These keyboard shortcuts are available in the main window:
 
-
-	Ctrl + Comma =  Show the Settings dialog
-	Ctrl + M = Change the theme
-	Ctrl + Numpad Plus = Increase size
-	Ctrl + Numpad Minus = Decrease size
-
-	F1 = Show the About dialog
+	Ctrl + 1 through Ctrl + 9 = will open the corresponding entry in the main window or a pop-up window.
+	Ctrl + Comma =  Show the Settings dialog.
+	Ctrl + L = Open the List Maintenance window.
+	Ctrl + M = Open the Menu Maintenance window.
+	Ctrl + Numpad Plus = Increase size.
+	Ctrl + Numpad Minus = Decrease size.
+	Ctrl + Shift + M = Changes the theme.
+	Ctrl + Shift + P = Changes the primary accent color.
+	Ctrl + Shift + S = Changes the secondary accent color.
+	Enter = Launch the selected entry.
+	Escape = Clears the selection.
+	F1 = Show the About dialog.
 
 
 Uninstalling
@@ -81,7 +121,7 @@ To uninstall use the regular Windows add/remove programs feature.
 
 Notices and License
 ===================
-My Launcher was written in C# by Tim Kennedy and now requires .Net 6.
+My Launcher was written in C# by Tim Kennedy and requires .Net 6.
 
 My Launcher uses the following icons & packages:
 

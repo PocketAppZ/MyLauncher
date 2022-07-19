@@ -1,18 +1,20 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
+using DragDrop = GongSolutions.Wpf.DragDrop.DragDrop;
+
 namespace MyLauncher;
 /// <summary>
 /// Class for all of the objects in the list. Also includes the drag and drop handlers.
 /// </summary>
-public class Child : INotifyPropertyChanged, IDropTarget
+public class MyListItem : INotifyPropertyChanged, IDropTarget
 {
-    #region ObservableCollection for Child
+    #region ObservableCollection for list items
     /// <summary>
     /// Observable collection containing the list entries
     /// </summary>
     [JsonPropertyName("Children")]
-    public static ObservableCollection<Child> Children { get; set; }
-    #endregion ObservableCollection for Child
+    public static ObservableCollection<MyListItem> Children { get; set; }
+    #endregion ObservableCollection for list items
 
     #region Properties
     /// <summary>
@@ -129,7 +131,7 @@ public class Child : INotifyPropertyChanged, IDropTarget
     /// Observable collection containing the entries
     /// </summary>
     [JsonPropertyName("Children")]
-    public ObservableCollection<Child> ChildrenOfChild { get; set; }
+    public ObservableCollection<MyListItem> MyListItems { get; set; }
 
     /// <summary>
     /// Ignore the image as we don't want to save it in the JSON file
@@ -191,13 +193,17 @@ public class Child : INotifyPropertyChanged, IDropTarget
     /// <param name="dropInfo"></param>
     void IDropTarget.DragOver(IDropInfo dropInfo)
     {
-        if (dropInfo.TargetItem is Child dragTarget
-            && dragTarget.EntryType == (int)ListEntryType.Normal
-            && dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
+        if (dropInfo.TargetItem is MyListItem dragTarget)
         {
-            return;
+            if (dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
+            {
+                if (dragTarget.EntryType is ListEntryType.Normal)
+                {
+                    return;
+                }
+            }
+            DragDrop.DefaultDropHandler.DragOver(dropInfo);
         }
-        GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.DragOver(dropInfo);
     }
 
     /// <summary>
@@ -206,18 +212,19 @@ public class Child : INotifyPropertyChanged, IDropTarget
     /// <param name="dropInfo"></param>
     void IDropTarget.Drop(IDropInfo dropInfo)
     {
-        if (dropInfo.TargetItem is Child dropItem)
+        if (dropInfo.TargetItem is MyListItem dropItem)
         {
             if (dropItem.EntryType == ListEntryType.Popup)
             {
-                GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
+                DragDrop.DefaultDropHandler.Drop(dropInfo);
                 TreeViewItem tvi = dropInfo.VisualTargetItem as TreeViewItem;
                 tvi.IsExpanded = true;
+                tvi.BringIntoView();
             }
             else if (dropItem.EntryType == ListEntryType.Normal
                 && !dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
             {
-                GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
+                DragDrop.DefaultDropHandler.Drop(dropInfo);
             }
         }
     }

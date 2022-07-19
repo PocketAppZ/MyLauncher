@@ -128,13 +128,13 @@
                     UseLayoutRounding="False">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate
-                            DataType="{x:Type local:Child}"
-                            ItemsSource="{Binding ChildrenOfChild}">
+                            DataType="{x:Type local:MyListItem}"
+                            ItemsSource="{Binding MyListItems}">
                             <TextBlock Text="{Binding Title}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                     <TreeView.DataContext>
-                        <local:Child />
+                        <local:MyListItem />
                     </TreeView.DataContext>
                 </TreeView>
             </materialDesign:Card>
@@ -228,7 +228,7 @@
                                                         TextAlignment="Left" />
                                                     <TextBlock
                                                         Margin="15,5,0,0"
-                                                        Text="{Binding ChildrenOfChild.Count,
+                                                        Text="{Binding MyListItems.Count,
                                                                        StringFormat='Children: {0}',
                                                                        FallbackValue='Children: None'}"
                                                         TextAlignment="Left" />

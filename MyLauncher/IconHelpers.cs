@@ -15,12 +15,12 @@ internal static class IconHelpers
     /// <summary>
     /// Find a suitable image for the item
     /// </summary>
-    /// <param name="collection">An ObservableCollection of type Child</param>
-    public static void GetIcons(ObservableCollection<Child> collection)
+    /// <param name="collection">An ObservableCollection of type MyListItem</param>
+    public static void GetIcons(ObservableCollection<MyListItem> collection)
     {
         if (collection is not null)
         {
-            foreach (Child item in collection)
+            foreach (MyListItem item in collection)
             {
                 if (!string.IsNullOrEmpty(item.FilePathOrURI) || item.EntryType == ListEntryType.Popup)
                 {

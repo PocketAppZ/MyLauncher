@@ -1,6 +1,5 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
-using System;
 namespace MyLauncher;
 
 /// <summary>
@@ -196,7 +195,7 @@ public partial class MenuMaint : Window
 
             if (itemToDelete?.SubMenuItems is not null && itemToDelete.SubMenuItems.Count > 0)
             {
-                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.SubMenuItems.Count} of its child items?",
+                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.SubMenuItems.Count} of its item items?",
                                         "Delete All?",
                                         ButtonType.YesNo,
                                         true,
@@ -222,24 +221,24 @@ public partial class MenuMaint : Window
     /// <summary>
     /// Removes a single item from the list.
     /// </summary>
-    /// <param name="children">ObservableCollection to search</param>
-    /// <param name="delItem">Child object to remove</param>
-    private void RemoveByID(ObservableCollection<MyMenuItem> children, MyMenuItem delItem)
+    /// <param name="menuItems">ObservableCollection to search</param>
+    /// <param name="delItem">MyListItem object to remove</param>
+    private void RemoveByID(ObservableCollection<MyMenuItem> menuItems, MyMenuItem delItem)
     {
-        for (int i = children.Count - 1; i >= 0; --i)
+        for (int i = menuItems.Count - 1; i >= 0; --i)
         {
-            MyMenuItem child = children[i];
+            MyMenuItem item = menuItems[i];
 
-            if (child.ItemID == delItem.ItemID && child.Title == delItem.Title)
+            if (item.ItemID == delItem.ItemID && item.Title == delItem.Title)
             {
-                children.RemoveAt(i);
-                log.Debug($"Removing \"{child.Title}\" - {child.ItemID}");
-                ClearAndQueueMessage($"\"{child.Title}\" was removed.", 3000);
+                menuItems.RemoveAt(i);
+                log.Debug($"Removing \"{item.Title}\" - {item.ItemID}");
+                ClearAndQueueMessage($"\"{item.Title}\" was removed.", 3000);
                 break;
             }
-            else if (child.SubMenuItems != null)
+            else if (item.SubMenuItems != null)
             {
-                RemoveByID(child.SubMenuItems, delItem);
+                RemoveByID(item.SubMenuItems, delItem);
             }
         }
     }
@@ -273,6 +272,22 @@ public partial class MenuMaint : Window
         UserSettings.SaveSettings();
     }
     #endregion Window events
+
+    #region TreeView events
+    private void TvMenuMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+        Debug.WriteLine("Selected Item Changed");
+    }
+
+    private void TvMenuMaint_Selected(object sender, RoutedEventArgs e)
+    {
+        Debug.WriteLine("Item Selected");
+        if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
+        {
+            tbTitle.SelectAll();
+        }
+    }
+    #endregion TreeView events
 
     #region Mouse Enter/Leave Card (to change shadow)
     private void Card_MouseEnter(object sender, MouseEventArgs e)
@@ -437,6 +452,16 @@ public partial class MenuMaint : Window
     {
         TextFileViewer.ViewTextFile(JsonHelpers.GetMenuListFile());
     }
+
+    private void BtnFolder_Click(object sender, RoutedEventArgs e)
+    {
+        MyListItem item = new()
+        {
+            Title = "App Folder",
+            FilePathOrURI = AppInfo.AppDirectory
+        };
+        MainWindow.LaunchApp(item);
+    }
     #endregion Button Events
 
     #region Clear message queue then queue a snackbar message and set duration
@@ -457,32 +482,4 @@ public partial class MenuMaint : Window
             TimeSpan.FromMilliseconds(duration));
     }
     #endregion Clear message queue then queue a snackbar message and set duration
-
-    private void BtnFolder_Click(object sender, RoutedEventArgs e)
-    {
-        Child child = new()
-        {
-            Title = "App Folder",
-            FilePathOrURI = AppInfo.AppDirectory
-        };
-        MainWindow.LaunchApp(child);
-    }
-
-    private void TvMenuMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
-        Debug.WriteLine("Selected Item Changed");
-        //if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
-        //{
-        //    tbTitle.SelectAll();
-        //}
-    }
-
-    private void TvMenuMaint_Selected(object sender, RoutedEventArgs e)
-    {
-        Debug.WriteLine("Item Selected");
-        if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
-        {
-            tbTitle.SelectAll();
-        }
-    }
 }

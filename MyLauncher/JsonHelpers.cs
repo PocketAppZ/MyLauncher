@@ -27,7 +27,7 @@ internal static class JsonHelpers
         try
         {
             string json = File.ReadAllText(jsonfile);
-            Child.Children = JsonSerializer.Deserialize<ObservableCollection<Child>>(json);
+            MyListItem.Children = JsonSerializer.Deserialize<ObservableCollection<MyListItem>>(json);
         }
         catch (Exception ex) when (ex is DirectoryNotFoundException || ex is FileNotFoundException)
         {
@@ -57,7 +57,7 @@ internal static class JsonHelpers
             _ = mbox.ShowDialog();
         }
 
-        if (Child.Children == null)
+        if (MyListItem.Children == null)
         {
             log.Error("File {0} is empty or is invalid", jsonfile);
             SystemSounds.Exclamation.Play();
@@ -72,13 +72,13 @@ internal static class JsonHelpers
             Environment.Exit(2);
         }
 
-        if (Child.Children.Count == 1)
+        if (MyListItem.Children.Count == 1)
         {
-            log.Info($"Read {Child.Children.Count} entry from {jsonfile}");
+            log.Info($"Read {MyListItem.Children.Count} entry from {jsonfile}");
         }
         else
         {
-            log.Info($"Read {Child.Children.Count} entries from {jsonfile}");
+            log.Info($"Read {MyListItem.Children.Count} entries from {jsonfile}");
         }
     }
     #endregion Read the JSON file for the main list
@@ -132,13 +132,13 @@ internal static class JsonHelpers
     /// </summary>
     public static void SaveMainJson()
     {
-        List<Child> tempCollection = new();
+        List<MyListItem> tempCollection = new();
 
-        foreach (Child item in Child.Children)
+        foreach (MyListItem item in MyListItem.Children)
         {
             if (!string.IsNullOrEmpty(item.Title))
             {
-                Child ch = new()
+                MyListItem ch = new()
                 {
                     Title = item.Title.Trim(),
                     FilePathOrURI = item.FilePathOrURI.Trim('"').Trim(),
@@ -146,7 +146,7 @@ internal static class JsonHelpers
                     Arguments = item.Arguments,
                     IconSource = item.IconSource.Trim(),
                     EntryType = item.EntryType,
-                    ChildrenOfChild = item.ChildrenOfChild,
+                    MyListItems = item.MyListItems,
                     ItemID = item.ItemID,
                     PopupHeight = item.PopupHeight,
                     PopupLeft = item.PopupLeft,

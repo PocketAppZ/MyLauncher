@@ -53,7 +53,7 @@ internal enum MySize
 /// <summary>
 /// Navigation in the app.
 /// </summary>
-internal enum NavPage
+public enum NavPage
 {
     Daily = 0,
     ListMaintenance = 1,

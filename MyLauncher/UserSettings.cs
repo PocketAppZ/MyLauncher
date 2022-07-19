@@ -438,7 +438,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool showFileIcons = true;
     private bool startMinimized = false;
     private bool startWithWindows = false;
-    private string titleText = "Click on any App Below to Open it";
+    private string titleText = "Click on any Item Below to Open it";
     private int trayMenuSize = (int)MenuSize.Medium;
     private int uiSize = (int)MySize.Default;
     private double windowHeight = 550;

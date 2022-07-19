@@ -1,7 +1,12 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
+using DragDrop = GongSolutions.Wpf.DragDrop.DragDrop;
+
 namespace MyLauncher;
 
+/// <summary>
+/// Class for all of the objects in the menu list. Also includes the drag and drop handlers.
+/// </summary>
 public class MyMenuItem : INotifyPropertyChanged, IDropTarget
 {
     #region ObservableCollection
@@ -139,7 +144,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
                     return;
                 }
             }
-            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.DragOver(dropInfo);
+            DragDrop.DefaultDropHandler.DragOver(dropInfo);
         }
     }
 
@@ -153,7 +158,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
         {
             if (dropItem.ItemType == MenuItemType.SubMenu)
             {
-                GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
+                DragDrop.DefaultDropHandler.Drop(dropInfo);
                 TreeViewItem tvi = dropInfo.VisualTargetItem as TreeViewItem;
                 tvi.IsExpanded = true;
                 tvi.BringIntoView();
@@ -161,7 +166,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
             else if ((dropItem.ItemType == MenuItemType.MenuItem || dropItem.ItemType == MenuItemType.Separator)
                 && !dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
             {
-                GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
+                DragDrop.DefaultDropHandler.Drop(dropInfo);
             }
         }
     }

@@ -10,6 +10,7 @@
     Title="PopupWindow"
     MinWidth="200"
     MinHeight="200"
+    PreviewKeyUp="ListBox_KeyUp"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
     SnapsToDevicePixels="True"

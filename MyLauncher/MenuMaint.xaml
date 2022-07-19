@@ -134,6 +134,9 @@
                             <TextBlock Text="{Binding Title}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
+                    <TreeView.DataContext>
+                        <local:MyMenuItem />
+                    </TreeView.DataContext>
                 </TreeView>
             </materialDesign:Card>
             <!--#endregion-->

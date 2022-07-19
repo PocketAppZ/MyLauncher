@@ -7,5 +7,5 @@ namespace MyLauncher;
 /// </summary>
 public class Root
 {
-    public ObservableCollection<Child> Children { get; set; }
+    public ObservableCollection<MyListItem> Children { get; set; }
 }

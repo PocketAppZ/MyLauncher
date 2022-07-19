@@ -169,7 +169,7 @@ public partial class MainWindow : Window
     /// Navigates to the requested dialog or window
     /// </summary>
     /// <param name="selectedIndex"></param>
-    private void NavigateToPage(NavPage selectedIndex)
+    public void NavigateToPage(NavPage selectedIndex)
     {
         switch (selectedIndex)
         {
@@ -217,9 +217,9 @@ public partial class MainWindow : Window
     /// </summary>
     public void ResetListBox()
     {
-        Child.Children?.Clear();
+        MyListItem.Children?.Clear();
         JsonHelpers.ReadJson();
-        IconHelpers.GetIcons(Child.Children);
+        IconHelpers.GetIcons(MyListItem.Children);
         PopulateMainListBox();
     }
     #endregion Clear and repopulate the listbox
@@ -269,11 +269,11 @@ public partial class MainWindow : Window
 
     #region Load the listbox
     /// <summary>
-    /// Simply sets the ItemsSource of the MainListBox to the Child.Children ObservableCollection
+    /// Simply sets the ItemsSource of the MainListBox to the MyListItem.Children ObservableCollection
     /// </summary>
     public void PopulateMainListBox()
     {
-        MainListBox.ItemsSource = Child.Children;
+        MainListBox.ItemsSource = MyListItem.Children;
     }
     #endregion Load the listbox
 
@@ -291,7 +291,7 @@ public partial class MainWindow : Window
         // Launch app/document/folder/website
         if (myMenuItem.ItemType == MenuItemType.MenuItem)
         {
-            Child ch = new()
+            MyListItem ch = new()
             {
                 FilePathOrURI = myMenuItem.FilePathOrURI,
                 Arguments = myMenuItem.Arguments,
@@ -318,9 +318,9 @@ public partial class MainWindow : Window
     /// <summary>
     /// Launch the application, folder or URI
     /// </summary>
-    /// <param name="item">Child object to open</param>
+    /// <param name="item">MyListItem object to open</param>
     /// <returns>True if successful, False if not.</returns>
-    internal static bool LaunchApp(Child item)
+    internal static bool LaunchApp(MyListItem item)
     {
         using Process launch = new();
         try
@@ -379,8 +379,8 @@ public partial class MainWindow : Window
     /// <summary>
     /// Open the selected pop-up window
     /// </summary>
-    /// <param name="item">Child object to open</param>
-    public static void OpenPopup(Child item)
+    /// <param name="item">MyListItem object to open</param>
+    public static void OpenPopup(MyListItem item)
     {
         PopupWindow popup = new(item);
 
@@ -758,7 +758,7 @@ public partial class MainWindow : Window
                 int k = (int)e.Key - 35;
                 if (k <= (MainListBox.Items.Count - 1))
                 {
-                    var item = MainListBox.Items[k] as Child;
+                    var item = MainListBox.Items[k] as MyListItem;
                     if (item.EntryType == ListEntryType.Popup)
                     {
                         OpenPopup(item);
@@ -847,7 +847,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void ListBox_KeyUp(object sender, KeyEventArgs e)
     {
-        if (MainListBox.SelectedItem != null && e.Key == Key.Enter && MainListBox.SelectedItem is Child item)
+        if (MainListBox.SelectedItem != null && e.Key == Key.Enter && MainListBox.SelectedItem is MyListItem item)
         {
             if (item.EntryType == ListEntryType.Popup)
             {
@@ -1112,7 +1112,7 @@ public partial class MainWindow : Window
         ListBoxItem lbi = sender as ListBoxItem;
         ListBox box = WindowHelpers.FindParent<ListBox>(lbi);
 
-        if (lbi.Content is Child entry && box is not null)
+        if (lbi.Content is MyListItem entry && box is not null)
         {
             if (!UserSettings.Setting.AllowRightButton && e.ChangedButton != MouseButton.Left)
             {

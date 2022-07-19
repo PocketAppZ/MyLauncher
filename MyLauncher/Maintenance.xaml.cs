@@ -1,6 +1,5 @@
 ﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
-using System;
 namespace MyLauncher;
 
 public partial class Maintenance : Window
@@ -9,13 +8,6 @@ public partial class Maintenance : Window
     private static readonly Logger log = LogManager.GetCurrentClassLogger();
     #endregion NLog
 
-    #region Properties
-    /// <summary>
-    /// Indicates if the list of entries has changed
-    /// </summary>
-    public static bool EntriesChanged { get; set; }
-    #endregion Properties
-
     public Maintenance()
     {
         InitializeComponent();
@@ -23,8 +15,6 @@ public partial class Maintenance : Window
         InitSettings();
 
         LoadTreeView();
-
-        DataContext = Child.Children;
     }
 
     #region Settings
@@ -55,8 +45,8 @@ public partial class Maintenance : Window
         // Settings change event
         UserSettings.Setting.PropertyChanged += UserSettingChanged;
 
-        //Child.Entries.ListChanged += Entries_ListChanged;
-        Child.Children.CollectionChanged += Children_CollectionChanged;
+        //MyListItem.Entries.ListChanged += Entries_ListChanged;
+        MyListItem.Children.CollectionChanged += Children_CollectionChanged;
     }
     #endregion Settings
 
@@ -88,7 +78,7 @@ public partial class Maintenance : Window
         _ = TvMaint.Focus();
         if (TvMaint.Items.Count > 0)
         {
-            Child first = Child.Children.FirstOrDefault();
+            MyListItem first = MyListItem.Children.FirstOrDefault();
             if (TvMaint.ItemContainerGenerator.ContainerFromItem(first) is TreeViewItem tvi)
             {
                 tvi.IsSelected = true;
@@ -110,15 +100,25 @@ public partial class Maintenance : Window
     }
     #endregion Window events
 
+    #region TreeView events
+    private void TvMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+        if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
+        {
+            tbTitle.Dispatcher.BeginInvoke(new Action(() => tbTitle.SelectAll()));
+        }
+    }
+    #endregion TreeView events
+
     #region Load the TreeView
     /// <summary>
     /// Loads the TreeView with the contents of the Observable Collection
     /// </summary>
     private void LoadTreeView()
     {
-        if (Child.Children is not null)
+        if (MyListItem.Children is not null)
         {
-            TvMaint.ItemsSource = Child.Children;
+            TvMaint.ItemsSource = MyListItem.Children;
         }
     }
     #endregion Load the TreeView
@@ -131,7 +131,7 @@ public partial class Maintenance : Window
     private bool CheckForUntitled()
     {
         // Loop through the list backwards checking for "untitled" entries
-        if (Child.Children.Any(x => string.Equals(x.Title, "untitled", StringComparison.OrdinalIgnoreCase)))
+        if (MyListItem.Children.Any(x => string.Equals(x.Title, "untitled", StringComparison.OrdinalIgnoreCase)))
         {
             log.Error("New item prohibited, \"untitled\" entry in list");
             MDCustMsgBox mbox = new("Please update or delete the \"untitled\" entry before adding another new entry.",
@@ -154,7 +154,7 @@ public partial class Maintenance : Window
     /// </summary>
     private void NewItem()
     {
-        Child newitem = new()
+        MyListItem newitem = new()
         {
             Title = "untitled",
             FilePathOrURI = string.Empty,
@@ -162,7 +162,7 @@ public partial class Maintenance : Window
             ItemID = Guid.NewGuid().ToString(),
             IsSelected = true,
         };
-        Child.Children.Add(newitem);
+        MyListItem.Children.Add(newitem);
         _ = tbTitle.Focus();
         ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
     }
@@ -174,17 +174,17 @@ public partial class Maintenance : Window
     /// </summary>
     private void NewPopup()
     {
-        Child newitem = new()
+        MyListItem newitem = new()
         {
             Title = "untitled",
             FilePathOrURI = string.Empty,
             IconSource = "Menu.png",
-            ChildrenOfChild = new ObservableCollection<Child>(),
+            MyListItems = new ObservableCollection<MyListItem>(),
             EntryType = ListEntryType.Popup,
             ItemID = Guid.NewGuid().ToString(),
             IsSelected= true,
         };
-        Child.Children.Add(newitem);
+        MyListItem.Children.Add(newitem);
         _ = tbTitle.Focus();
         ClearAndQueueMessage("New \"untitled\" pop-up list was created.", 3000);
     }
@@ -198,11 +198,11 @@ public partial class Maintenance : Window
     {
         if (TvMaint.SelectedItem != null)
         {
-            Child itemToDelete = (TvMaint.SelectedItem as Child);
+            MyListItem itemToDelete = (TvMaint.SelectedItem as MyListItem);
 
-            if (itemToDelete?.ChildrenOfChild is not null && itemToDelete.ChildrenOfChild.Count > 0)
+            if (itemToDelete?.MyListItems is not null && itemToDelete.MyListItems.Count > 0)
             {
-                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.ChildrenOfChild.Count} of its child items?",
+                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.MyListItems.Count} of its item items?",
                                         "Delete All?",
                                         ButtonType.YesNo,
                                         true,
@@ -215,7 +215,7 @@ public partial class Maintenance : Window
                     return;
                 }
             }
-            RemoveByID(Child.Children, itemToDelete);
+            RemoveByID(MyListItem.Children, itemToDelete);
         }
         else
         {
@@ -240,25 +240,24 @@ public partial class Maintenance : Window
     /// <summary>
     /// Removes a single item from the list.
     /// </summary>
-    /// <param name="children">ObservableCollection to search</param>
-    /// <param name="delItem">Child object to remove</param>
-    private void RemoveByID(ObservableCollection<Child> children, Child delItem)
+    /// <param name="listItems">ObservableCollection to search</param>
+    /// <param name="delItem">MyListItem object to remove</param>
+    private void RemoveByID(ObservableCollection<MyListItem> listItems, MyListItem delItem)
     {
-        for (int i = children.Count - 1; i >= 0; --i)
+        for (int i = listItems.Count - 1; i >= 0; --i)
         {
-            Child child = children[i];
+            MyListItem item = listItems[i];
 
-            if (child.ItemID == delItem.ItemID && child.Title == delItem.Title)
+            if (item.ItemID == delItem.ItemID && item.Title == delItem.Title)
             {
-                children.RemoveAt(i);
-                log.Debug($"Removing \"{child.Title}\" - {child.ItemID}");
-                ClearAndQueueMessage($"\"{child.Title}\" was removed.", 3000);
-                EntriesChanged = true;
+                listItems.RemoveAt(i);
+                log.Debug($"Removing \"{item.Title}\" - {item.ItemID}");
+                ClearAndQueueMessage($"\"{item.Title}\" was removed.", 3000);
                 break;
             }
-            else if (child.ChildrenOfChild != null)
+            else if (item.MyListItems != null)
             {
-                RemoveByID(child.ChildrenOfChild, delItem);
+                RemoveByID(item.MyListItems, delItem);
             }
         }
     }
@@ -290,7 +289,7 @@ public partial class Maintenance : Window
         if (result == true)
         {
             tbPath.Text = dlgOpen.FileName;
-            Child entry = (Child)TvMaint.SelectedItem;
+            MyListItem entry = (MyListItem)TvMaint.SelectedItem;
             entry.FilePathOrURI = tbPath.Text;
         }
     }
@@ -310,7 +309,7 @@ public partial class Maintenance : Window
         if (dialogFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
             tbPath.Text = dialogFolder.SelectedPath;
-            Child entry = (Child)TvMaint.SelectedItem;
+            MyListItem entry = (MyListItem)TvMaint.SelectedItem;
             entry.FilePathOrURI = tbPath.Text;
         }
     }
@@ -372,6 +371,21 @@ public partial class Maintenance : Window
         e.Handled = true;
         pbxNewItem.IsPopupOpen = false;
     }
+
+    private void BtnData_Click(object sender, RoutedEventArgs e)
+    {
+        TextFileViewer.ViewTextFile(JsonHelpers.GetMainListFile());
+    }
+
+    private void BtnFolder_Click(object sender, RoutedEventArgs e)
+    {
+        MyListItem item = new()
+        {
+            Title = "App Folder",
+            FilePathOrURI = AppInfo.AppDirectory
+        };
+        MainWindow.LaunchApp(item);
+    }
     #endregion Button events
 
     #region Move to next control on Enter
@@ -412,7 +426,7 @@ public partial class Maintenance : Window
     {
         if (CheckForUntitled())
         {
-            Child newitem = new();
+            MyListItem newitem = new();
             Button btn = sender as Button;
             switch (btn.Content.ToString())
             {
@@ -471,8 +485,7 @@ public partial class Maintenance : Window
             {
                 newitem.ItemID = Guid.NewGuid().ToString();
                 newitem.IsSelected = true;
-                Child.Children.Add(newitem);
-                EntriesChanged = true;
+                MyListItem.Children.Add(newitem);
                 _ = tbTitle.Focus();
                 ClearAndQueueMessage($"New \"{newitem.Title}\" item was created.", 3000);
             }
@@ -503,13 +516,13 @@ public partial class Maintenance : Window
             if (Path.GetDirectoryName(dlgOpen.FileName) == dlgOpen.InitialDirectory)
             {
                 tbIconFile.Text = Path.GetFileName(dlgOpen.FileName);
-                Child entry = (Child)TvMaint.SelectedItem;
+                MyListItem entry = (MyListItem)TvMaint.SelectedItem;
                 entry.IconSource = tbIconFile.Text;
             }
             else
             {
                 tbIconFile.Text = dlgOpen.FileName;
-                Child entry = (Child)TvMaint.SelectedItem;
+                MyListItem entry = (MyListItem)TvMaint.SelectedItem;
                 entry.IconSource = tbIconFile.Text;
             }
         }
@@ -519,7 +532,6 @@ public partial class Maintenance : Window
     #region Collection changed event
     private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
-        EntriesChanged = true;
         Debug.WriteLine($"List changed, action was: {e.Action} {e.OldStartingIndex} {e.NewStartingIndex}");
     }
     #endregion Collection changed event
@@ -558,27 +570,4 @@ public partial class Maintenance : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
-
-    private void BtnData_Click(object sender, RoutedEventArgs e)
-    {
-        TextFileViewer.ViewTextFile(JsonHelpers.GetMainListFile());
-    }
-
-    private void BtnFolder_Click(object sender, RoutedEventArgs e)
-    {
-        Child child = new()
-        {
-            Title = "App Folder",
-            FilePathOrURI = AppInfo.AppDirectory
-        };
-        MainWindow.LaunchApp(child);
-    }
-
-    private void TvMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
-        if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
-        {
-            tbTitle.Dispatcher.BeginInvoke(new Action(() => tbTitle.SelectAll()));
-        }
-    }
 }

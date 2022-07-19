@@ -7,27 +7,27 @@ public partial class PopupWindow : Window
     #region Properties
     public string PopupTitle { get; set; }
     public string PopupID { get; set; }
-    public Child ThisPopup { get; set; }
+    public MyListItem ThisPopup { get; set; }
     #endregion Properties
 
-    public PopupWindow(Child child)
+    public PopupWindow(MyListItem popup)
     {
         InitializeComponent();
         DataContext = this;
 
-        InitPopUp(child);
+        InitPopUp(popup);
 
-        PopulateListBox(child);
+        PopulateListBox(popup);
     }
 
     #region Init Pop-up
     /// <summary>
     /// Sets UI elements according to the settings value
     /// </summary>
-    /// <param name="child"></param>
-    private void InitPopUp(Child child)
+    /// <param name="popup"></param>
+    private void InitPopUp(MyListItem popup)
     {
-        ThisPopup = child;
+        ThisPopup = popup;
         PopupID = ThisPopup.ItemID;
         PopupTitle = ThisPopup.Title;
         Title = "My Launcher - Pop-Up List";
@@ -81,13 +81,13 @@ public partial class PopupWindow : Window
 
     #region Load the listbox
     /// <summary>
-    /// Populate the ListBox with the Child items for this pop-up.
+    /// Populate the ListBox with the MyListItem items for this pop-up.
     /// </summary>
     /// <param name="child"></param>
-    private void PopulateListBox(Child child)
+    private void PopulateListBox(MyListItem child)
     {
-        IconHelpers.GetIcons(child.ChildrenOfChild);
-        PopupListBox.ItemsSource = child.ChildrenOfChild;
+        IconHelpers.GetIcons(child.MyListItems);
+        PopupListBox.ItemsSource = child.MyListItems;
     }
     #endregion Load the listbox
 
@@ -129,7 +129,7 @@ public partial class PopupWindow : Window
     /// Save the pop-up window size and position
     /// </summary>
     /// <param name="child"></param>
-    public void SavePopupPosition(Child child)
+    public void SavePopupPosition(MyListItem child)
     {
         child.PopupHeight = Height;
         child.PopupLeft = Left;
@@ -234,7 +234,7 @@ public partial class PopupWindow : Window
     /// </summary>
     private void ListBox_KeyUp(object sender, KeyEventArgs e)
     {
-        if (PopupListBox.SelectedItem != null && e.Key == Key.Enter && PopupListBox.SelectedItem is Child item)
+        if (PopupListBox.SelectedItem != null && e.Key == Key.Enter && PopupListBox.SelectedItem is MyListItem item)
         {
             if (item.EntryType == ListEntryType.Popup)
             {
@@ -260,17 +260,21 @@ public partial class PopupWindow : Window
                 int k = (int)e.Key - 35;
                 if (k <= (PopupListBox.Items.Count - 1))
                 {
-                    Child child = PopupListBox.Items[k] as Child;
-                    if (child.EntryType == ListEntryType.Popup)
+                    MyListItem listItem = PopupListBox.Items[k] as MyListItem;
+                    if (listItem.EntryType == ListEntryType.Popup)
                     {
-                        MainWindow.OpenPopup(child);
+                        MainWindow.OpenPopup(listItem);
                     }
                     else
                     {
-                        MainWindow.LaunchApp(child);
+                        MainWindow.LaunchApp(listItem);
                     }
                     PopupListBox.SelectedItem = null;
                 }
+            }
+            if (e.Key == Key.OemComma)
+            {
+                MainWindow.ShowWindow<SettingsWindow>();
             }
         }
     }
