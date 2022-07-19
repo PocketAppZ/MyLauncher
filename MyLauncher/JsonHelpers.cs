@@ -244,7 +244,7 @@ internal static class JsonHelpers
             CheckPathExists = true,
             CheckFileExists = false,
             OverwritePrompt = true,
-            FileName = $"MyLauncher_{tStamp}_backup.json",
+            FileName = $"MyLauncher_{tStamp}_List_backup.json",
             Filter = "JSON (*.json)|*.json|All files (*.*)|*.*"
         };
         if (dlgSave.ShowDialog() == true)
@@ -285,7 +285,7 @@ internal static class JsonHelpers
             CheckPathExists = true,
             CheckFileExists = false,
             OverwritePrompt = true,
-            FileName = $"MyLauncher_{tStamp}_menu_backup.json",
+            FileName = $"MyLauncher_{tStamp}_Menu_backup.json",
             Filter = "JSON (*.json)|*.json|All files (*.*)|*.*"
         };
         if (dlgSave.ShowDialog() == true)
