@@ -10,12 +10,21 @@ main window. As development continued, I made those things customizable and adde
 as pop-up windows and the system tray menu from the Tray Launcher app. You don't need to be a
 nonagenarian to use My Launcher.
 
+A note on terminology. When this document refers to "List" that refers to the items in the main
+window or pop-up windows. "Menu" refers to items in the tray menu.
+
 
 Getting Started
 ===============
 When you first start My Launcher, you will see the main window with a single entry for Calculator.
 Clicking on the Navigation menu (the hamburger icon at the left end of the colored bar) will bring
-up choices for List Maintenance, Menu Maintenance, App Settings, About and Exit.
+up choices for List Maintenance, Menu Maintenance, App Settings, About and Exit. More on these below.
+
+
+Using My Launcher
+=================
+After adding your apps, folders, etc. using My Launcher is as easy as pointing the mouse and clicking.
+You can choose to use the lists in the main window or the tray menu or both.
 
 
 List Maintenance
@@ -76,42 +85,60 @@ clicking the Save & Close button or closing the window.
 There is also a Backup List button which will copy the list file to a location of your choice.
 
 
+Menu Maintenance
+================
+The Menu Maintenance window is very similar to the List Maintenance window with a couple of
+exceptions. There isn't a text box for an icon file as icons are not available in the menu.
+Also, there isn't an option for Special Apps.
 
-	Settings
-	--------
-	In the top section you can choose the initial view, UI size, theme and color.
+To add a new item, click the New Item button. You will see a pop-up menu with three item types.
 
-	In the middle section you can select the amount of delay between opening successive documents.
-	Choosing a longer time may be helpful on slower computers.
+  - Menu item. This menu item can be an application, a document, a folder or a website.
 
-	In the bottom section you can choose to have the ### window close after it opens the list
-	items that are selected. You can choose to show or not show the check boxes and file type icons. You
-	can choose to have the ###s stay on top of other windows and the detail level of the log
-	file.
+  - Submenu. This menu item is a sub menu that can contain normal items and other sub-menus.
 
-	Note that these settings, along with widow size and position, are saved when the application is closed.
+  - Separator. This is a horizontal line that can be used to delineate sections in the menu.
 
-	About
-	-----
-	The About page displays version information and a link to the GitHib repository.
+See the discussion of List Maintenance above for the other options.
+
+
+App Settings
+============
+In the top section you can choose the theme, primary and secondary accents colors and UI size.
+You can also set the font weight, spacing and border width of the list items. Finally you can
+set the font size in the tray menu.
+
+The middle section allows you to set the title text on the main page.
+
+The bottom section has several options that control how My Launcher works. Hopefully the
+descriptions are self explanatory.
+
+Note that these settings, along with widow size and position, are saved when the application
+is closed.
 
 
 Keys
 ====
 These keyboard shortcuts are available in the main window:
 
-	Ctrl + 1 through Ctrl + 9 = will open the corresponding entry in the main window or a pop-up window.
-	Ctrl + Comma =  Show the Settings dialog.
-	Ctrl + L = Open the List Maintenance window.
-	Ctrl + M = Open the Menu Maintenance window.
-	Ctrl + Numpad Plus = Increase size.
-	Ctrl + Numpad Minus = Decrease size.
+	Ctrl + 1 through Ctrl + 9 = will open the corresponding entry in the main window (or a pop-up window).
+	* The 1-9 keys are those located above the QWERTY row and not those located in the number pad.
+	Ctrl + Comma =  Shows the Settings dialog.
+	Ctrl + L = Opens the List Maintenance window.
+	Ctrl + M = Opens the Menu Maintenance window.
+	Ctrl + Numpad Plus = Increases size.
+	Ctrl + Numpad Minus = Decreases size.
 	Ctrl + Shift + M = Changes the theme.
 	Ctrl + Shift + P = Changes the primary accent color.
 	Ctrl + Shift + S = Changes the secondary accent color.
-	Enter = Launch the selected entry.
+	Enter = Launches the selected entry.
 	Escape = Clears the selection.
-	F1 = Show the About dialog.
+	F1 = Shows the About dialog.
+
+
+About
+=====
+The About page displays version information and a link to the GitHib repository.
 
 
 Uninstalling
