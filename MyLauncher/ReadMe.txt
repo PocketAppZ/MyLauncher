@@ -11,7 +11,9 @@ as pop-up windows and the system tray menu from the Tray Launcher app. You don't
 nonagenarian to use My Launcher.
 
 A note on terminology. When this document refers to "List" that refers to the items in the main
-window or pop-up windows. "Menu" refers to items in the tray menu.
+window or pop-up windows. "Menu" refers to items in the tray menu. This is important to be aware of
+because the list items and menu items are kept in separate files and the file formats are different
+and are not interchangeable.
 
 
 Getting Started
@@ -19,6 +21,8 @@ Getting Started
 When you first start My Launcher, you will see the main window with a single entry for Calculator.
 Clicking on the Navigation menu (the hamburger icon at the left end of the colored bar) will bring
 up choices for List Maintenance, Menu Maintenance, App Settings, About and Exit. More on these below.
+If you wish to import a Tray Launcher menu file, you may want to stop here and read the conversion.txt
+file before returning to this document.
 
 
 Using My Launcher
@@ -75,6 +79,15 @@ To delete an item from the list, highlight that item in the list on the left sid
 then click the Delete Item button. If you attempt to delete a pop-up that has child items, you will
 be asked to confirm the deletion.
 
+Items can be updated by first selecting them in the panel on the left and then by updating the fields
+on the right side of the maintenance window. Pay attention to the text in the colored area in the top
+box, it will change depending on the item type.
+
+Items can be rearranged by dragging & dropping them into a new position in the panel on the left.
+"Normal" items can be dropped onto a pop-up to move them into the pop-up. While dragging over a pop-up
+the indicator will change to a rectangle. Pop-ups can be expanded by clicking the chevron symbol to the
+left.
+
 When you have finished updating the list, click the Save & Close button. Even though you can see
 changes in the main window, the list is not actually saved until the Save & Close button has been
 clicked or the List Maintenance window is closed.
@@ -99,6 +112,11 @@ To add a new item, click the New Item button. You will see a pop-up menu with th
 
   - Separator. This is a horizontal line that can be used to delineate sections in the menu.
 
+Items can be rearranged by dragging & dropping them into a new position in the panel on the left.
+A Menu item or a Separator can be dropped on a Submenu item. Just like the list items, when dragging
+over a submenu the indicator will change to a rectangle. Submenus can be expanded by clicking the
+chevron symbol to the left.
+
 See the discussion of List Maintenance above for the other options.
 
 
@@ -115,6 +133,11 @@ descriptions are self explanatory.
 
 Note that these settings, along with widow size and position, are saved when the application
 is closed.
+
+
+About
+=====
+The About page displays version information and a link to the GitHib repository.
 
 
 Keys
@@ -136,9 +159,23 @@ These keyboard shortcuts are available in the main window:
 	F1 = Shows the About dialog.
 
 
-About
-=====
-The About page displays version information and a link to the GitHib repository.
+Miscellaneous
+=============
+In the main window and pop-up windows, you can adjust the width of the window so that the horizontal
+scroll bar disappears by double clicking on the accent colored bar at the top.
+
+If you see the question mark icon next to a list item it could be that either the file or folder could
+not be found or that My Launcher could not extract the icon. The latter can happen with certain UWP apps.
+Feel free to add you own icon if you don't want to look at the question mark.
+
+The three-dot icon in the upper right of the main window will open a menu that has options to view the
+readme file and to view the log file.
+
+The three-dot icon in the upper right of the maintenance windows will open a menu that has options to
+open the data files and to open the app's folder.
+
+In the maintenance windows, the "i" icon will open a pop-up that shows additional information about the
+selected item.
 
 
 Uninstalling
