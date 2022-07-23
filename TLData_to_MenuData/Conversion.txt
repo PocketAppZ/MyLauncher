@@ -6,32 +6,78 @@ Introduction
 TLDataToMLData is part of My Launcher. It is used to convert Tray Launcher data to either My Launcher
 list data or menu data or both.
 
+A note on terminology. When this document refers to "List" that refers to the items in the main
+window or pop-up windows. "Menu" refers to items in the tray menu. This is important to be aware of
+because the list items and menu items are kept in separate files and the file formats are different.
+
 
 Using TLDataToMLData
 ====================
-After starting TLDataToMLData, enter the file name of the Tray Launcher menu data file in the upper
-text box. Clicking the file icon on the right will bring up an open file dialog that will start in the
-default Tray Launcher folder. The filename for the menu data is MenuItems.xml. If Tray Launcher is not
-installed in the default location or if you wish to use a backup, navigate to the appropriate location
-and select the menu .XML file.
+After starting TLDataToMLData, select either the "Menu Items" or "List Items" conversion by clicking
+corresponding radio button. The My Launcher file name will be filled in for you. Note that the file name
+will change depending on the output file type.
 
-Next, enter the name of the My Launcher data file. Clicking the file icon on the right will bring up an
-open file dialog that will start in the desktop folder. Choose a filename that is appropriate for the
-type of data you are converting to, either list or menu.
+The file name of the Tray Launcher menu data is set to the default location.
 
-Then click the button corresponding to the type of data you are converting to. The area below the buttons
+Change either file name if needed. Clicking the file icon on the right of either file name will bring
+up an open file dialog. In the case of the My Launcher output file the default location will be on the
+desktop.
+
+In the case of the Tray Launcher file the dialog will open in the default Tray Launcher folder.
+The filename for the menu data is MenuItems.xml. If Tray Launcher is not installed in the default location
+or if you wish to use a backup, navigate to the appropriate location and select the menu .XML file.
+
+Make note of the output file's name and location. You will need it during the import phase.
+
+
+Converting the file
+===================
+Once the type of conversion is selected and the file names are filled in, decide if you want to keep a
+copy of the conversion log by selecting the checkbox at the bottom to save the output to a text file on
+the desktop.
+
+Click the Convert button near the upper right hand corner of the window. The area below the buttons
 will display a log of the conversion process. Any error messages will be displayed there as well.
 
-When converting to menu data, Tray Launcher Section Heading entries will be skipped as there is no analogous
-feature in My Launcher menus. When converting to list data, Section Heading and Separators are skipped as
+When converting to Menu data, Tray Launcher Section Heading entries will be skipped as there is no analogous
+feature in My Launcher menus. When converting to List data, Section Heading and Separators are skipped as
 well.
 
-Once the conversion process is complete, copy the .json output file(s) to the My Launcher program folder,
-renaming as needed.
+Once the conversion process is complete, you can close the conversion utility.
 
-Start My Launcher and navigate to the appropriate maintenance type and verify the data has been converted
-to your liking. The conversion process may not be flawless, make any changes that you see fit and the save
-the data file.
+
+Importing the files
+===================
+Start My Launcher and navigate to the appropriate maintenance type from the navigation (hamburger) menu.
+Select List Maintenance to import items for the main and pop-up windows. Select Menu Maintenance for menu
+items.
+
+Once you have opened the appropriate maintenance window, click the "Import List"" button located towards
+the bottom right. Use the open file dialog to select the file that was created by the conversion utility.
+If you select a file that is the wrong type you will see an error message. Otherwise the converted file
+will be imported.
+
+
+Making Changes
+==============
+The conversion process may not be flawless, make any changes that you see fit.
+
+Items can be updated by first selecting them in the panel on the left and then by updating the fields
+on the right side of the maintenance window. Pay attention to the text in the colored area in the top
+box, it will change depending on the item type.
+
+Items can be rearranged by dragging & dropping them into a new position in the panel on the left.
+
+In the case of List items, "Normal" items can be dropped onto a pop-up to move them into the pop-up.
+While dragging over a pop-up the indicator will change to a rectangle. Pop-ups can be expanded by
+clicking the chevron symbol to the left.
+
+In the case of Menus, a "Menu" item or a Separator can be dropped on a Submenu item. Just like the list
+items, when dragging over a submenu the indicator will change to a rectangle. Submenus can be expanded by
+clicking the chevron symbol to the left.
+
+When you are done click the "Save & Close" button. If you don't wish to save then click the "Discard &
+Close" button.
 
 
 Uninstalling

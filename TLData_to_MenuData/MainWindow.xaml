@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Convert Tray Launcher Data to My Launcher Data"
-    Width="660"
+    Width="800"
     Height="400"
     MinWidth="380"
     MinHeight="300"
@@ -19,17 +19,18 @@
     <Grid>
         <!--#region Row definitions-->
         <Grid.RowDefinitions>
-            <RowDefinition Height="15" />
-            <RowDefinition Height="34" />
-            <RowDefinition Height="34" />
+            <RowDefinition Height="10" />
             <RowDefinition Height="38" />
+            <RowDefinition Height="36" />
+            <RowDefinition Height="36" />
             <RowDefinition />
+            <RowDefinition Height="34" />
         </Grid.RowDefinitions>
         <!--#endregion-->
 
         <!--#region Tray Launcher input file-->
         <Grid
-            Grid.Row="1"
+            Grid.Row="3"
             Margin="15,5,15,5">
             <Image
                 Width="24"
@@ -39,7 +40,7 @@
             <TextBox x:Name="tbTrayLauncherFile"
                 Margin="40,0,20,0"
                 VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Tray Launcher menu file" />
+                materialDesign:HintAssist.Hint="Tray Launcher menu file." />
             <Button x:Name="BtnTLFilePicker"
                 Width="24"
                 Height="24"
@@ -71,7 +72,7 @@
             <TextBox x:Name="tbMyLauncherFile"
                 Margin="40,0,20,0"
                 VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="My Launcher list or menu file" />
+                materialDesign:HintAssist.Hint="My Launcher list or menu file. Select conversion type above." />
             <Button x:Name="BtnMLFilePicker"
                 Width="24"
                 Height="24"
@@ -92,34 +93,41 @@
         <!--#endregion-->
 
         <!--#region Row of buttons-->
-        <StackPanel
-            Grid.Row="3"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <Button x:Name="BtnConvert"
-                Width="180"
-                Height="30"
-                Margin="10,0"
+        <Grid Grid.Row="1">
+            <TextBlock
+                Margin="15,0"
                 VerticalAlignment="Center"
-                Click="BtnConvertMenu_Click"
-                Content="Convert to Menu Items"
-                Style="{StaticResource MaterialDesignOutlinedDarkButton}" />
+                FontSize="15"
+                Text="Convert To:" />
+            <Grid Margin="100,0,0,0">
+                <RadioButton
+                    Name="rbMenu"
+                    Margin="10,0,10,0"
+                    Checked="RbMenu_Checked"
+                    Content="Menu Items" />
+                <RadioButton
+                    Name="rbList"
+                    Margin="120,0,10,0"
+                    Checked="RbList_Checked"
+                    Content="List Items" />
+            </Grid>
             <Button
-                Width="180"
+                Width="110"
                 Height="30"
-                Margin="10,0"
-                VerticalAlignment="Center"
+                Margin="0,0,150,0"
+                HorizontalAlignment="Right"
                 Click="BtnConvertList_Click"
-                Content="Convert to List Items"
+                Content="Convert"
                 Style="{StaticResource MaterialDesignOutlinedDarkButton}" />
             <Button
-                Width="180"
+                Width="110"
                 Height="30"
-                Margin="10,0"
+                Margin="0,0,15,0"
+                HorizontalAlignment="Right"
                 Click="BtnReadMe_Click"
-                Content="Open ReadMe"
+                Content="Help"
                 Style="{StaticResource MaterialDesignOutlinedDarkButton}" />
-        </StackPanel>
+        </Grid>
         <!--#endregion-->
 
         <!--#region ListBox for messages-->
@@ -146,5 +154,10 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
         <!--#endregion-->
+
+        <CheckBox x:Name="cbSaveLog"
+            Grid.Row="5"
+            Margin="15,0,0,10"
+            Content="Save conversion log to Desktop" />
     </Grid>
 </Window>

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Text.Json;
 using System.Windows;
@@ -31,21 +32,46 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        tbTrayLauncherFile.Text = Environment.ExpandEnvironmentVariables("%localappdata%\\Programs\\T_K\\TrayLauncher\\MenuItems.xml");
+        _ = lbxOutput.Items.Add("1. Select either the \"Menu Items\" or \"List Items\" conversion type. The My Launcher file name will be filled for you.");
+        _ = lbxOutput.Items.Add("2. The Tray Launcher file name is set to the default location.");
+        _ = lbxOutput.Items.Add("3. Change either file name if needed.");
+        _ = lbxOutput.Items.Add("4. Check the box at the bottom to save the output to a text file.");
+        _ = lbxOutput.Items.Add("5. Click the Convert button when ready.");
+        _ = lbxOutput.Items.Add("6. Use the Import function in the appropriate Maintenance window in My Launcher to import the converted file.");
     }
 
     #region Button click events
-    private void BtnConvertMenu_Click(object sender, RoutedEventArgs e)
+    private void RbMenu_Checked(object sender, RoutedEventArgs e)
     {
-        lbxOutput.Items.Clear();
-        ReadTrayLauncher();
-        ConvertToMLMenu();
+        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        tbMyLauncherFile.Text = Path.Combine(desktop, "Converted_MenuItems.json");
+    }
+
+    private void RbList_Checked(object sender, RoutedEventArgs e)
+    {
+        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        tbMyLauncherFile.Text = Path.Combine(desktop, "Converted_LauncherItems.json");
     }
 
     private void BtnConvertList_Click(object sender, RoutedEventArgs e)
     {
         lbxOutput.Items.Clear();
-        ReadTrayLauncher();
-        ConvertToMLList();
+        if (rbList.IsChecked == true)
+        {
+            ReadTrayLauncher();
+            ConvertToMLList();
+        }
+        else if (rbMenu.IsChecked == true)
+        {
+            ReadTrayLauncher();
+            ConvertToMLMenu();
+        }
+        else
+        {
+            _ = lbxOutput.Items.Add("⚠️ Please select conversion type!");
+            SystemSounds.Exclamation.Play();
+        }
     }
 
     private void BtnReadMe_Click(object sender, RoutedEventArgs e)
@@ -118,7 +144,7 @@ public partial class MainWindow : Window
     {
         if (XmlData == null)
         {
-            lbxOutput.Items.Add("⚠️ Error converting data");
+            _ = lbxOutput.Items.Add("⚠️ Error converting data");
             SystemSounds.Exclamation.Play();
             return;
         }
@@ -177,7 +203,7 @@ public partial class MainWindow : Window
                 child.ItemID = guid.ToString();
                 child.EntryType = ListEntryType.Normal;
                 listItems.Add(child);
-                lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Normal item");
+                _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Normal item");
                 keep++;
             }
         }
@@ -192,7 +218,7 @@ public partial class MainWindow : Window
     {
         if (XmlData == null)
         {
-            lbxOutput.Items.Add("⚠️ Error converting data");
+            _ = lbxOutput.Items.Add("⚠️ Error converting data");
             SystemSounds.Exclamation.Play();
             return;
         }
@@ -254,7 +280,7 @@ public partial class MainWindow : Window
                 menuItem.ItemID = guid.ToString();
                 menuItem.ItemType = MenuItemType.MenuItem;
                 menuItems.Add(menuItem);
-                lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Normal item");
+                _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Normal item");
                 keep++;
             }
         }
@@ -273,18 +299,39 @@ public partial class MainWindow : Window
             JsonSerializerOptions opts = new() { WriteIndented = true };
             string json = JsonSerializer.Serialize(list, opts);
             File.WriteAllText(jsonDataFile, json);
-            lbxOutput.Items.Add($"✔️ Saving JSON file: \"{jsonDataFile}\"");
+            _ = lbxOutput.Items.Add($"✔️ Saving JSON file: \"{jsonDataFile}\"");
         }
         catch (Exception ex)
         {
-            lbxOutput.Items.Add($"⚠️ Error saving JSON file: \"{jsonDataFile}\"");
-            lbxOutput.Items.Add($"⚠️ {ex.Message}");
+            _ = lbxOutput.Items.Add($"⚠️ Error saving JSON file: \"{jsonDataFile}\"");
+            _ = lbxOutput.Items.Add($"⚠️ {ex.Message}");
             SystemSounds.Exclamation.Play();
         }
         lbxOutput.SelectedIndex = lbxOutput.Items.Count - 1;
         lbxOutput.ScrollIntoView(lbxOutput.SelectedItem);
+        SaveOutput(jsonDataFile);
     }
     #endregion Write JSON
+
+    #region Save listbox to text file
+    private void SaveOutput(string jsonfile)
+    {
+        if (cbSaveLog.IsChecked == true)
+        {
+            string convtype;
+            if (jsonfile.Contains("Menu"))
+            {
+                convtype = "Convert_to_Menu_Log.txt";
+            }
+            else
+            {
+                convtype = "Convert_to_List_Log.txt";
+            }
+            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            File.AppendAllLines(Path.Combine(desktop, convtype), lbxOutput.Items.Cast<string>());
+        }
+    }
+    #endregion Save listbox to text file
 
     #region Unhandled Exception Handler
     /// <summary>
@@ -295,7 +342,7 @@ public partial class MainWindow : Window
     private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
     {
         Exception e = (Exception)args.ExceptionObject;
-        MessageBox.Show($"An error has occurred.\n {e.Message}",
+        _ = MessageBox.Show($"An error has occurred.\n {e.Message}",
                             "Error",
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
