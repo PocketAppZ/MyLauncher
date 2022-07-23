@@ -240,7 +240,7 @@ public partial class MainWindow : Window
     /// <summary>
     /// Uses a CompositeCollection to add the static menu items to the ItemsSource
     /// </summary>
-    private void PopulateTrayMenu()
+    public void PopulateTrayMenu()
     {
         MyMenuItem trayMainWindow = new()
         {

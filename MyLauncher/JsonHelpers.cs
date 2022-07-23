@@ -378,6 +378,128 @@ internal static class JsonHelpers
     }
     #endregion Get the name of the main list JSON file
 
+    #region Import a List file
+    /// <summary>
+    /// Imports a json file to be used as the List file
+    /// </summary>
+    /// <returns>True if successful, false otherwise</returns>
+    internal static bool ImportListFile()
+    {
+        OpenFileDialog dlgOpen = new()
+        {
+            DefaultExt = "json",
+            Title = "Choose a File to Import",
+            Multiselect = false,
+            CheckFileExists = false,
+            CheckPathExists = true,
+            Filter = "JSON (*.json)|*.json"
+        };
+        bool? result = dlgOpen.ShowDialog();
+        if (result == true)
+        {
+            try
+            {
+                log.Info($"Importing {dlgOpen.FileName}");
+                string json = File.ReadAllText(dlgOpen.FileName);
+                const string findit = "\"Children\":";
+                if (!json.Contains(findit, StringComparison.CurrentCulture))
+                {
+                    log.Error($"Import failed. {dlgOpen.FileName}  is not a List Items file.");
+                    SystemSounds.Exclamation.Play();
+                    MDCustMsgBox mbox = new("This file is not a List Items file.",
+                                        "ERROR",
+                                        ButtonType.Ok,
+                                        true,
+                                        true,
+                                        null,
+                                        true);
+                    _ = mbox.ShowDialog();
+                    return false;
+                }
+                MyListItem.Children.Clear();
+                MyListItem.Children = JsonSerializer.Deserialize<ObservableCollection<MyListItem>>(json);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex, "Import failed.");
+                SystemSounds.Exclamation.Play();
+                MDCustMsgBox mbox = new($"Import failed.\n{ex.Message}.",
+                                    "ERROR",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    null,
+                                    true);
+                _ = mbox.ShowDialog();
+                return false;
+            }
+        }
+        return false;
+    }
+    #endregion Import a List file
+
+    #region Import a Menu file
+    /// <summary>
+    /// Imports a json file to be used as the Menu file
+    /// </summary>
+    /// <returns>True if successful, false otherwise</returns>
+    internal static bool ImportMenuFile()
+    {
+        OpenFileDialog dlgOpen = new()
+        {
+            DefaultExt = "json",
+            Title = "Choose a File to Import",
+            Multiselect = false,
+            CheckFileExists = false,
+            CheckPathExists = true,
+            Filter = "JSON (*.json)|*.json"
+        };
+        bool? result = dlgOpen.ShowDialog();
+        if (result == true)
+        {
+            try
+            {
+                log.Info($"Importing {dlgOpen.FileName}");
+                string json = File.ReadAllText(dlgOpen.FileName);
+                const string findit = "\"MenuItems\":";
+                if (!json.Contains(findit, StringComparison.CurrentCulture))
+                {
+                    log.Error($"Import failed. {dlgOpen.FileName}  is not a Menu Items file.");
+                    SystemSounds.Exclamation.Play();
+                    MDCustMsgBox mbox = new("This file is not a Menu Items file.",
+                                        "ERROR",
+                                        ButtonType.Ok,
+                                        true,
+                                        true,
+                                        null,
+                                        true);
+                    _ = mbox.ShowDialog();
+                    return false;
+                }
+                MyMenuItem.MLMenuItems.Clear();
+                MyMenuItem.MLMenuItems = JsonSerializer.Deserialize<ObservableCollection<MyMenuItem>>(json);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex, "Import failed.");
+                SystemSounds.Exclamation.Play();
+                MDCustMsgBox mbox = new($"Import failed.\n{ex.Message}.",
+                                    "ERROR",
+                                    ButtonType.Ok,
+                                    true,
+                                    true,
+                                    null,
+                                    true);
+                _ = mbox.ShowDialog();
+                return false;
+            }
+        }
+        return false;
+    }
+    #endregion Import a Menu file
+
     #region Get the name of the menu items JSON file
     /// <summary>
     /// Gets the filename of the JSON file containing the menu items

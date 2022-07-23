@@ -570,4 +570,14 @@ public partial class Maintenance : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
+
+    private void BtnImport_Click(object sender, RoutedEventArgs e)
+    {
+        if (JsonHelpers.ImportListFile())
+        {
+            JsonHelpers.SaveMainJson();
+            LoadTreeView();
+            (Application.Current.MainWindow as MainWindow)?.PopulateMainListBox();
+        }
+    }
 }

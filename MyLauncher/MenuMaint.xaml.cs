@@ -174,7 +174,7 @@ public partial class MenuMaint : Window
             FilePathOrURI = string.Empty,
             ItemType = MenuItemType.Separator,
             ItemID = Guid.NewGuid().ToString(),
-            IsSelected= true,
+            IsSelected = true,
             SubMenuItems = null
         };
         MyMenuItem.MLMenuItems.Add(newitem);
@@ -434,6 +434,15 @@ public partial class MenuMaint : Window
         JsonHelpers.CreateMenuBackup();
     }
 
+    private void BtnImport_Click(object sender, RoutedEventArgs e)
+    {
+        if (JsonHelpers.ImportMenuFile())
+        {
+            JsonHelpers.SaveMenuJson();
+            LoadTreeView();
+            (Application.Current.MainWindow as MainWindow)?.PopulateTrayMenu();
+        }
+    }
     private void DiscardChanges()
     {
         JsonHelpers.ReadMenuJson();
