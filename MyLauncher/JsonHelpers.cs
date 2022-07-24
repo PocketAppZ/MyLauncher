@@ -144,6 +144,7 @@ internal static class JsonHelpers
                     FilePathOrURI = item.FilePathOrURI.Trim('"').Trim(),
                     FileIcon = item.FileIcon,
                     Arguments = item.Arguments,
+                    WorkingDir = item.WorkingDir,
                     IconSource = item.IconSource.Trim(),
                     EntryType = item.EntryType,
                     MyListItems = item.MyListItems,
@@ -200,6 +201,7 @@ internal static class JsonHelpers
                     Arguments = item.Arguments,
                     ItemType = item.ItemType,
                     SubMenuItems = item.SubMenuItems,
+                    WorkingDir = item.WorkingDir,
                     ItemID = item.ItemID
                 };
                 tempCollection.Add(mmi);

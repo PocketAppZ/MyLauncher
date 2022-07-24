@@ -92,6 +92,22 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
     }
 
     /// <summary>
+    /// Working Directory for the item
+    /// </summary>
+    public string WorkingDir
+    {
+        get => workingDir;
+        set
+        {
+            if (arguments != null)
+            {
+                workingDir = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    /// <summary>
     /// Path to image file for icons
     /// </summary>
     public string IconSource
@@ -175,6 +191,7 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
     private bool isSelected;
     private string itemID;
     private string title;
+    private string workingDir = string.Empty;
     #endregion Private backing fields
 
     #region Handle property change

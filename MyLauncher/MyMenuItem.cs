@@ -80,6 +80,22 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     }
 
     /// <summary>
+    /// Working Directory for the item
+    /// </summary>
+    public string WorkingDir
+    {
+        get => workingDir;
+        set
+        {
+            if (arguments != null)
+            {
+                workingDir = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    /// <summary>
     /// Unique Identifier for the item
     /// </summary>
     public string ItemID
@@ -117,6 +133,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     private string itemID;
     private MenuItemType itemType = MenuItemType.MenuItem;
     private string title;
+    private string workingDir = string.Empty;
     #endregion Private backing fields
 
     #region Handle property change

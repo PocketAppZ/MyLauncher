@@ -295,7 +295,8 @@ public partial class MainWindow : Window
             {
                 FilePathOrURI = myMenuItem.FilePathOrURI,
                 Arguments = myMenuItem.Arguments,
-                Title = myMenuItem.Title
+                Title = myMenuItem.Title,
+                WorkingDir = myMenuItem.WorkingDir
             };
             _ = LaunchApp(ch);
         }
@@ -327,6 +328,7 @@ public partial class MainWindow : Window
         {
             launch.StartInfo.FileName = Environment.ExpandEnvironmentVariables(item.FilePathOrURI);
             launch.StartInfo.Arguments = Environment.ExpandEnvironmentVariables(item.Arguments);
+            launch.StartInfo.WorkingDirectory = Environment.ExpandEnvironmentVariables(item.WorkingDir);
             launch.StartInfo.UseShellExecute = true;
             _ = launch.Start();
             if (UserSettings.Setting.PlaySound)
