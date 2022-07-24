@@ -117,7 +117,7 @@
                         Margin="10,5"
                         HorizontalAlignment="Center"
                         FontSize="14"
-                        Text="Use drag &amp; drop to list arrange items" />
+                        Text="Use drag &amp; drop to arrange items" />
                 </materialDesign:ColorZone>
                 <materialDesign:Card
                     Grid.Row="1"
