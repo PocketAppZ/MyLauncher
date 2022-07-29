@@ -158,9 +158,35 @@ public partial class MenuMaint : Window
             tvi.BringIntoView();
         }
         _ = tbTitle.Focus();
-        ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
+        ClearAndQueueMessage("New \"untitled\" submenu was created.", 3000);
     }
     #endregion Add new submenu
+
+    #region Add new section heading
+        /// <summary>
+    /// Adds a new section heading item
+    /// </summary>
+    private void NewSectionHead()
+    {
+        MyMenuItem newitem = new()
+        {
+            Title = "untitled",
+            FilePathOrURI = string.Empty,
+            ItemType = MenuItemType.SectionHead,
+            ItemID = Guid.NewGuid().ToString(),
+            IsSelected = true,
+            SubMenuItems = null
+        };
+        MyMenuItem.MLMenuItems.Add(newitem);
+        if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
+        {
+            tvi.IsSelected = true;
+            tvi.BringIntoView();
+        }
+        _ = tbTitle.Focus();
+        ClearAndQueueMessage("New \"untitled\" section heading was created.", 3000);
+    }
+    #endregion Add new section heading
 
     #region Add new separator
     /// <summary>
@@ -281,7 +307,6 @@ public partial class MenuMaint : Window
 
     private void TvMenuMaint_Selected(object sender, RoutedEventArgs e)
     {
-        Debug.WriteLine("Item Selected");
         if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
         {
             tbTitle.SelectAll();
@@ -404,6 +429,12 @@ public partial class MenuMaint : Window
     {
         e.Handled = true;
         NewSubMenu();
+    }
+
+    private void NewSectionHead_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        NewSectionHead();
     }
 
     private void NewSeparator_Click(object sender, RoutedEventArgs e)

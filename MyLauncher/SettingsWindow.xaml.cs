@@ -118,7 +118,7 @@ public partial class SettingsWindow : Window
     /// <param name="e"></param>
     private void ColorZone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        SizeToContent = SizeToContent.Width;
+        SizeToContent = SizeToContent.WidthAndHeight;
         double width = ActualWidth;
         Thread.Sleep(50);
         SizeToContent = SizeToContent.Manual;

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
-using System;
 namespace MyLauncher;
 
 public partial class MainWindow : Window
@@ -50,6 +49,7 @@ public partial class MainWindow : Window
 
         // Startup message in the temp file
         log.Info($"{AppInfo.AppName} ({AppInfo.AppProduct}) {AppInfo.AppVersion} is starting up");
+        log.Info($"{AppInfo.AppCopyright}");
         log.Debug($"{AppInfo.AppName} Build date: {BuildInfo.BuildDateString} UTC");
         log.Debug($"{AppInfo.AppName} Commit ID: {BuildInfo.CommitIDString}");
 
@@ -99,8 +99,6 @@ public partial class MainWindow : Window
         if (UserSettings.Setting.StartMinimized)
         {
             Hide();
-            //WindowState = WindowState.Minimized;
-            Debug.WriteLine("Minimized via settings");
         }
 
         // ListBox event handlers
@@ -242,28 +240,31 @@ public partial class MainWindow : Window
     /// </summary>
     public void PopulateTrayMenu()
     {
+        // static item at bottom of menu
         MyMenuItem trayMainWindow = new()
         {
             Title = "Show Main Window",
             ItemType = MenuItemType.ShowMainWindow
         };
+        // static item at bottom of menu
         MyMenuItem trayExit = new()
         {
             Title = "Exit My Launcher",
             ItemType = MenuItemType.ExitML
         };
-        MyMenuItem traySeperator = new()
+        // separates the two items above from the rest of the menu
+        MyMenuItem traySeparator = new()
         {
             Title = "-",
             ItemType = MenuItemType.Separator
         };
-        trayMenu.ItemsSource = (CompositeCollection)(new()
+        trayMenu.ItemsSource = new CompositeCollection()
         {
             new CollectionContainer { Collection = MyMenuItem.MLMenuItems },
-            traySeperator,
+            traySeparator,
             trayMainWindow,
             trayExit
-        });
+        };
     }
     #endregion Load the tray menu
 
@@ -838,7 +839,6 @@ public partial class MainWindow : Window
         // Catching Alt+F4 apparently needs to be done on the key down event
         if (e.Key == Key.System && e.SystemKey == Key.F4)
         {
-            Debug.WriteLine("Gotcha");
             App.ExplicitClose = true;
             Application.Current.Shutdown();
         }
@@ -1004,7 +1004,6 @@ public partial class MainWindow : Window
             // Exit selected from menu so don't ask intention
             else
             {
-                log.Debug("Explicit exit from menu");
                 tbIcon.Dispose();
                 base.OnClosing(e);
             }

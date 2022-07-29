@@ -105,6 +105,7 @@ public enum MenuItemType
     ExitML = 2,
     Separator = 3,
     ShowMainWindow = 4,
+    SectionHead = 5
 }
 
 /// <summary>

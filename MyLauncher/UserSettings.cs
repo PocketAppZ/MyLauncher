@@ -21,7 +21,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
 
     public int BorderWidth
     {
-        get { return borderWidth; }
+        get => borderWidth;
         set
         {
             borderWidth = value;
@@ -61,7 +61,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
 
     public int ListBoxFontWeight
     {
-        get { return listBoxFontWeight; }
+        get => listBoxFontWeight;
         set
         {
             listBoxFontWeight = value;
@@ -205,7 +205,6 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
-
     public bool PlaySound
     {
         get => playSound;
@@ -242,6 +241,46 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         set
         {
             secondaryColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int SectionHeadWeight
+    {
+        get => sectionHeadWeight;
+        set
+        {
+            sectionHeadWeight = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int SectionHeadStyle
+    {
+        get => sectionHeadStyle;
+        set
+        {
+            sectionHeadStyle = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int SectionHeadOffset
+    {
+        get => sectionHeadOffset;
+        set
+        {
+            sectionHeadOffset = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int SectionHeadSize
+    {
+        get => sectionHeadSize;
+        set
+        {
+            sectionHeadSize = value;
             OnPropertyChanged();
         }
     }
@@ -287,7 +326,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
 
     public bool ShowExitButton
     {
-        get { return showExitButton; }
+        get => showExitButton;
         set
         {
             showExitButton = value;
@@ -412,16 +451,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool allowRightButton = true;
     private int borderWidth = 2;
     private int darkmode = (int)ThemeType.Light;
-    private bool includeDebug = false;
+    private bool includeDebug = true;
     private bool keepOnTop = false;
     private int listBoxFontWeight = (int)Weight.Regular;
     private int listBoxSpacing = (int)Spacing.Comfortable;
     private bool mainWindowMinimizeOnLaunch = false;
-    private double maintWindowHeight = 540;
+    private double maintWindowHeight = 630;
     private double maintWindowLeft = 100;
     private double maintWindowTop = 100;
     private double maintWindowWidth = 850;
-    private double menuMaintWindowHeight = 420;
+    private double menuMaintWindowHeight = 630;
     private double menuMaintWindowLeft = 100;
     private double menuMaintWindowTop = 100;
     private double menuMaintWindowWidth = 850;
@@ -431,7 +470,11 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool popupCloseAfterLaunch = true;
     private int primaryColor = (int)AccentColor.Blue;
     private int secondaryColor = (int)AccentColor.Red;
-    private double settingsWindowHeight = 660;
+    private int sectionHeadOffset = 1;
+    private int sectionHeadSize = 1;
+    private int sectionHeadStyle = 0;
+    private int sectionHeadWeight = 0;
+    private double settingsWindowHeight = 550;
     private double settingsWindowLeft = 100;
     private double settingsWindowTop = 100;
     private bool showExitButton = true;

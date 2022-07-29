@@ -8,7 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="List Maintenance"
+    Title="Menu Maintenance"
     MinWidth="300"
     MinHeight="300"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -210,6 +210,11 @@
                                                             Binding="{Binding ItemType}"
                                                             Value="3">
                                                             <Setter Property="Text" Value="Separator" />
+                                                        </DataTrigger>
+                                                        <DataTrigger
+                                                            Binding="{Binding ItemType}"
+                                                            Value="5">
+                                                            <Setter Property="Text" Value="Section Heading" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -444,6 +449,12 @@
                                                             VerticalContentAlignment="Center"
                                                             Click="NewSubMenu_Click"
                                                             Content="Submenu" />
+                                                        <Button
+                                                            Height="35"
+                                                            Padding="15,0,15,10"
+                                                            VerticalContentAlignment="Center"
+                                                            Click="NewSectionHead_Click"
+                                                            Content="Section Heading" />
                                                         <Button
                                                             Height="35"
                                                             Padding="15,0,15,10"

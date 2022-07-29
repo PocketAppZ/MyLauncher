@@ -156,7 +156,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
         {
             if (dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
             {
-                if (dragTarget.ItemType is MenuItemType.MenuItem or MenuItemType.Separator)
+                if (dragTarget.ItemType is MenuItemType.MenuItem or MenuItemType.Separator or MenuItemType.SectionHead)
                 {
                     return;
                 }

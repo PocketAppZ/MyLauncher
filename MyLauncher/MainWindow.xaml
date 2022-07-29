@@ -13,8 +13,8 @@
     Activated="Window_Activated"
     Background="{DynamicResource MaterialDesignPaper}"
     Closing="Window_Closing"
-    IsVisibleChanged="Window_IsVisibleChanged"
     FontSize="12"
+    IsVisibleChanged="Window_IsVisibleChanged"
     PreviewKeyDown="Window_PreviewKeyDown"
     PreviewKeyUp="WindowPreview_KeyUp"
     PreviewMouseWheel="Window_MouseWheel"
@@ -28,6 +28,8 @@
     <!--#region Window resources-->
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolVisConverter" />
+        <local:FontSizeConverter x:Key="FSConverter" />
+        <local:SectionHeadingConverter x:Key="SHConverter" />
         <Style
             BasedOn="{StaticResource {x:Type materialDesign:SnackbarMessage}}"
             TargetType="{x:Type materialDesign:SnackbarMessage}">
@@ -36,7 +38,7 @@
         <ControlTemplate
             x:Key="sep"
             TargetType="{x:Type MenuItem}">
-            <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
+            <Separator Height="5"  />
         </ControlTemplate>
     </Window.Resources>
     <!--#endregion-->
@@ -46,7 +48,6 @@
         DialogTheme="Inherit"
         Focusable="False"
         Identifier="MainDialogHost">
-
         <Grid x:Name="MainGrid">
             <!--#region Row definitions-->
             <Grid.RowDefinitions>
@@ -64,25 +65,48 @@
                 TrayLeftMouseDown="TbIconShowMainWindow_Click"
                 TrayMouseDoubleClick="TbIconShowMainWindow_Click"
                 Visibility="Collapsed">
-                <!-- TrayToolTip is broken in Windows 11, see https://github.com/hardcodet/wpf-notifyicon/issues/65 -->
+                <!--  TrayToolTip is broken in Windows 11, see https://github.com/hardcodet/wpf-notifyicon/issues/65  -->
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu
                         Name="trayMenu"
-                        FontSize="{Binding TrayMenuSize,
-                                           Source={x:Static local:UserSettings.Setting}}">
+                        Style="{StaticResource MaterialDesignContextMenu}"
+                        UsesItemContainerTemplate="True">
                         <ContextMenu.ItemContainerStyle>
                             <Style
                                 BasedOn="{StaticResource MaterialDesignMenuItem}"
                                 TargetType="MenuItem">
                                 <Setter Property="Tag" Value="{Binding}" />
-                                <EventSetter
-                                    Event="Click"
-                                    Handler="TrayMenu_Click" />
+                                <EventSetter Event="Click" Handler="TrayMenu_Click" />
                                 <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding ItemType}"
-                                        Value="Separator">
+                                    <DataTrigger Binding="{Binding ItemType}" Value="Separator">
                                         <Setter Property="Template" Value="{StaticResource sep}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ItemType}" Value="SectionHead">
+                                        <Setter Property="IsHitTestVisible" Value="False" />
+                                        <Setter Property="FontFamily" Value="Segoe UI" />
+                                        <Setter Property="Margin"     Value="{Binding SectionHeadOffset,
+                                                                                      Source={x:Static local:UserSettings.Setting},
+                                                                                      Converter={StaticResource SHConverter},
+                                                                                      ConverterParameter=offset}" />
+                                        <Setter Property="FontWeight" Value="{Binding SectionHeadWeight,
+                                                                                      Source={x:Static local:UserSettings.Setting},
+                                                                                      Converter={StaticResource SHConverter},
+                                                                                      ConverterParameter=fontweight}" />
+                                        <Setter Property="FontStyle"  Value="{Binding SectionHeadStyle,
+                                                                                      Source={x:Static local:UserSettings.Setting},
+                                                                                      Converter={StaticResource SHConverter},
+                                                                                      ConverterParameter=fontstyle}" />
+                                        <Setter Property="FontSize">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource FSConverter}" >
+                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                              AncestorType=ContextMenu}"
+                                                             Path="FontSize"/>
+                                                    <Binding Path="SectionHeadSize"
+                                                             Source="{x:Static local:UserSettings.Setting}"/>
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -105,17 +129,13 @@
                 LastChildFill="True">
                 <materialDesign:ColorZone
                     Height="33"
-                    Margin="10"
-                    Padding="0,0,0,3"
-                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                    CornerRadius="4"
-                    Mode="PrimaryMid"
-                    MouseDoubleClick="ColorZone_MouseDoubleClick">
+                    Margin="10" Padding="0,0,0,3"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth2" CornerRadius="4"
+                    Mode="PrimaryMid" MouseDoubleClick="ColorZone_MouseDoubleClick">
                     <Grid>
                         <StackPanel Orientation="Horizontal">
                             <ToggleButton
-                                Width="30"
-                                Height="30"
+                                Width="30" Height="30"
                                 Margin="5,2"
                                 Cursor="Hand"
                                 IsChecked="{Binding IsLeftDrawerOpen,
@@ -123,21 +143,17 @@
                                 Style="{DynamicResource MaterialDesignHamburgerToggleButton}"
                                 ToolTip="Click to navigate" />
                             <TextBlock x:Name="PageTitle"
-                                Margin="6,4,0,0"
-                                HorizontalAlignment="Center"
+                                Margin="6,4,0,0" HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                FontSize="18"
-                                FontWeight="DemiBold"
+                                FontSize="18" FontWeight="DemiBold"
                                 Text="{Binding TitleText,
                                                Source={x:Static local:UserSettings.Setting}}" />
                         </StackPanel>
 
                         <materialDesign:PopupBox
-                            Margin="1,0"
-                            Padding="0"
+                            Margin="1,0" Padding="0"
                             HorizontalAlignment="Right"
-                            Focusable="False"
-                            PlacementMode="LeftAndAlignTopEdges"
+                            Focusable="False" PlacementMode="LeftAndAlignTopEdges"
                             ToolTip="View Files">
                             <Border
                                 Padding="3"
@@ -149,21 +165,17 @@
                                     Background="{DynamicResource MaterialDesignPaper}">
                                     <StackPanel Orientation="Vertical">
                                         <Button
-                                            Click="BtnReadme_Click"
-                                            Content="View ReadMe"
+                                            Click="BtnReadme_Click" Content="View ReadMe"
                                             FontSize="14" />
                                         <Button
-                                            Click="BtnLog_Click"
-                                            Content="View Log File"
+                                            Click="BtnLog_Click" Content="View Log File"
                                             FontSize="14" />
                                         <Separator
-                                            Margin="0"
-                                            Padding="1"
+                                            Margin="0" Padding="1"
                                             Background="{DynamicResource PrimaryHueMidBrush}" />
                                         <Button
                                             HorizontalContentAlignment="Left"
-                                            Content="Cancel"
-                                            FontSize="14" />
+                                            Content="Cancel" FontSize="14" />
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -182,10 +194,8 @@
                 <materialDesign:DrawerHost.LeftDrawerContent>
                     <ListBox x:Name="NavListBox"
                         Width="auto"
-                        Margin="0,16,0,16"
-                        HorizontalAlignment="Left"
-                        Cursor="Hand"
-                        FontSize="14"
+                        Margin="0,16,0,16" HorizontalAlignment="Left"
+                        Cursor="Hand" FontSize="14"
                         SelectionChanged="NavListBox_SelectionChanged"
                         Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
                         <ListBoxItem>
@@ -258,40 +268,33 @@
                 <!--#endregion-->
 
                 <Grid
-                    Grid.Row="1"
-                    Grid.Column="1">
+                    Grid.Row="1" Grid.Column="1">
                     <!--#region Row definitions-->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition
-                            Height="auto"
-                            MinHeight="7" />
+                            Height="auto" MinHeight="7" />
                     </Grid.RowDefinitions>
                     <!--#endregion-->
 
                     <!--#region ListBox in Card-->
                     <materialDesign:Card x:Name="MainCard"
                         Grid.Row="0"
-                        Margin="10,5"
-                        Padding="2,5,10,5"
+                        Margin="10,5" Padding="5,10"
                         HorizontalAlignment="Stretch"
-                        materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                        MouseEnter="Card_MouseEnter"
-                        MouseLeave="Card_MouseLeave"
-                        UniformCornerRadius="7">
+                        materialDesign:ShadowAssist.ShadowDepth="Depth2" MouseEnter="Card_MouseEnter"
+                        MouseLeave="Card_MouseLeave" UniformCornerRadius="7">
                         <ListBox x:Name="MainListBox"
                             Margin="0"
                             d:ItemsSource="{d:SampleData ItemCount=5}"
                             materialDesign:ListBoxItemAssist.ShowSelection="True"
-                            PreviewKeyUp="ListBox_KeyUp"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            PreviewKeyUp="ListBox_KeyUp" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
                             Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel
-                                        Grid.IsSharedSizeScope="True"
-                                        Orientation="Vertical" />
+                                        Grid.IsSharedSizeScope="True" Orientation="Vertical" />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
                             <ListBox.Resources>
@@ -313,10 +316,8 @@
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <Image
-                                                Width="28"
-                                                Height="28"
-                                                Margin="10,0,0,0"
-                                                HorizontalAlignment="Left"
+                                                Width="28" Height="28"
+                                                Margin="10,0,0,0" HorizontalAlignment="Left"
                                                 VerticalAlignment="Center"
                                                 SnapsToDevicePixels="True"
                                                 Source="{Binding FileIcon}"
@@ -325,11 +326,9 @@
                                                                      Converter={StaticResource BoolVisConverter}}" />
                                             <TextBlock
                                                 Grid.Column="1"
-                                                Margin="10,0,0,0"
-                                                Padding="1"
+                                                Margin="10,0,0,0" Padding="1"
                                                 VerticalAlignment="Center"
-                                                FontFamily="Segoe UI"
-                                                FontSize="14"
+                                                FontFamily="Segoe UI" FontSize="14"
                                                 Text="{Binding Title}" />
                                         </Grid>
                                     </Grid>
@@ -342,19 +341,15 @@
                     <!--#region Buttons-->
                     <DockPanel
                         Grid.Row="1"
-                        Margin="0,15"
-                        HorizontalAlignment="Center"
+                        Margin="0,15" HorizontalAlignment="Center"
                         Visibility="{Binding ShowExitButton,
                                              Source={x:Static local:UserSettings.Setting},
                                              Converter={StaticResource BoolVisConverter}}">
                         <Button x:Name="btnExit"
-                            Width="110"
-                            Height="auto"
+                            Width="110" Height="auto"
                             Margin="10,0"
-                            Click="BtnExit_Click"
-                            Content="Exit"
-                            FontSize="15"
-                            FontWeight="Bold"
+                            Click="BtnExit_Click" Content="Exit"
+                            FontSize="15" FontWeight="Bold"
                             IsDefault="True"
                             Style="{DynamicResource MaterialDesignRaisedButton}" />
                     </DockPanel>
@@ -365,12 +360,9 @@
             <!--#region SnackBar-->
             <materialDesign:Snackbar x:Name="SnackBar1"
                 Grid.Row="1"
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                Background="#FF202020"
-                Focusable="False"
-                FontWeight="DemiBold"
-                Foreground="White"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                Background="#FF202020" Focusable="False"
+                FontWeight="DemiBold" Foreground="White"
                 MessageQueue="{materialDesign:MessageQueue}" />
             <!--#endregion-->
         </Grid>
