@@ -24,5 +24,5 @@ nonagenarian to use My Launcher.
 ### Pop-up List
 ![Pop-up List](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/ML_Pop-up.png)
 
-### Settings
+### Settings (Updated in 0.5.2)
 ![Settings](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/ML_Settings.png)
