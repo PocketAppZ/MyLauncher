@@ -41,7 +41,8 @@ the tab key or the enter key.
 
 To add a new item, click the New Item button. You will see a pop-up menu with three item types.
 
-  - Normal item. This item type can be an application, a document, a folder or a website.
+  - Normal item. This item type can be an application, a document, a folder or a website. It can
+    also be a shortcut to one of these types.
 
   - Pop-Up List. This item type is a window that can contain normal items and other pop-up lists.
 
@@ -66,8 +67,12 @@ The Arguments text box is where you can specify optional arguments. For example,
 open Aunt Sally's Secret Buttermilk Biscuit Recipe in notepad, you would enter notepad.exe in the
 Path or URL text box and C:\Recipes\SecretBiscuits.txt in the Arguments textbox.
 
+The Working Directory text box is where you can add a directory to start in. Normally this isn't
+necessary. But if there are problems with an application that won't start or can't locate one of
+it's file, try setting the working directory.
+
 The Icon File text box is where you can specify a custom icon. My Launcher attempts to find a
-suitable icon, but if it can't or you would prefer a different icon this is where you can specify
+suitable icon, but if it can't or you would prefer a different icon, this is where you can specify
 your own. Acceptable image file types are .ico, .png, .bmp, .jpg and .jpeg.
 
 To arrange list items, simply drag an entry to a new position in the list. Normal items and pop-up
@@ -104,11 +109,15 @@ The Menu Maintenance window is very similar to the List Maintenance window with 
 exceptions. There isn't a text box for an icon file as icons are not available in the menu.
 Also, there isn't an option for Special Apps.
 
-To add a new item, click the New Item button. You will see a pop-up menu with three item types.
+To add a new item, click the New Item button. You will see a pop-up menu with four item types.
 
   - Menu item. This menu item can be an application, a document, a folder or a website.
 
   - Submenu. This menu item is a sub menu that can contain normal items and other sub-menus.
+
+  - Section Heading. This item type can be used to describe the contents of a section of the menu.
+    Section heading can be styled to make them visually distinct in then menu. Section headings
+	don't do anything if they are clicked.
 
   - Separator. This is a horizontal line that can be used to delineate sections in the menu.
 
@@ -122,14 +131,27 @@ See the discussion of List Maintenance above for the other options.
 
 App Settings
 ============
-In the top section you can choose the theme, primary and secondary accents colors and UI size.
-You can also set the font weight, spacing and border width of the list items. Finally you can
-set the font size in the tray menu.
+In the top left section you can choose the theme, primary and secondary accents colors and UI size.
+You can also set the font weight, spacing and border width of the list items.
 
-The middle section allows you to set the title text on the main page.
+The bottom left section contains tray menu specific items. The Minimize to tray and enable tray menu
+toggle must be enabled to change any of the other items in the section. The second item is an option
+to have My Launcher minimize to the system tray instead of closing when the X in the upper right
+corner of the main window is clicked. The remaining items included in this section are related to the
+appearance of the tray menu.
 
-The bottom section has several options that control how My Launcher works. Hopefully the
-descriptions are self explanatory.
+The top right section has several options that control how My Launcher works. Included are options
+to show icons in lists in the main and pop-up windows, to show an Exit button at the bottom center
+of the main window, to allow the right mouse button to be used to launch selections, to play a "pop"
+sound when an selection is launched, to keep the My Launcher window topmost, to close a pop-up window
+after launching, and to minimize the main window after launching. The Start minimized option will, as
+it sounds, start My Launcher in a minimized state. If the Minimize to tray option is also enabled,
+the My Launcher window will not be displayed when the app is started. The Start with Windows option
+will tell Windows to start My Launcher each time Windows is started. The final option sets the detail
+level for the log file which is located in the temp folder. Including debug level messages can aid in
+diagnosing problems such as launch failures or icon display issues.
+
+The bottom right section allows you to set the title text on the main page.
 
 Note that these settings, along with widow size and position, are saved when the application
 is closed.
@@ -137,7 +159,8 @@ is closed.
 
 About
 =====
-The About page displays version information and a link to the GitHib repository.
+The About dialog displays version information, build date, copyright statement, a link to the
+license and a link to the GitHib repository.
 
 
 Keys
@@ -166,9 +189,9 @@ scroll bar disappears by double clicking on the accent colored bar at the top.
 
 If you see the question mark icon next to a list item it could be that either the file or folder could
 not be found or that My Launcher could not extract the icon. The latter can happen with certain UWP apps.
-Feel free to add you own icon if you don't want to look at the question mark.
+Feel free to add your own icon if you don't want to look at the question mark.
 
-The three-dot icon in the upper right of the main window will open a menu that has options to view the
+The three-dot icon in the upper right of the main window will open a menu that has options to view this
 readme file and to view the log file.
 
 The three-dot icon in the upper right of the maintenance windows will open a menu that has options to
@@ -176,6 +199,13 @@ open the data files and to open the app's folder.
 
 In the maintenance windows, the "i" icon will open a pop-up that shows additional information about the
 selected item.
+
+
+Known Issues
+============
+The system tray menu will not change theme until the app has been restarted.
+
+Changes to icons in the main or pop-up windows do not appear until the maintenance window is closed.
 
 
 Uninstalling
