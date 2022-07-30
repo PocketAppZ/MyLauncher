@@ -145,6 +145,10 @@
                         SelectedItemChanged="TvMaint_SelectedItemChanged"
                         TabIndex="0"
                         UseLayoutRounding="False">
+                        <TreeView.Resources>
+                            <Style BasedOn="{StaticResource ListTreeView}"
+                                   TargetType="TreeViewItem"/>
+                        </TreeView.Resources>
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate
                                 DataType="{x:Type local:MyListItem}"

@@ -99,16 +99,9 @@
             <!--#endregion-->
 
             <!--#region Style for TreeViewItem-->
-            <Style
+            <Style x:Key="ListTreeView"
                 BasedOn="{StaticResource MaterialDesignTreeViewItem}"
                 TargetType="TreeViewItem">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding ItemType}" Value="5">
-                        <Setter Property="FontWeight" Value="SemiBold" />
-                        <Setter Property="Margin"  Value="-15,0,0,2"/>
-                    </DataTrigger>
-                </Style.Triggers>
-                <Setter Property="materialDesign:TreeViewAssist.ExpanderSize" Value="18" />
                 <Setter Property="Margin" Value="5,0,5,0" />
                 <Setter Property="Padding" Value="5" />
                 <Setter Property="IsSelected" Value="{Binding IsSelected}" />

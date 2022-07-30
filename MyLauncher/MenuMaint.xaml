@@ -137,9 +137,9 @@
                         AllowDrop="True"
                         BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                         BorderThickness="2"
+                        FontFamily="Segoe UI"
                         FontStyle="Normal"
                         FontWeight="Normal"
-                        FontFamily="Segoe UI"
                         ScrollViewer.CanContentScroll="True"
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
                         SelectedItemChanged="TvMenuMaint_SelectedItemChanged"
@@ -153,6 +153,24 @@
                                 <TextBlock Text="{Binding Title}" />
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
+                        <TreeView.Resources>
+                            <Style
+                                BasedOn="{StaticResource ListTreeView}"
+                                TargetType="TreeViewItem">
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding ItemType}"
+                                        Value="5">
+                                        <Setter
+                                            Property="FontWeight"
+                                            Value="SemiBold" />
+                                        <Setter
+                                            Property="Margin"
+                                            Value="-15,0,0,2" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TreeView.Resources>
                         <TreeView.DataContext>
                             <local:MyMenuItem />
                         </TreeView.DataContext>
@@ -200,22 +218,30 @@
                                                 <Style
                                                     BasedOn="{StaticResource {x:Type TextBlock}}"
                                                     TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="Menu Item Title" />
+                                                    <Setter
+                                                        Property="Text"
+                                                        Value="Menu Item Title" />
                                                     <Style.Triggers>
                                                         <DataTrigger
                                                             Binding="{Binding ItemType}"
                                                             Value="0">
-                                                            <Setter Property="Text" Value="SubMenu Item Title" />
+                                                            <Setter
+                                                                Property="Text"
+                                                                Value="SubMenu Item Title" />
                                                         </DataTrigger>
                                                         <DataTrigger
                                                             Binding="{Binding ItemType}"
                                                             Value="3">
-                                                            <Setter Property="Text" Value="Separator" />
+                                                            <Setter
+                                                                Property="Text"
+                                                                Value="Separator" />
                                                         </DataTrigger>
                                                         <DataTrigger
                                                             Binding="{Binding ItemType}"
                                                             Value="5">
-                                                            <Setter Property="Text" Value="Section Heading" />
+                                                            <Setter
+                                                                Property="Text"
+                                                                Value="Section Heading" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
