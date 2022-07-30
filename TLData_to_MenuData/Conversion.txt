@@ -39,9 +39,8 @@ the desktop.
 Click the Convert button near the upper right hand corner of the window. The area below the buttons
 will display a log of the conversion process. Any error messages will be displayed there as well.
 
-When converting to Menu data, Tray Launcher Section Heading entries will be skipped as there is no analogous
-feature in My Launcher menus. When converting to List data, Section Heading and Separators are skipped as
-well.
+When converting to Menu data, all Tray Launcher entries will be processed. When converting to List data,
+Section Heading and Separators will be skipped since there are no counterparts in My Launcher lists.
 
 Once the conversion process is complete, you can close the conversion utility.
 
@@ -76,8 +75,8 @@ In the case of Menus, a "Menu" item or a Separator can be dropped on a Submenu i
 items, when dragging over a submenu the indicator will change to a rectangle. Submenus can be expanded by
 clicking the chevron symbol to the left.
 
-When you are done click the "Save & Close" button. If you don't wish to save then click the "Discard &
-Close" button.
+When you are done click the "Save & Close" button. If you don't wish to save, click the "Discard & Close"
+button.
 
 
 Uninstalling

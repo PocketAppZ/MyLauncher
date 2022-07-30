@@ -28,71 +28,7 @@
         </Grid.RowDefinitions>
         <!--#endregion-->
 
-        <!--#region Tray Launcher input file-->
-        <Grid
-            Grid.Row="3"
-            Margin="15,5,15,5">
-            <Image
-                Width="24"
-                Height="24"
-                HorizontalAlignment="Left"
-                Source="/Images/Splash256.png" />
-            <TextBox x:Name="tbTrayLauncherFile"
-                Margin="40,0,20,0"
-                VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="Tray Launcher menu file." />
-            <Button x:Name="BtnTLFilePicker"
-                Width="24"
-                Height="24"
-                Margin="0,0,-4,0"
-                HorizontalAlignment="Right"
-                Click="BtnTLFilePicker_Click"
-                Style="{StaticResource MaterialDesignIconButton}"
-                ToolTip="Browse for file"
-                ToolTipService.Placement="Left">
-                <materialDesign:PackIcon
-                    Width="24"
-                    Height="24"
-                    Margin="0"
-                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                    Kind="FileCodeOutline" />
-            </Button>
-        </Grid>
-        <!--#endregion-->
-
-        <!--#region My Launcher output file-->
-        <Grid
-            Grid.Row="2"
-            Margin="15,5,15,5">
-            <Image
-                Width="24"
-                Height="24"
-                HorizontalAlignment="Left"
-                Source="/Images/ML.png" />
-            <TextBox x:Name="tbMyLauncherFile"
-                Margin="40,0,20,0"
-                VerticalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="My Launcher list or menu file. Select conversion type above." />
-            <Button x:Name="BtnMLFilePicker"
-                Width="24"
-                Height="24"
-                Margin="0,0,-4,0"
-                HorizontalAlignment="Right"
-                Click="BtnMLFilePicker_Click"
-                Style="{StaticResource MaterialDesignIconButton}"
-                ToolTip="Browse for file"
-                ToolTipService.Placement="Left">
-                <materialDesign:PackIcon
-                    Width="24"
-                    Height="24"
-                    Margin="0"
-                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                    Kind="FileCodeOutline" />
-            </Button>
-        </Grid>
-        <!--#endregion-->
-
-        <!--#region Row of buttons-->
+        <!--#region Radio buttons - Convert & Help buttons-->
         <Grid Grid.Row="1">
             <TextBlock
                 Margin="15,0"
@@ -130,6 +66,70 @@
         </Grid>
         <!--#endregion-->
 
+        <!--#region My Launcher output file-->
+        <Grid
+            Grid.Row="2"
+            Margin="15,5,15,5">
+            <Image
+                Width="24"
+                Height="24"
+                HorizontalAlignment="Left"
+                Source="/Images/ML.png" />
+            <TextBox x:Name="tbMyLauncherFile"
+                Margin="40,0,20,0"
+                VerticalContentAlignment="Center"
+                materialDesign:HintAssist.Hint="My Launcher list or menu file. Select conversion type above." />
+            <Button x:Name="BtnMLFilePicker"
+                Width="24"
+                Height="24"
+                Margin="0,0,-4,0"
+                HorizontalAlignment="Right"
+                Click="BtnMLFilePicker_Click"
+                Style="{StaticResource MaterialDesignIconButton}"
+                ToolTip="Browse for file"
+                ToolTipService.Placement="Left">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    Margin="0"
+                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                    Kind="FileCodeOutline" />
+            </Button>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Tray Launcher input file-->
+        <Grid
+            Grid.Row="3"
+            Margin="15,5,15,5">
+            <Image
+                Width="24"
+                Height="24"
+                HorizontalAlignment="Left"
+                Source="/Images/Splash256.png" />
+            <TextBox x:Name="tbTrayLauncherFile"
+                Margin="40,0,20,0"
+                VerticalContentAlignment="Center"
+                materialDesign:HintAssist.Hint="Tray Launcher menu file." />
+            <Button x:Name="BtnTLFilePicker"
+                Width="24"
+                Height="24"
+                Margin="0,0,-4,0"
+                HorizontalAlignment="Right"
+                Click="BtnTLFilePicker_Click"
+                Style="{StaticResource MaterialDesignIconButton}"
+                ToolTip="Browse for file"
+                ToolTipService.Placement="Left">
+                <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    Margin="0"
+                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                    Kind="FileCodeOutline" />
+            </Button>
+        </Grid>
+        <!--#endregion-->
+
         <!--#region ListBox for messages-->
         <ListBox x:Name="lbxOutput"
             Grid.Row="4"
@@ -147,17 +147,25 @@
                 <Style
                     BasedOn="{StaticResource {x:Type ListBoxItem}}"
                     TargetType="ListBoxItem">
-                    <Setter Property="Margin" Value="5,0" />
-                    <Setter Property="Height" Value="23" />
-                    <Setter Property="Padding" Value="0" />
+                    <Setter
+                        Property="Margin"
+                        Value="5,0" />
+                    <Setter
+                        Property="Height"
+                        Value="23" />
+                    <Setter
+                        Property="Padding"
+                        Value="0" />
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
         <!--#endregion-->
 
+        <!--#region CheckBox at the bottom-->
         <CheckBox x:Name="cbSaveLog"
             Grid.Row="5"
             Margin="15,0,0,10"
             Content="Save conversion log to Desktop" />
+        <!--#endregion-->
     </Grid>
 </Window>

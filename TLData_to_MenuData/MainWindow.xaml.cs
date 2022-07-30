@@ -33,6 +33,12 @@ public partial class MainWindow : Window
         InitializeComponent();
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         tbTrayLauncherFile.Text = Environment.ExpandEnvironmentVariables("%localappdata%\\Programs\\T_K\\TrayLauncher\\MenuItems.xml");
+        AddListBoxInstructions();
+    }
+
+    #region Put instructions in the ListBox
+    private void AddListBoxInstructions()
+    {
         _ = lbxOutput.Items.Add("1. Select either the \"Menu Items\" or \"List Items\" conversion type. The My Launcher file name will be filled for you.");
         _ = lbxOutput.Items.Add("2. The Tray Launcher file name is set to the default location.");
         _ = lbxOutput.Items.Add("3. Change either file name if needed.");
@@ -40,6 +46,7 @@ public partial class MainWindow : Window
         _ = lbxOutput.Items.Add("5. Click the Convert button when ready.");
         _ = lbxOutput.Items.Add("6. Use the Import function in the appropriate Maintenance window in My Launcher to import the converted file.");
     }
+    #endregion Put instructions in the ListBox
 
     #region Button click events
     private void RbMenu_Checked(object sender, RoutedEventArgs e)
@@ -51,7 +58,7 @@ public partial class MainWindow : Window
     private void RbList_Checked(object sender, RoutedEventArgs e)
     {
         string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        tbMyLauncherFile.Text = Path.Combine(desktop, "Converted_LauncherItems.json");
+        tbMyLauncherFile.Text = Path.Combine(desktop, "Converted_ListItems.json");
     }
 
     private void BtnConvertList_Click(object sender, RoutedEventArgs e)
@@ -142,31 +149,31 @@ public partial class MainWindow : Window
     #region Convert TL data to My Launcher list data
     private void ConvertToMLList()
     {
+        _ = lbxOutput.Items.Add($"⌚ Beginning conversion - {DateTime.UtcNow} UTC ");
         if (XmlData == null)
         {
             _ = lbxOutput.Items.Add("⚠️ Error converting data");
             SystemSounds.Exclamation.Play();
             return;
         }
-        int skip = 0;
-        int keep = 0;
+        int sh = 0, sep = 0, sm = 0, smi = 0, mi = 0;
         listItems.Clear();
         foreach (TLMenuItem item in XmlData.menuList)
         {
             Guid guid = Guid.NewGuid();
             Child child = new();
 
-            // Skip Section Headers. No analogous property in ML.
+            // Skip Section Headers. No analogous property in ML lists.
             if (item.ItemType == "SH")
             {
                 _ = lbxOutput.Items.Add($"➖ Skipping Section Header \"{item.Header}\" ");
-                skip++;
+                sh++;
             }
             // Separator
             else if (item.ItemType == "SEP")
             {
                 _ = lbxOutput.Items.Add("➖ Skipping Separator ");
-                skip++;
+                sep++;
             }
             // SubMenu
             else if (item.ItemType == "SM")
@@ -180,7 +187,7 @@ public partial class MainWindow : Window
                 listItems.Add(child);
                 _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Pop-up");
                 currentPopup = child;
-                keep++;
+                sm++;
             }
             // SubMenu item
             else if (item.ItemType == "SMI")
@@ -192,7 +199,7 @@ public partial class MainWindow : Window
                 child.EntryType = ListEntryType.Normal;
                 currentPopup.ChildrenOfChild.Add(child);
                 _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Normal item under {currentPopup.Title}");
-                keep++;
+                smi++;
             }
             // Menu item
             else
@@ -204,11 +211,14 @@ public partial class MainWindow : Window
                 child.EntryType = ListEntryType.Normal;
                 listItems.Add(child);
                 _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Normal item");
-                keep++;
+                mi++;
             }
         }
-        _ = lbxOutput.Items.Add($"👉 Skipped {skip} Section Header and/or Separator entries");
-        _ = lbxOutput.Items.Add($"⚡ Converted {keep} My Launcher list entries");
+        _ = lbxOutput.Items.Add($"👉 Skipped {sep} Separator entries");
+        _ = lbxOutput.Items.Add($"👉 Skipped {sh} Section Header entries");
+        _ = lbxOutput.Items.Add($"⚡ Converted {sm} Submenu entries to Pop-up entries");
+        _ = lbxOutput.Items.Add($"⚡ Converted {smi} Submenu items to My Launcher list entries");
+        _ = lbxOutput.Items.Add($"⚡ Converted {mi} Menu items to My Launcher list entries");
         WriteJson(listItems);
     }
     #endregion Convert TL data to My Launcher list data
@@ -216,25 +226,31 @@ public partial class MainWindow : Window
     #region Convert TL data to My Launcher menu data
     private void ConvertToMLMenu()
     {
+        _ = lbxOutput.Items.Add($"⌚ Beginning conversion - {DateTime.UtcNow} UTC ");
         if (XmlData == null)
         {
             _ = lbxOutput.Items.Add("⚠️ Error converting data");
             SystemSounds.Exclamation.Play();
             return;
         }
-        int skip = 0;
-        int keep = 0;
+        int sh = 0, sep = 0, sm = 0, smi = 0, mi = 0;
         menuItems.Clear();
         foreach (TLMenuItem item in XmlData.menuList)
         {
             Guid guid = Guid.NewGuid();
             MyMenuItem menuItem = new();
 
-            // Skip Section Headers. No analogous property in ML.
+            // Section Heading
             if (item.ItemType == "SH")
             {
-                _ = lbxOutput.Items.Add($"➖ Skipping Section Header \"{item.Header}\" ");
-                skip++;
+                menuItem.Title = item.Header;
+                menuItem.FilePathOrURI = "";
+                menuItem.Arguments = "";
+                menuItem.ItemID = guid.ToString();
+                menuItem.ItemType = MenuItemType.SectionHead;
+                menuItems.Add(menuItem);
+                _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Section Heading");
+                sh++;
             }
             // Separator
             else if (item.ItemType == "SEP")
@@ -245,6 +261,7 @@ public partial class MainWindow : Window
                 menuItem.ItemType = MenuItemType.Separator;
                 menuItems.Add(menuItem);
                 _ = lbxOutput.Items.Add("➕ Adding Separator ");
+                sep++;
             }
             // SubMenu
             else if (item.ItemType == "SM")
@@ -257,7 +274,7 @@ public partial class MainWindow : Window
                 menuItems.Add(menuItem);
                 _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Submenu");
                 currentSubMenu = menuItem;
-                keep++;
+                sm++;
             }
             // SubMenu item
             else if (item.ItemType == "SMI")
@@ -269,7 +286,7 @@ public partial class MainWindow : Window
                 menuItem.ItemType = MenuItemType.MenuItem;
                 currentSubMenu.SubMenuItems.Add(menuItem);
                 _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Normal item under {currentSubMenu.Title}");
-                keep++;
+                smi++;
             }
             // Menu item
             else
@@ -281,11 +298,14 @@ public partial class MainWindow : Window
                 menuItem.ItemType = MenuItemType.MenuItem;
                 menuItems.Add(menuItem);
                 _ = lbxOutput.Items.Add($"➕ Adding \"{item.Header}\" as Normal item");
-                keep++;
+                mi++;
             }
         }
-        _ = lbxOutput.Items.Add($"👉 Skipped {skip} Section Header entries");
-        _ = lbxOutput.Items.Add($"⚡ Converted {keep} My Launcher menu entries");
+        _ = lbxOutput.Items.Add($"⚡ Converted {sep} Separator entries");
+        _ = lbxOutput.Items.Add($"⚡ Converted {sh} Section Heading entries");
+        _ = lbxOutput.Items.Add($"⚡ Converted {sm} Submenu entries");
+        _ = lbxOutput.Items.Add($"⚡ Converted {smi} Submenu item entries");
+        _ = lbxOutput.Items.Add($"⚡ Converted {mi} Menu item entries");
         WriteJson(menuItems);
     }
     #endregion Convert TL data to My Launcher Menu data
