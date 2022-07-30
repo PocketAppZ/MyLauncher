@@ -139,6 +139,7 @@
                         BorderThickness="2"
                         FontStyle="Normal"
                         FontWeight="Normal"
+                        FontFamily="Segoe UI"
                         ScrollViewer.CanContentScroll="True"
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
                         SelectedItemChanged="TvMenuMaint_SelectedItemChanged"
