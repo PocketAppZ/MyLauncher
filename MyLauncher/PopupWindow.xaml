@@ -93,7 +93,7 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" MinWidth="90"/>
                                 </Grid.ColumnDefinitions>
                                 <Image
                                     Width="28"
