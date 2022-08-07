@@ -13,16 +13,16 @@ nonagenarian to use My Launcher.
 
 ## Screenshots
 ### Main Window
-![My Launcher screenshot](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/MyLauncher_047.png)
+![My Launcher screenshot](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/MyLauncher_054.png)
 
 ### List Maintenance
 ![List Maintenance](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/ML_List.png)
 
 ### Menu Maintenance
-![Menu Maintenance](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/ML_Tray_Menu.png)
+![Menu Maintenance](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/ML_Menu.png)
 
 ### Pop-up List
 ![Pop-up List](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/ML_Pop-up.png)
 
-### Settings (Updated in 0.5.2)
+### Settings
 ![Settings](https://github.com/Timthreetwelve/MyLauncher/blob/main/Images/ML_Settings.png)
