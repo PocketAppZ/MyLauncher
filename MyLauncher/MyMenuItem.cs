@@ -168,12 +168,13 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     {
         if (dropInfo.TargetItem is MyMenuItem dragTarget)
         {
-            if (dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
+            if (dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter)
+                && dragTarget.ItemType is MenuItemType.MenuItem
+                                       or MenuItemType.Separator
+                                       or MenuItemType.SectionHead
+                                       or MenuItemType.Popup)
             {
-                if (dragTarget.ItemType is MenuItemType.MenuItem or MenuItemType.Separator or MenuItemType.SectionHead)
-                {
-                    return;
-                }
+                return;
             }
             DragDrop.DefaultDropHandler.DragOver(dropInfo);
         }
@@ -187,17 +188,22 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     {
         if (dropInfo.TargetItem is MyMenuItem dropItem)
         {
-            if (dropItem.ItemType == MenuItemType.SubMenu)
+            if (dropItem.ItemType is MenuItemType.SubMenu)
             {
                 DragDrop.DefaultDropHandler.Drop(dropInfo);
                 TreeViewItem tvi = dropInfo.VisualTargetItem as TreeViewItem;
                 tvi.IsExpanded = true;
                 tvi.BringIntoView();
             }
-            else if ((dropItem.ItemType == MenuItemType.MenuItem || dropItem.ItemType == MenuItemType.Separator)
-                && !dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
+            else if ((dropItem.ItemType is MenuItemType.MenuItem
+                                        or MenuItemType.Separator
+                                        or MenuItemType.SectionHead
+                                        or MenuItemType.Popup)
+                     && !dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
             {
                 DragDrop.DefaultDropHandler.Drop(dropInfo);
+                TreeViewItem tvi = dropInfo.VisualTargetItem as TreeViewItem;
+                tvi.BringIntoView();
             }
         }
     }
