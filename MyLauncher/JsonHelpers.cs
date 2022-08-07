@@ -202,7 +202,8 @@ internal static class JsonHelpers
                     ItemType = item.ItemType,
                     SubMenuItems = item.SubMenuItems,
                     WorkingDir = item.WorkingDir,
-                    ItemID = item.ItemID
+                    ItemID = item.ItemID,
+                    PopupID = item.PopupID,
                 };
                 tempCollection.Add(mmi);
             }
@@ -242,10 +243,11 @@ internal static class JsonHelpers
         string tStamp = string.Format("{0:yyyyMMdd_HHmm}", DateTime.Now);
         SaveFileDialog dlgSave = new()
         {
-            Title = "Choose backup location",
+            Title = "Choose Export location",
             CheckPathExists = true,
             CheckFileExists = false,
             OverwritePrompt = true,
+            AddExtension = true,
             FileName = $"MyLauncher_{tStamp}_List_backup.json",
             Filter = "JSON (*.json)|*.json|All files (*.*)|*.*"
         };
@@ -283,10 +285,11 @@ internal static class JsonHelpers
         string tStamp = string.Format("{0:yyyyMMdd_HHmm}", DateTime.Now);
         SaveFileDialog dlgSave = new()
         {
-            Title = "Choose backup location",
+            Title = "Choose Export location",
             CheckPathExists = true,
             CheckFileExists = false,
             OverwritePrompt = true,
+            AddExtension = true,
             FileName = $"MyLauncher_{tStamp}_Menu_backup.json",
             Filter = "JSON (*.json)|*.json|All files (*.*)|*.*"
         };

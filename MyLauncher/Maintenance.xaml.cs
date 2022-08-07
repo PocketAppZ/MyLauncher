@@ -263,7 +263,7 @@ public partial class Maintenance : Window
     }
     #endregion Remove an item from the list
 
-    #region File picker buttons (for Path)
+    #region File picker buttons
     private void BtnFilePicker_Click(object sender, RoutedEventArgs e)
     {
         ChooseFile();
@@ -272,7 +272,10 @@ public partial class Maintenance : Window
     {
         ChooseFolder();
     }
-
+    private void BtnWorkingDirPicker_Click(object sender, RoutedEventArgs e)
+    {
+        ChooseWorkDir();
+    }
     /// <summary>
     /// Pick a file using the OpenFileDialog
     /// </summary>
@@ -313,7 +316,27 @@ public partial class Maintenance : Window
             entry.FilePathOrURI = tbPath.Text;
         }
     }
-    #endregion File picker buttons (for Path)
+
+    /// <summary>
+    /// Folder picker for working directory
+    /// </summary>
+    private void ChooseWorkDir()
+    {
+        System.Windows.Forms.FolderBrowserDialog dialogFolder = new()
+        {
+            Description = "Browse for a Folder",
+            UseDescriptionForTitle = true,
+            AutoUpgradeEnabled = true,
+        };
+
+        if (dialogFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            tbWorkDir.Text = dialogFolder.SelectedPath;
+            MyListItem entry = (MyListItem)TvMaint.SelectedItem;
+            entry.WorkingDir = tbWorkDir.Text;
+        }
+    }
+    #endregion File picker buttons
 
     #region Button events
     private void Delete_Click(object sender, RoutedEventArgs e)
@@ -385,6 +408,16 @@ public partial class Maintenance : Window
             FilePathOrURI = AppInfo.AppDirectory
         };
         MainWindow.LaunchApp(item);
+    }
+
+    private void BtnImport_Click(object sender, RoutedEventArgs e)
+    {
+        if (JsonHelpers.ImportListFile())
+        {
+            JsonHelpers.SaveMainJson();
+            LoadTreeView();
+            (Application.Current.MainWindow as MainWindow)?.PopulateMainListBox();
+        }
     }
     #endregion Button events
 
@@ -570,14 +603,4 @@ public partial class Maintenance : Window
         Width = width + 1;
     }
     #endregion Double click ColorZone
-
-    private void BtnImport_Click(object sender, RoutedEventArgs e)
-    {
-        if (JsonHelpers.ImportListFile())
-        {
-            JsonHelpers.SaveMainJson();
-            LoadTreeView();
-            (Application.Current.MainWindow as MainWindow)?.PopulateMainListBox();
-        }
-    }
 }

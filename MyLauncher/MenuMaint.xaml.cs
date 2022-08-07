@@ -18,6 +18,8 @@ public partial class MenuMaint : Window
         InitSettings();
 
         LoadTreeView();
+
+        LoadPopups();
     }
 
     #region Settings
@@ -91,6 +93,16 @@ public partial class MenuMaint : Window
     }
     #endregion Load the TreeView
 
+    #region Load the ComboBox
+    /// <summary>
+    /// Loads the ComboBox with the list of pop-ups
+    /// </summary>
+    private void LoadPopups()
+    {
+        cbxPopups.ItemsSource = PopupHelpers.SortedPopups();
+    }
+    #endregion Load the ComboBox
+
     #region Check for "untitled" entries in the list box
     /// <summary>
     /// Checks the observable collection for any Title equal to "untitled"
@@ -163,7 +175,7 @@ public partial class MenuMaint : Window
     #endregion Add new submenu
 
     #region Add new section heading
-        /// <summary>
+    /// <summary>
     /// Adds a new section heading item
     /// </summary>
     private void NewSectionHead()
@@ -208,6 +220,31 @@ public partial class MenuMaint : Window
         ClearAndQueueMessage("New Separator item was created.", 3000);
     }
     #endregion Add new separator
+
+    #region Add Existing Pop-up
+    private void AddPopup()
+    {
+        MyMenuItem newitem = new()
+        {
+            Title = "untitled",
+            FilePathOrURI = string.Empty,
+            Arguments = string.Empty,
+            ItemType = MenuItemType.Popup,
+            ItemID = Guid.NewGuid().ToString(),
+            PopupID = string.Empty,
+            IsSelected = true,
+            SubMenuItems = null
+        };
+        MyMenuItem.MLMenuItems.Add(newitem);
+        if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
+        {
+            tvi.IsSelected = true;
+            tvi.BringIntoView();
+        }
+        _ = tbTitle.Focus();
+        ClearAndQueueMessage("New \"untitled\" pop-up was created.", 3000);
+    }
+    #endregion Add Existing Pop-up
 
     #region Delete an item
     /// <summary>
@@ -302,7 +339,6 @@ public partial class MenuMaint : Window
     #region TreeView events
     private void TvMenuMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-        Debug.WriteLine("Selected Item Changed");
     }
 
     private void TvMenuMaint_Selected(object sender, RoutedEventArgs e)
@@ -358,7 +394,7 @@ public partial class MenuMaint : Window
     }
     #endregion Move to next control on Enter
 
-    #region File picker buttons (for Path)
+    #region File & Folder picker buttons
     private void BtnFilePicker_Click(object sender, RoutedEventArgs e)
     {
         ChooseFile();
@@ -366,6 +402,10 @@ public partial class MenuMaint : Window
     private void BtnFolderPicker_Click(object sender, RoutedEventArgs e)
     {
         ChooseFolder();
+    }
+    private void BtnWorkingDirPicker_Click(object sender, RoutedEventArgs e)
+    {
+        ChooseWorkDir();
     }
 
     /// <summary>
@@ -408,7 +448,27 @@ public partial class MenuMaint : Window
             entry.FilePathOrURI = tbPath.Text;
         }
     }
-    #endregion File picker buttons (for Path)
+
+    /// <summary>
+    /// Pick a folder for working directory
+    /// </summary>
+    private void ChooseWorkDir()
+    {
+        System.Windows.Forms.FolderBrowserDialog dialogFolder = new()
+        {
+            Description = "Browse for a Folder",
+            UseDescriptionForTitle = true,
+            AutoUpgradeEnabled = true,
+        };
+
+        if (dialogFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            tbWorkDir.Text = dialogFolder.SelectedPath;
+            MyMenuItem entry = (MyMenuItem)TvMenuMaint.SelectedItem;
+            entry.WorkingDir = tbWorkDir.Text;
+        }
+    }
+    #endregion File & Folder picker buttons
 
     #region New items
     private void NewItem_Click(object sender, RoutedEventArgs e)
@@ -441,6 +501,13 @@ public partial class MenuMaint : Window
     {
         e.Handled = true;
         NewSeparator();
+    }
+
+    private void Popup_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        cbxPopups.IsDropDownOpen = true;
+        AddPopup();
     }
 
     private void CancelNewItem_Click(object sender, RoutedEventArgs e)
@@ -522,4 +589,17 @@ public partial class MenuMaint : Window
             TimeSpan.FromMilliseconds(duration));
     }
     #endregion Clear message queue then queue a snackbar message and set duration
+
+    #region Pop-ups ComboBox selection changed
+    private void CbxPopups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (cbxPopups.SelectedItem != null
+            && IsLoaded
+            && TvMenuMaint.SelectedItem is MyMenuItem myMenuItem
+            && myMenuItem.ItemType == MenuItemType.Popup)
+        {
+            myMenuItem.PopupID = (cbxPopups.SelectedItem as MyListItem)?.ItemID;
+        }
+    }
+    #endregion Pop-ups ComboBox selection changed
 }

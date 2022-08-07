@@ -109,6 +109,19 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     }
 
     /// <summary>
+    /// ID of the pop-up for this menu item
+    /// </summary>
+    public string PopupID
+    {
+        get => popupID;
+        set
+        {
+            popupID = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
     /// ObservableCollection for the submenu items.
     /// </summary>
     [JsonPropertyName("MenuItems")]
@@ -132,6 +145,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     private bool isSelected;
     private string itemID;
     private MenuItemType itemType = MenuItemType.MenuItem;
+    private string popupID = string.Empty;
     private string title;
     private string workingDir = string.Empty;
     #endregion Private backing fields

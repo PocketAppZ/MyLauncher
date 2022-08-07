@@ -331,6 +331,7 @@
                             <RowDefinition Height="35" />
                             <RowDefinition Height="35" />
                             <RowDefinition Height="35" />
+                            <RowDefinition Height="35" />
                         </Grid.RowDefinitions>
                         <!--#endregion-->
                         <StackPanel
@@ -399,6 +400,32 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="200"
+                                Content="Tray Menu Spacing" />
+                            <ComboBox
+                                Width="110"
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Left"
+                                IsEnabled="{Binding MinimizeToTray,
+                                                    Source={x:Static local:UserSettings.Setting}}"
+                                MaxDropDownHeight="170"
+                                SelectedIndex="{Binding TrayMenuSpacing,
+                                                        Source={x:Static local:UserSettings.Setting}}"
+                                Style="{StaticResource MaterialDesignComboBox}"
+                                TabIndex="9">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Scrunched" />
+                                    <ComboBoxItem Content="Compact" />
+                                    <ComboBoxItem Content="Comfortable" />
+                                    <ComboBoxItem Content="Spacious" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="4"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="200"
                                 Content="Section Heading Font Weight" />
                             <ComboBox
                                 Width="110"
@@ -420,7 +447,7 @@
                         </StackPanel>
 
                         <StackPanel
-                            Grid.Row="4"
+                            Grid.Row="5"
                             Orientation="Horizontal">
                             <Label
                                 Width="200"
@@ -444,7 +471,7 @@
                         </StackPanel>
 
                         <StackPanel
-                            Grid.Row="5"
+                            Grid.Row="6"
                             Orientation="Horizontal">
                             <Label
                                 Width="200"
@@ -470,7 +497,7 @@
                         </StackPanel>
 
                         <StackPanel
-                            Grid.Row="6"
+                            Grid.Row="7"
                             Orientation="Horizontal">
                             <Label
                                 Width="200"
@@ -690,11 +717,11 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Width="475"
-                    Height="100"
-                    Margin="10,175,5,5"
-                    Padding="10,10,10,20"
+                    Height="auto"
+                    Margin="10,175,5,6"
+                    Padding="10,20,10,10"
                     HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Stretch"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
                     Foreground="{DynamicResource MaterialDesignBody}"
                     MouseEnter="Card_MouseEnter"

@@ -1,24 +1,22 @@
-﻿<Window
-    x:Class="MyLauncher.Maintenance"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-    xmlns:local="clr-namespace:MyLauncher"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Title="List Maintenance"
-    MinWidth="300"
-    MinHeight="300"
-    Background="{DynamicResource MaterialDesignPaper}"
-    Closing="Window_Closing"
-    Loaded="Window_Loaded"
-    TextElement.FontSize="14"
-    TextElement.FontWeight="Regular"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-    TextOptions.TextFormattingMode="Ideal"
-    TextOptions.TextRenderingMode="Auto">
+﻿<Window x:Class="MyLauncher.Maintenance"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        xmlns:local="clr-namespace:MyLauncher"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="List Maintenance"
+        MinWidth="300" MinHeight="300"
+        Background="{DynamicResource MaterialDesignPaper}"
+        Closing="Window_Closing"
+        Loaded="Window_Loaded"
+        TextElement.FontSize="14"
+        TextElement.FontWeight="Regular"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto">
 
     <Grid x:Name="MaintGrid">
         <!--#region Row definitions-->
@@ -29,52 +27,38 @@
         <!--#endregion-->
 
         <!--#region ColorZone for page header-->
-        <materialDesign:ColorZone
-            Height="33"
-            Margin="10"
-            Padding="0,0,0,3"
-            materialDesign:ShadowAssist.ShadowDepth="Depth2"
-            CornerRadius="4"
-            Focusable="False"
-            Mode="PrimaryMid"
-            MouseDoubleClick="ColorZone_MouseDoubleClick">
+        <materialDesign:ColorZone Height="33"
+                                  Margin="10" Padding="0,0,0,3"
+                                  materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                  CornerRadius="4" Focusable="False"
+                                  Mode="PrimaryMid"
+                                  MouseDoubleClick="ColorZone_MouseDoubleClick">
             <Grid>
                 <TextBlock x:Name="tbHeader"
-                    Margin="5,2"
-                    Style="{StaticResource PageHeader}"
-                    Text="LIST MAINTENANCE" />
-                <materialDesign:PopupBox
-                    Margin="0,0,10,0"
-                    Padding="0"
-                    HorizontalAlignment="Right"
-                    Focusable="False"
-                    PlacementMode="LeftAndAlignTopEdges"
-                    ToolTip="View Files">
-                    <Border
-                        Padding="3"
-                        BorderBrush="{DynamicResource SecondaryHueMidBrush}"
-                        BorderThickness="2">
-                        <Grid
-                            Width="165"
-                            Margin="0"
-                            Background="{DynamicResource MaterialDesignPaper}">
+                           Margin="5,2"
+                           Style="{StaticResource PageHeader}"
+                           Text="LIST MAINTENANCE" />
+                <materialDesign:PopupBox Margin="0,0,10,0" Padding="0"
+                                         HorizontalAlignment="Right"
+                                         Focusable="False"
+                                         PlacementMode="LeftAndAlignTopEdges"
+                                         ToolTip="View Files">
+                    <Border Padding="3"
+                            BorderBrush="{DynamicResource SecondaryHueMidBrush}"
+                            BorderThickness="2">
+                        <Grid Width="165"
+                              Margin="0"
+                              Background="{DynamicResource MaterialDesignPaper}">
                             <StackPanel Orientation="Vertical">
-                                <Button
-                                    Click="BtnData_Click"
-                                    Content="View List Data File"
-                                    FontSize="14" />
-                                <Button
-                                    Click="BtnFolder_Click"
-                                    Content="Open App Folder"
-                                    FontSize="14" />
-                                <Separator
-                                    Margin="0"
-                                    Padding="1"
-                                    Background="{DynamicResource SecondaryHueMidBrush}" />
-                                <Button
-                                    HorizontalContentAlignment="Left"
-                                    Content="Cancel"
-                                    FontSize="14" />
+                                <Button Click="BtnData_Click"
+                                        Content="View List Data File"
+                                        FontSize="14" />
+                                <Button Click="BtnFolder_Click"
+                                        Content="Open App Folder" FontSize="14" />
+                                <Separator Margin="0" Padding="1"
+                                           Background="{DynamicResource SecondaryHueMidBrush}" />
+                                <Button HorizontalContentAlignment="Left"
+                                        Content="Cancel" FontSize="14" />
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -100,59 +84,50 @@
             <!--#endregion-->
 
             <!--#region TreeView on the left side-->
-            <Grid
-                Grid.Row="1"
-                Grid.Column="1">
+            <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="38" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <materialDesign:ColorZone
-                    Height="38"
-                    Margin="5,6,4.5,0"
-                    CornerRadius="7,7,0,0"
-                    Mode="PrimaryMid"
-                    SnapsToDevicePixels="True">
-                    <TextBlock
-                        Margin="10,5"
-                        HorizontalAlignment="Center"
-                        FontSize="14"
-                        Text="Use drag &amp; drop to arrange items" />
+                <materialDesign:ColorZone Height="38"
+                                          Margin="5,6,4.5,0"
+                                          CornerRadius="7,7,0,0" Mode="PrimaryMid"
+                                          SnapsToDevicePixels="True">
+                    <TextBlock Margin="10,5"
+                               HorizontalAlignment="Center"
+                               FontSize="14"
+                               Text="Use drag &amp; drop to arrange items" />
                 </materialDesign:ColorZone>
-                <materialDesign:Card
-                    Grid.Row="1"
-                    MinWidth="100"
-                    Margin="5,0"
-                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                    MouseEnter="Card_MouseEnter"
-                    MouseLeave="Card_MouseLeave"
-                    UniformCornerRadius="1">
+                <materialDesign:Card Grid.Row="1"
+                                     MinWidth="100"
+                                     Margin="5,0"
+                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                     MouseEnter="Card_MouseEnter"
+                                     MouseLeave="Card_MouseLeave"
+                                     UniformCornerRadius="1">
                     <TreeView x:Name="TvMaint"
-                        Margin="0"
-                        d:ItemsSource="{d:SampleData ItemCount=10}"
-                        dd:DragDrop.DragHandler="{Binding}"
-                        dd:DragDrop.DropHandler="{Binding}"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True"
-                        dd:DragDrop.UseDefaultDragAdorner="True"
-                        AllowDrop="True"
-                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                        BorderThickness="2,0,2,2"
-                        FontStyle="Normal"
-                        FontWeight="Normal"
-                        ScrollViewer.CanContentScroll="True"
-                        ScrollViewer.VerticalScrollBarVisibility="Visible"
-                        SelectedItemChanged="TvMaint_SelectedItemChanged"
-                        TabIndex="0"
-                        UseLayoutRounding="False">
+                              Margin="0"
+                              d:ItemsSource="{d:SampleData ItemCount=10}"
+                              dd:DragDrop.DragHandler="{Binding}"
+                              dd:DragDrop.DropHandler="{Binding}"
+                              dd:DragDrop.IsDragSource="True"
+                              dd:DragDrop.IsDropTarget="True"
+                              dd:DragDrop.UseDefaultDragAdorner="True"
+                              AllowDrop="True"
+                              BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                              BorderThickness="2,0,2,2"
+                              FontStyle="Normal" FontWeight="Normal"
+                              ScrollViewer.CanContentScroll="True"
+                              ScrollViewer.VerticalScrollBarVisibility="Visible"
+                              SelectedItemChanged="TvMaint_SelectedItemChanged"
+                              TabIndex="0" UseLayoutRounding="False">
                         <TreeView.Resources>
-                            <Style BasedOn="{StaticResource ListTreeView}"
-                                   TargetType="TreeViewItem"/>
+                            <Style TargetType="TreeViewItem"
+                                   BasedOn="{StaticResource ListTreeView}" />
                         </TreeView.Resources>
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate
-                                DataType="{x:Type local:MyListItem}"
-                                ItemsSource="{Binding MyListItems}">
+                            <HierarchicalDataTemplate DataType="{x:Type local:MyListItem}"
+                                                      ItemsSource="{Binding MyListItems}">
                                 <TextBlock Text="{Binding Title}" />
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
@@ -166,17 +141,13 @@
             <!--#endregion-->
 
             <!--#region Text boxes and buttons on the right side-->
-            <Grid
-                Grid.Row="1"
-                Grid.Column="3">
+            <Grid Grid.Row="1" Grid.Column="3">
                 <Grid.DataContext>
-                    <Binding
-                        ElementName="TvMaint"
-                        Path="SelectedItem" />
+                    <Binding ElementName="TvMaint"
+                             Path="SelectedItem" />
                 </Grid.DataContext>
-                <ScrollViewer
-                    HorizontalScrollBarVisibility="Disabled"
-                    VerticalScrollBarVisibility="Auto">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
                     <Grid>
                         <!--#region Row definitions-->
                         <Grid.RowDefinitions>
@@ -191,173 +162,142 @@
                         <!--#endregion-->
 
                         <!--#region Title with "special" apps button-->
-                        <materialDesign:Card
-                        Grid.Row="0"
-                        MouseEnter="Card_MouseEnter"
-                        MouseLeave="Card_MouseLeave"
-                        Style="{StaticResource MaintCardStyle}">
+                        <materialDesign:Card Grid.Row="0"
+                                             MouseEnter="Card_MouseEnter"
+                                             MouseLeave="Card_MouseLeave"
+                                             Style="{StaticResource MaintCardStyle}">
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
                                         <TextBlock Margin="10,5">
                                             <TextBlock.Style>
-                                                <Style
-                                                BasedOn="{StaticResource {x:Type TextBlock}}"
-                                                TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="Title" />
+                                                <Style TargetType="TextBlock"
+                                                       BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                    <Setter Property="Text"
+                                                            Value="Title" />
                                                     <Style.Triggers>
-                                                        <DataTrigger
-                                                        Binding="{Binding EntryType}"
-                                                        Value="1">
-                                                            <Setter Property="Text" Value="Pop-up List Title" />
+                                                        <DataTrigger Binding="{Binding EntryType}"
+                                                                     Value="1">
+                                                            <Setter Property="Text"
+                                                                    Value="Pop-up List Title" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
                                         <materialDesign:PopupBox x:Name="pbxInfo"
-                                        Margin="0,0,60,0"
-                                        Padding="0"
-                                        HorizontalAlignment="Right"
-                                        PlacementMode="LeftAndAlignTopEdges"
-                                        ToolTip="Item Information">
+                                                                 Margin="0,0,60,0" Padding="0"
+                                                                 HorizontalAlignment="Right"
+                                                                 PlacementMode="LeftAndAlignTopEdges"
+                                                                 ToolTip="Item Information">
                                             <materialDesign:PopupBox.ToggleContent>
-                                                <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Foreground="{Binding ElementName=x31,
-                                                                     Path=Foreground}"
-                                                Kind="InfoVariant" />
+                                                <materialDesign:PackIcon Width="24" Height="24"
+                                                                         Foreground="{Binding ElementName=tbHeader,
+                                                                                              Path=Foreground}"
+                                                                         Kind="InfoVariant" />
                                             </materialDesign:PopupBox.ToggleContent>
-                                            <Border
-                                            Padding="3"
-                                            BorderBrush="{DynamicResource SecondaryHueMidBrush}"
-                                            BorderThickness="2">
-                                                <Grid
-                                                Width="410"
-                                                Margin="0"
-                                                Background="{DynamicResource MaterialDesignPaper}">
+                                            <Border Padding="3"
+                                                    BorderBrush="{DynamicResource PrimaryHueLightBrush}"
+                                                    BorderThickness="2">
+                                                <Grid Width="410"
+                                                      Margin="0"
+                                                      Background="{DynamicResource MaterialDesignPaper}">
                                                     <Grid.DataContext>
-                                                        <Binding
-                                                        ElementName="TvMaint"
-                                                        Path="SelectedItem" />
+                                                        <Binding ElementName="TvMaint"
+                                                                 Path="SelectedItem" />
                                                     </Grid.DataContext>
                                                     <StackPanel Orientation="Vertical">
-                                                        <TextBlock
-                                                        Margin="15,10,0,0"
-                                                        Text="{Binding Title,
-                                                                       StringFormat='Title: {0}',
-                                                                       FallbackValue='Please select an item'}"
-                                                        TextAlignment="Left" />
-                                                        <TextBlock
-                                                        Margin="15,5,0,0"
-                                                        Text="{Binding EntryType,
-                                                                       StringFormat='Type: {0}'}"
-                                                        TextAlignment="Left" />
-                                                        <TextBlock
-                                                        Margin="15,5,0,0"
-                                                        Text="{Binding MyListItems.Count,
-                                                                       StringFormat='Children: {0}',
-                                                                       FallbackValue='Children: None'}"
-                                                        TextAlignment="Left" />
-                                                        <TextBlock
-                                                        Margin="15,5,0,5"
-                                                        Text="{Binding ItemID,
-                                                                       StringFormat='ID: {0}'}"
-                                                        TextAlignment="Left" />
+                                                        <TextBlock Margin="15,10,0,0"
+                                                                   Text="{Binding Title,
+                                                                                  StringFormat='Title:  {0}',
+                                                                                  FallbackValue='Please select an item'}"
+                                                                   TextAlignment="Left" />
+                                                        <TextBlock Margin="15,5,0,0"
+                                                                   Text="{Binding EntryType,
+                                                                                  StringFormat='Type:  {0}'}"
+                                                                   TextAlignment="Left" />
+                                                        <TextBlock Margin="15,5,0,0"
+                                                                   Text="{Binding MyListItems.Count,
+                                                                                  StringFormat='Children:  {0}',
+                                                                                  FallbackValue='Children:  None'}"
+                                                                   TextAlignment="Left" />
+                                                        <TextBlock Margin="15,5,0,5"
+                                                                   Text="{Binding ItemID,
+                                                                                  StringFormat='ID:  {0}'}"
+                                                                   TextAlignment="Left" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
                                         </materialDesign:PopupBox>
 
                                         <materialDesign:PopupBox x:Name="pbxSpecialApps"
-                                        Margin="0,0,17,0"
-                                        Padding="0"
-                                        HorizontalAlignment="Right"
-                                        PlacementMode="LeftAndAlignTopEdges"
-                                        ToolTip="Special Apps">
+                                                                 Margin="0,0,17,0" Padding="0"
+                                                                 HorizontalAlignment="Right"
+                                                                 PlacementMode="LeftAndAlignTopEdges"
+                                                                 ToolTip="Special Apps">
                                             <materialDesign:PopupBox.ToggleContent>
-                                                <materialDesign:PackIcon
-                                                Width="24"
-                                                Height="24"
-                                                Foreground="{Binding ElementName=x31,
-                                                                     Path=Foreground}"
-                                                Kind="Apps" />
+                                                <materialDesign:PackIcon Width="24" Height="24"
+                                                                         Foreground="{Binding ElementName=tbHeader,
+                                                                                              Path=Foreground}"
+                                                                         Kind="Apps" />
                                             </materialDesign:PopupBox.ToggleContent>
-                                            <Border
-                                            Padding="3"
-                                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                                            BorderThickness="2">
-                                                <Grid
-                                                Width="185"
-                                                Margin="0"
-                                                Background="{DynamicResource MaterialDesignPaper}">
+                                            <Border Padding="3"
+                                                    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                                    BorderThickness="2">
+                                                <Grid Width="185"
+                                                      Margin="0"
+                                                      Background="{DynamicResource MaterialDesignPaper}">
                                                     <StackPanel Orientation="Vertical">
-                                                        <TextBlock
-                                                        Margin="15,10,0,10"
-                                                        FontSize="16"
-                                                        FontWeight="DemiBold"
-                                                        Foreground="{DynamicResource SecondaryHueMidBrush}"
-                                                        Text="Special Apps"
-                                                        TextAlignment="Left" />
+                                                        <TextBlock Margin="15,10,0,10"
+                                                                   FontSize="16" FontWeight="DemiBold"
+                                                                   Foreground="{DynamicResource SecondaryHueMidBrush}"
+                                                                   Text="Special Apps" TextAlignment="Left" />
                                                         <Separator Background="{DynamicResource PrimaryHueDarkBrush}" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Calculator" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Calendar" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Email" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Solitaire" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Weather" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Windows Settings" />
-                                                        <Separator
-                                                        Margin="0"
-                                                        Padding="1"
-                                                        Background="{DynamicResource PrimaryHueDarkBrush}" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Restart" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="BtnSpecial_Click"
-                                                        Content="Shutdown" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="BtnSpecial_Click"
+                                                                Content="Calculator" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="BtnSpecial_Click"
+                                                                Content="Calendar" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="BtnSpecial_Click" Content="Email" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="BtnSpecial_Click"
+                                                                Content="Solitaire" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="BtnSpecial_Click"
+                                                                Content="Weather" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="BtnSpecial_Click"
+                                                                Content="Windows Settings" />
+                                                        <Separator Margin="0" Padding="1"
+                                                                   Background="{DynamicResource PrimaryHueDarkBrush}" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="BtnSpecial_Click"
+                                                                Content="Restart" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="BtnSpecial_Click"
+                                                                Content="Shutdown" />
                                                         <Separator Background="{DynamicResource PrimaryHueDarkBrush}" />
-                                                        <Button
-                                                        HorizontalContentAlignment="Left"
-                                                        Click="CancelNewItem_Click"
-                                                        Content="Cancel" />
+                                                        <Button HorizontalContentAlignment="Left"
+                                                                Click="CancelNewItem_Click"
+                                                                Content="Cancel" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -365,263 +305,236 @@
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbTitle"
-                                materialDesign:HintAssist.Hint="The text you want to see in the list."
-                                PreviewKeyDown="Textbox_KeyDown"
-                                Style="{StaticResource EntryTextBox}"
-                                TabIndex="1"
-                                Text="{Binding Title,
-                                               UpdateSourceTrigger=PropertyChanged}"
-                                ToolTip="{Binding ItemID}" />
+                                         materialDesign:HintAssist.Hint="The text you want to see in the list."
+                                         PreviewKeyDown="Textbox_KeyDown"
+                                         Style="{StaticResource EntryTextBox}"
+                                         TabIndex="1"
+                                         Text="{Binding Title,
+                                                        UpdateSourceTrigger=PropertyChanged}"
+                                         ToolTip="{Binding ItemID}" />
                             </Grid>
                         </materialDesign:Card>
                         <!--#endregion-->
 
                         <!--#region Path or URL with folder and file picker buttons-->
-                        <materialDesign:Card
-                        Grid.Row="1"
-                        MouseEnter="Card_MouseEnter"
-                        MouseLeave="Card_MouseLeave"
-                        Style="{StaticResource MaintCardStyle}">
+                        <materialDesign:Card Grid.Row="1"
+                                             MouseEnter="Card_MouseEnter"
+                                             MouseLeave="Card_MouseLeave"
+                                             Style="{StaticResource MaintCardStyle}">
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock x:Name="x31"
-                                        Margin="10,5"
-                                        Text="Path or URL" />
-                                        <Button
-                                        Margin="0"
-                                        HorizontalAlignment="Right"
-                                        Click="BtnFilePicker_Click"
-                                        Style="{StaticResource MaterialDesignFlatLightButton}"
-                                        ToolTip="Browse for file">
-                                            <materialDesign:PackIcon
-                                            Width="24"
-                                            Height="24"
-                                            Foreground="{Binding ElementName=x31,
-                                                                 Path=Foreground}"
-                                            Kind="FileDocumentOutline" />
+                                        <TextBlock Margin="10,5"
+                                                   Text="Path or URL" />
+                                        <Button Margin="0" HorizontalAlignment="Right"
+                                                Click="BtnFilePicker_Click"
+                                                Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                ToolTip="Browse for file">
+                                            <materialDesign:PackIcon Width="24" Height="24"
+                                                                     Foreground="{Binding ElementName=tbHeader,
+                                                                                          Path=Foreground}"
+                                                                     Kind="FileDocumentOutline" />
                                         </Button>
-                                        <Button
-                                        Margin="0,0,40,0"
-                                        HorizontalAlignment="Right"
-                                        Click="BtnFolderPicker_Click"
-                                        Style="{StaticResource MaterialDesignFlatLightButton}"
-                                        ToolTip="Browse for folder">
-                                            <materialDesign:PackIcon
-                                            Width="24"
-                                            Height="24"
-                                            Foreground="{Binding ElementName=x31,
-                                                                 Path=Foreground}"
-                                            Kind="FolderOpenOutline" />
+                                        <Button Margin="0,0,40,0"
+                                                HorizontalAlignment="Right"
+                                                Click="BtnFolderPicker_Click"
+                                                Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                ToolTip="Browse for folder">
+                                            <materialDesign:PackIcon Width="24" Height="24"
+                                                                     Foreground="{Binding ElementName=tbHeader,
+                                                                                          Path=Foreground}"
+                                                                     Kind="FolderOpenOutline" />
                                         </Button>
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbPath"
-                                materialDesign:HintAssist.Hint="Enter the complete path to the document, application, or URL"
-                                materialDesign:TextBlockAssist.AutoToolTip="True"
-                                PreviewKeyDown="Textbox_KeyDown"
-                                Style="{StaticResource EntryTextBox}"
-                                TabIndex="2"
-                                Text="{Binding FilePathOrURI,
-                                               UpdateSourceTrigger=LostFocus}" />
+                                         materialDesign:HintAssist.Hint="Enter the complete path to the document, application, or URL"
+                                         materialDesign:TextBlockAssist.AutoToolTip="True"
+                                         PreviewKeyDown="Textbox_KeyDown"
+                                         Style="{StaticResource EntryTextBox}"
+                                         TabIndex="2"
+                                         Text="{Binding FilePathOrURI,
+                                                        UpdateSourceTrigger=LostFocus}" />
                             </Grid>
                         </materialDesign:Card>
                         <!--#endregion-->
 
                         <!--#region Arguments-->
-                        <materialDesign:Card
-                        Grid.Row="2"
-                        MouseEnter="Card_MouseEnter"
-                        MouseLeave="Card_MouseLeave"
-                        Style="{StaticResource MaintCardStyle}">
+                        <materialDesign:Card Grid.Row="2"
+                                             MouseEnter="Card_MouseEnter"
+                                             MouseLeave="Card_MouseLeave"
+                                             Style="{StaticResource MaintCardStyle}">
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock
-                                        Margin="10,5"
-                                        Text="Arguments" />
+                                        <TextBlock Margin="10,5"
+                                                   Text="Arguments" />
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbArgs"
-                                materialDesign:HintAssist.Hint="Enter any arguments here. "
-                                PreviewKeyDown="Textbox_KeyDown"
-                                Style="{StaticResource EntryTextBox}"
-                                TabIndex="3"
-                                Text="{Binding Arguments,
-                                               UpdateSourceTrigger=Default}" />
+                                         materialDesign:HintAssist.Hint="Enter any arguments here. "
+                                         PreviewKeyDown="Textbox_KeyDown"
+                                         Style="{StaticResource EntryTextBox}"
+                                         TabIndex="3"
+                                         Text="{Binding Arguments,
+                                                        UpdateSourceTrigger=Default}" />
                             </Grid>
                         </materialDesign:Card>
                         <!--#endregion-->
 
                         <!--#region Working Directory-->
-                        <materialDesign:Card
-                            Grid.Row="3"
-                            MouseEnter="Card_MouseEnter"
-                            MouseLeave="Card_MouseLeave"
-                            Style="{StaticResource MaintCardStyle}">
+                        <materialDesign:Card Grid.Row="3"
+                                             MouseEnter="Card_MouseEnter"
+                                             MouseLeave="Card_MouseLeave"
+                                             Style="{StaticResource MaintCardStyle}">
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock
-                                            Margin="10,5"
-                                            Text="Working Directory" />
+                                        <TextBlock Margin="10,5"
+                                                   Text="Working Directory" />
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbWorkDir"
-                                    materialDesign:HintAssist.Hint="Enter working directory here if needed. "
-                                    PreviewKeyDown="Textbox_KeyDown"
-                                    Style="{StaticResource EntryTextBox}"
-                                    TabIndex="3"
-                                    Text="{Binding WorkingDir,
-                                                   UpdateSourceTrigger=Default}" />
+                                         materialDesign:HintAssist.Hint="Enter working directory here if needed. "
+                                         PreviewKeyDown="Textbox_KeyDown"
+                                         Style="{StaticResource EntryTextBox}"
+                                         TabIndex="3"
+                                         Text="{Binding WorkingDir,
+                                                        UpdateSourceTrigger=Default}" />
+                                <Button Margin="0,0,0,35"
+                                        HorizontalAlignment="Right"
+                                        Click="BtnWorkingDirPicker_Click"
+                                        Style="{StaticResource MaterialDesignFlatLightButton}"
+                                        ToolTip="Browse for folder">
+                                    <materialDesign:PackIcon Width="24" Height="24"
+                                                             Foreground="{Binding ElementName=tbHeader,
+                                                                                  Path=Foreground}"
+                                                             Kind="FolderOpenOutline" />
+                                </Button>
                             </Grid>
                         </materialDesign:Card>
                         <!--#endregion-->
 
                         <!--#region Icon File with file picker button-->
-                        <materialDesign:Card
-                        Grid.Row="4"
-                        MouseEnter="Card_MouseEnter"
-                        MouseLeave="Card_MouseLeave"
-                        Style="{StaticResource MaintCardStyle}">
+                        <materialDesign:Card Grid.Row="4"
+                                             MouseEnter="Card_MouseEnter"
+                                             MouseLeave="Card_MouseLeave"
+                                             Style="{StaticResource MaintCardStyle}">
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock
-                                        Margin="10,5"
-                                        Text="Icon File" />
-                                        <Button
-                                        Margin="0"
-                                        HorizontalAlignment="Right"
-                                        Click="IconFile_Click"
-                                        Style="{StaticResource MaterialDesignFlatLightButton}"
-                                        ToolTip="Browse for image file">
-                                            <materialDesign:PackIcon
-                                            Width="24"
-                                            Height="24"
-                                            Foreground="{Binding ElementName=x31,
-                                                                 Path=Foreground}"
-                                            Kind="FileImageOutline" />
+                                        <TextBlock Margin="10,5"
+                                                   Text="Icon File" />
+                                        <Button Margin="0" HorizontalAlignment="Right"
+                                                Click="IconFile_Click"
+                                                Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                ToolTip="Browse for image file">
+                                            <materialDesign:PackIcon Width="24" Height="24"
+                                                                     Foreground="{Binding ElementName=tbHeader,
+                                                                                          Path=Foreground}"
+                                                                     Kind="FileImageOutline" />
                                         </Button>
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbIconFile"
-                                materialDesign:HintAssist.Hint="The name of the custom icon file. Leave blank to get the associated icon."
-                                PreviewKeyDown="Textbox_KeyDown"
-                                Style="{StaticResource EntryTextBox}"
-                                TabIndex="4"
-                                Text="{Binding IconSource}" />
+                                         materialDesign:HintAssist.Hint="The name of the custom icon file. Leave blank to get the associated icon."
+                                         PreviewKeyDown="Textbox_KeyDown"
+                                         Style="{StaticResource EntryTextBox}"
+                                         TabIndex="4"
+                                         Text="{Binding IconSource}" />
                             </Grid>
                         </materialDesign:Card>
                         <!--#endregion-->
 
                         <!--#region Buttons at bottom-->
                         <Grid Grid.Row="5">
-                            <WrapPanel
-                            Margin="0,10"
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal">
+                            <WrapPanel Margin="0,10"
+                                       HorizontalAlignment="Center"
+                                       Orientation="Horizontal">
                                 <!--  New Item button opens a PopupBox with item type choices  -->
-                                <Button
-                                Click="NewItem_Click"
-                                Style="{StaticResource BottomButtonRow}"
-                                TabIndex="5"
-                                ToolTip="Add a new item to the bottom of the list">
+                                <Button Click="NewItem_Click"
+                                        Style="{StaticResource BottomButtonRow}"
+                                        TabIndex="5"
+                                        ToolTip="Add a new item to the bottom of the list">
                                     <Grid>
                                         <materialDesign:PopupBox x:Name="pbxNewItem"
-                                        Padding="0"
-                                        PlacementMode="TopAndAlignCentres"
-                                        PopupMode="Click"
-                                        PopupVerticalOffset="-5">
+                                                                 Padding="0"
+                                                                 PlacementMode="TopAndAlignCentres"
+                                                                 PopupMode="Click"
+                                                                 PopupVerticalOffset="-5">
                                             <materialDesign:PopupBox.ToggleContent>
-                                                <TextBlock
-                                                FontWeight="{Binding ElementName=btnDiscard,
-                                                                     Path=FontWeight}"
-                                                Foreground="{Binding ElementName=btnDiscard,
-                                                                     Path=Foreground}"
-                                                Text="New Item"
-                                                TextAlignment="Center" />
+                                                <TextBlock FontWeight="{Binding ElementName=btnDiscard,
+                                                                                Path=FontWeight}"
+                                                           Foreground="{Binding ElementName=btnDiscard,
+                                                                                Path=Foreground}"
+                                                           Text="New Item" TextAlignment="Center" />
                                             </materialDesign:PopupBox.ToggleContent>
-                                            <Border
-                                            Padding="0"
-                                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                                            BorderThickness="2">
-                                                <Grid
-                                                Width="200"
-                                                Margin="0"
-                                                Background="{DynamicResource MaterialDesignPaper}">
-                                                    <StackPanel
-                                                    Margin="5"
-                                                    Orientation="Vertical">
-                                                        <TextBlock
-                                                        Margin="15,10,0,10"
-                                                        FontSize="16"
-                                                        FontWeight="SemiBold"
-                                                        Foreground="{DynamicResource SecondaryHueMidBrush}"
-                                                        Text="New Item Type"
-                                                        TextAlignment="Left" />
+                                            <Border Padding="0"
+                                                    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                                    BorderThickness="2">
+                                                <Grid Width="200"
+                                                      Margin="0"
+                                                      Background="{DynamicResource MaterialDesignPaper}">
+                                                    <StackPanel Margin="5"
+                                                                Orientation="Vertical">
+                                                        <TextBlock Margin="15,10,0,10"
+                                                                   FontSize="16" FontWeight="SemiBold"
+                                                                   Foreground="{DynamicResource SecondaryHueMidBrush}"
+                                                                   Text="New Item Type"
+                                                                   TextAlignment="Left" />
                                                         <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="NewNormalItem_Click"
-                                                        Content="Normal Item" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="NewPopupItem_Click"
-                                                        Content="Pop-Up List" />
-                                                        <Button
-                                                        Height="35"
-                                                        Padding="15,0,15,10"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="NewSpecialApp_Click"
-                                                        Content="Special App" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="NewNormalItem_Click"
+                                                                Content="Normal Item" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="NewPopupItem_Click"
+                                                                Content="Pop-Up List" />
+                                                        <Button Height="35"
+                                                                Padding="15,0,15,10"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="NewSpecialApp_Click"
+                                                                Content="Special App" />
                                                         <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
-                                                        <Button
-                                                        Height="35"
-                                                        HorizontalContentAlignment="Left"
-                                                        VerticalContentAlignment="Center"
-                                                        Click="CancelNewItem_Click"
-                                                        Content="Cancel" />
+                                                        <Button Height="35"
+                                                                HorizontalContentAlignment="Left"
+                                                                VerticalContentAlignment="Center"
+                                                                Click="CancelNewItem_Click"
+                                                                Content="Cancel" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
                                         </materialDesign:PopupBox>
                                     </Grid>
                                 </Button>
-                                <Button
-                                Click="Delete_Click"
-                                Content="Delete Item"
-                                Style="{StaticResource BottomButtonRow}"
-                                TabIndex="6"
-                                ToolTip="Delete the currently selected list item" />
-                                <Button
-                                Click="BtnImport_Click"
-                                Content="Import List"
-                                Style="{StaticResource BottomButtonRow}"
-                                TabIndex="7"
-                                ToolTip="Import a backup or converted list" />
-                                <Button
-                                Click="BtnBackup_Click"
-                                Content="Backup List"
-                                Style="{StaticResource BottomButtonRow}"
-                                TabIndex="8"
-                                ToolTip="Make a backup copy of the current list" />
+                                <Button Click="Delete_Click"
+                                        Content="Delete Item"
+                                        Style="{StaticResource BottomButtonRow}"
+                                        TabIndex="6"
+                                        ToolTip="Delete the currently selected list item" />
+                                <Button Click="BtnImport_Click"
+                                        Content="Import"
+                                        Style="{StaticResource BottomButtonRow}"
+                                        TabIndex="7"
+                                        ToolTip="Import a backup or converted list" />
+                                <Button Click="BtnBackup_Click"
+                                        Content="Export"
+                                        Style="{StaticResource BottomButtonRow}"
+                                        TabIndex="8"
+                                        ToolTip="Export a backup copy of the current list" />
                                 <Button x:Name="btnDiscard"
-                                Click="Discard_Click"
-                                Content="Discard &amp; Close"
-                                Style="{StaticResource BottomButtonRow}"
-                                TabIndex="9"
-                                ToolTip="Discard any changes and close the window" />
-                                <Button
-                                Click="BtnSaveClose_Click"
-                                Content="Save &amp; Close"
-                                Style="{StaticResource BottomButtonRow}"
-                                TabIndex="10"
-                                ToolTip="Save any changes" />
+                                        Click="Discard_Click"
+                                        Content="Discard &amp; Close"
+                                        Style="{StaticResource BottomButtonRow}"
+                                        TabIndex="9"
+                                        ToolTip="Discard any changes and close the window" />
+                                <Button Click="BtnSaveClose_Click"
+                                        Content="Save &amp; Close"
+                                        Style="{StaticResource BottomButtonRow}"
+                                        TabIndex="10" ToolTip="Save any changes" />
                             </WrapPanel>
                         </Grid>
                         <!--#endregion-->
@@ -633,13 +546,12 @@
 
         <!--#region SnackBar-->
         <materialDesign:Snackbar x:Name="SnackBarMaint"
-            Grid.Row="0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Background="#FF303030"
-            FontWeight="DemiBold"
-            Foreground="White"
-            MessageQueue="{materialDesign:MessageQueue}" />
+                                 Grid.Row="0"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Top"
+                                 Background="#FF303030"
+                                 FontWeight="DemiBold" Foreground="White"
+                                 MessageQueue="{materialDesign:MessageQueue}" />
         <!--#endregion-->
     </Grid>
 </Window>

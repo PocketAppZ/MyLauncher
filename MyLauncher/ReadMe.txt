@@ -85,7 +85,7 @@ then click the Delete Item button. If you attempt to delete a pop-up that has ch
 be asked to confirm the deletion.
 
 Items can be updated by first selecting them in the panel on the left and then by updating the fields
-on the right side of the maintenance window. Pay attention to the text in the colored area in the top
+on the right side of the maintenance window. Pay attention to the text in the accented area in the top
 box, it will change depending on the item type.
 
 Items can be rearranged by dragging & dropping them into a new position in the panel on the left.
@@ -100,7 +100,10 @@ clicked or the List Maintenance window is closed.
 If you wish to undo and changes, additions or deletions, click the Discard & Close button before
 clicking the Save & Close button or closing the window.
 
-There is also a Backup List button which will copy the list file to a location of your choice.
+There are also Import and Export buttons. Export will copy the current list file to a location of your
+choice. The exported copy can be used for a backup or to copy the list to other machines. Import is used
+to read a previously exported list or a list created by the Tray Launcher conversion utility. Note that
+importing a list will replace the current list.
 
 
 Menu Maintenance
@@ -120,6 +123,8 @@ To add a new item, click the New Item button. You will see a pop-up menu with fo
 	don't do anything if they are clicked.
 
   - Separator. This is a horizontal line that can be used to delineate sections in the menu.
+
+  - Pop-up. This is a pop-up list that has previously been defined via List Maintenance.
 
 Items can be rearranged by dragging & dropping them into a new position in the panel on the left.
 A Menu item or a Separator can be dropped on a Submenu item. Just like the list items, when dragging

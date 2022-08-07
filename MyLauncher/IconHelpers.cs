@@ -64,10 +64,19 @@ internal static class IconHelpers
                     {
                         if (filePath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
                         {
-                            string shortcut = ((IWshShortcut)new WshShell().CreateShortcut(filePath)).TargetPath;
-                            Icon temp = Icon.ExtractAssociatedIcon(shortcut);
-                            item.FileIcon = IconToImageSource(temp);
-                            log.Debug($"Using extracted associated icon from shortcut to {item.FilePathOrURI}.");
+                            try
+                            {
+                                string shortcut = ((IWshShortcut)new WshShell().CreateShortcut(filePath)).TargetPath;
+                                Icon temp = Icon.ExtractAssociatedIcon(shortcut);
+                                item.FileIcon = IconToImageSource(temp);
+                                log.Debug($"Using extracted associated icon from shortcut to {item.FilePathOrURI}.");
+                            }
+                            catch (Exception ex)
+                            {
+                                Icon temp = Properties.Resources.question;
+                                item.FileIcon = IconToImageSource(temp);
+                                log.Error(ex, $"Could not extract icon from shortcut {filePath}.");
+                            }
                         }
                         else
                         {

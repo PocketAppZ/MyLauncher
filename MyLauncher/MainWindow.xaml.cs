@@ -106,6 +106,10 @@ public partial class MainWindow : Window
 
         // Settings change event
         UserSettings.Setting.PropertyChanged += UserSettingChanged;
+#if DEBUG
+        // Suppress harmless binding errors
+        PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
+#endif
     }
     #endregion Settings
 
@@ -300,6 +304,22 @@ public partial class MainWindow : Window
                 WorkingDir = myMenuItem.WorkingDir
             };
             _ = LaunchApp(ch);
+        }
+        // Show Pop-up
+        if (myMenuItem.ItemType == MenuItemType.Popup)
+        {
+            MyListItem pop = PopupHelpers.FindPopup(MyListItem.Children, myMenuItem.PopupID);
+            if (pop == null)
+            {
+                log.Debug($"Couldn't find Pop-up with ID: {myMenuItem.PopupID}");
+                return;
+            }
+            if (pop.EntryType != ListEntryType.Popup)
+            {
+                log.Debug($"{myMenuItem.PopupID} is not a Pop-up ID");
+                return;
+            }
+            OpenPopup(pop);
         }
         // Exit the app
         else if (myMenuItem.ItemType == MenuItemType.ExitML)

@@ -105,7 +105,8 @@ public enum MenuItemType
     ExitML = 2,
     Separator = 3,
     ShowMainWindow = 4,
-    SectionHead = 5
+    SectionHead = 5,
+    Popup = 6
 }
 
 /// <summary>
@@ -117,4 +118,15 @@ public enum MenuSize
     Medium = 1,
     Large = 2,
     Jumbo = 3
+}
+
+/// <summary>
+/// Height of items in tray menu
+/// </summary>
+public enum MenuSpacing
+{
+    Scrunched = 0,
+    Compact = 1,
+    Comfortable = 2,
+    Wide = 3
 }

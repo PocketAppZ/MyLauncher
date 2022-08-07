@@ -384,6 +384,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public int TrayMenuSpacing
+    {
+        get => trayMenuSpacing;
+        set
+        {
+            trayMenuSpacing = value;
+            OnPropertyChanged();
+        }
+    }
+
     public int UISize
     {
         get => uiSize;
@@ -483,6 +493,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool startWithWindows = false;
     private string titleText = "Click on any Item Below to Open it";
     private int trayMenuSize = (int)MenuSize.Medium;
+    private int trayMenuSpacing = (int)MenuSpacing.Comfortable;
     private int uiSize = (int)MySize.Default;
     private double windowHeight = 550;
     private double windowLeft = 100;
