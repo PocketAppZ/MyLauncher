@@ -119,7 +119,7 @@
                               FontStyle="Normal" FontWeight="Normal"
                               ScrollViewer.CanContentScroll="True"
                               ScrollViewer.VerticalScrollBarVisibility="Visible"
-                              SelectedItemChanged="TvMaint_SelectedItemChanged"
+                              TreeViewItem.Selected="TvMaint_Selected"
                               TabIndex="0" UseLayoutRounding="False">
                         <TreeView.Resources>
                             <Style TargetType="TreeViewItem"

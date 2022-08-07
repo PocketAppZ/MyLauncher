@@ -101,8 +101,10 @@ public partial class Maintenance : Window
     #endregion Window events
 
     #region TreeView events
-    private void TvMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    private void TvMaint_Selected(object sender, RoutedEventArgs e)
     {
+        TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+        tvi?.BringIntoView();
         if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
         {
             tbTitle.Dispatcher.BeginInvoke(new Action(() => tbTitle.SelectAll()));
@@ -182,7 +184,7 @@ public partial class Maintenance : Window
             MyListItems = new ObservableCollection<MyListItem>(),
             EntryType = ListEntryType.Popup,
             ItemID = Guid.NewGuid().ToString(),
-            IsSelected= true,
+            IsSelected = true,
         };
         MyListItem.Children.Add(newitem);
         _ = tbTitle.Focus();
@@ -209,7 +211,7 @@ public partial class Maintenance : Window
                                         true,
                                         this,
                                         false);
-                    mbox.ShowDialog();
+                mbox.ShowDialog();
                 if (MDCustMsgBox.CustResult != CustResultType.Yes)
                 {
                     return;

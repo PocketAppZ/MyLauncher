@@ -167,7 +167,6 @@ public partial class MenuMaint : Window
         if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
         {
             tvi.IsSelected = true;
-            tvi.BringIntoView();
         }
         _ = tbTitle.Focus();
         ClearAndQueueMessage("New \"untitled\" submenu was created.", 3000);
@@ -193,7 +192,6 @@ public partial class MenuMaint : Window
         if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
         {
             tvi.IsSelected = true;
-            tvi.BringIntoView();
         }
         _ = tbTitle.Focus();
         ClearAndQueueMessage("New \"untitled\" section heading was created.", 3000);
@@ -239,7 +237,6 @@ public partial class MenuMaint : Window
         if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
         {
             tvi.IsSelected = true;
-            tvi.BringIntoView();
         }
         _ = tbTitle.Focus();
         ClearAndQueueMessage("New \"untitled\" pop-up was created.", 3000);
@@ -337,15 +334,14 @@ public partial class MenuMaint : Window
     #endregion Window events
 
     #region TreeView events
-    private void TvMenuMaint_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
-    }
-
     private void TvMenuMaint_Selected(object sender, RoutedEventArgs e)
     {
+        TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+        tvi?.BringIntoView();
+
         if (tbTitle.Text.Equals("untitled", StringComparison.OrdinalIgnoreCase))
         {
-            tbTitle.SelectAll();
+            tbTitle.Dispatcher.BeginInvoke(new Action(() => tbTitle.SelectAll()));
         }
     }
     #endregion TreeView events
