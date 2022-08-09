@@ -141,11 +141,11 @@ internal static class JsonHelpers
                 MyListItem ch = new()
                 {
                     Title = item.Title.Trim(),
-                    FilePathOrURI = item.FilePathOrURI.Trim('"').Trim(),
+                    FilePathOrURI = item.FilePathOrURI?.TrimStart('"').TrimEnd('"').Trim(),
                     FileIcon = item.FileIcon,
                     Arguments = item.Arguments,
-                    WorkingDir = item.WorkingDir,
-                    IconSource = item.IconSource.Trim(),
+                    WorkingDir = item.WorkingDir?.TrimStart('"').TrimEnd('"').Trim(),
+                    IconSource = item.IconSource?.TrimStart('"').TrimEnd('"').Trim(),
                     EntryType = item.EntryType,
                     MyListItems = item.MyListItems,
                     ItemID = item.ItemID,
@@ -201,7 +201,7 @@ internal static class JsonHelpers
                     Arguments = item.Arguments,
                     ItemType = item.ItemType,
                     SubMenuItems = item.SubMenuItems,
-                    WorkingDir = item.WorkingDir,
+                    WorkingDir = item.WorkingDir?.TrimStart('"').TrimEnd('"').Trim(),
                     ItemID = item.ItemID,
                     PopupID = item.PopupID,
                 };
