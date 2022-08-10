@@ -23,7 +23,7 @@ internal static class JsonHelpers
             CreateNewMainJson(jsonfile);
         }
 
-        log.Debug($"Reading JSON file: {jsonfile}");
+        log.Debug($"My Launcher List file is: {jsonfile}");
         try
         {
             string json = File.ReadAllText(jsonfile);
@@ -96,7 +96,7 @@ internal static class JsonHelpers
             CreateNewMenuJson(jsonfile);
         }
 
-        log.Debug($"Reading JSON file: {jsonfile}");
+        log.Debug($"My Launcher Menu file is: {jsonfile}");
         try
         {
             string json = File.ReadAllText(jsonfile);
