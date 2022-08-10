@@ -119,8 +119,9 @@
                               FontStyle="Normal" FontWeight="Normal"
                               ScrollViewer.CanContentScroll="True"
                               ScrollViewer.VerticalScrollBarVisibility="Visible"
+                              TabIndex="0"
                               TreeViewItem.Selected="TvMaint_Selected"
-                              TabIndex="0" UseLayoutRounding="False">
+                              UseLayoutRounding="False">
                         <TreeView.Resources>
                             <Style TargetType="TreeViewItem"
                                    BasedOn="{StaticResource ListTreeView}" />
@@ -515,13 +516,11 @@
                                         Style="{StaticResource BottomButtonRow}"
                                         TabIndex="6"
                                         ToolTip="Delete the currently selected list item" />
-                                <Button Click="BtnImport_Click"
-                                        Content="Import"
+                                <Button Click="BtnImport_Click" Content="Import"
                                         Style="{StaticResource BottomButtonRow}"
                                         TabIndex="7"
                                         ToolTip="Import a backup or converted list" />
-                                <Button Click="BtnBackup_Click"
-                                        Content="Export"
+                                <Button Click="BtnBackup_Click" Content="Export"
                                         Style="{StaticResource BottomButtonRow}"
                                         TabIndex="8"
                                         ToolTip="Export a backup copy of the current list" />

@@ -210,16 +210,27 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
     /// <param name="dropInfo"></param>
     void IDropTarget.DragOver(IDropInfo dropInfo)
     {
-        if (dropInfo.TargetItem is MyListItem dragTarget)
+        if (dropInfo.DragInfo is not null)
         {
-            if (dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
+            if (dropInfo.DragInfo.VisualSource is TreeView)
             {
-                if (dragTarget.EntryType is ListEntryType.Normal)
+                if (dropInfo.TargetItem is MyListItem dragTarget)
                 {
-                    return;
+                    if (dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
+                    {
+                        if (dragTarget.EntryType is ListEntryType.Normal)
+                        {
+                            return;
+                        }
+                    }
+                    DragDrop.DefaultDropHandler.DragOver(dropInfo);
                 }
             }
-            DragDrop.DefaultDropHandler.DragOver(dropInfo);
+            if (dropInfo.DragInfo.VisualSource is TextBox)
+            {
+                Debug.WriteLine("Found a text box");
+                DragDrop.DefaultDropHandler.DragOver(dropInfo);
+            }
         }
     }
 
@@ -231,15 +242,23 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
     {
         if (dropInfo.TargetItem is MyListItem dropItem)
         {
-            if (dropItem.EntryType == ListEntryType.Popup)
+            if (dropItem.EntryType == ListEntryType.Popup
+                && dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
             {
                 DragDrop.DefaultDropHandler.Drop(dropInfo);
                 TreeViewItem tvi = dropInfo.VisualTargetItem as TreeViewItem;
                 tvi.IsExpanded = true;
                 tvi.BringIntoView();
             }
-            else if (dropItem.EntryType == ListEntryType.Normal
-                && !dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
+            else if ((dropItem.EntryType == ListEntryType.Popup
+                     && (dropInfo.InsertPosition == RelativeInsertPosition.BeforeTargetItem
+                     || dropInfo.InsertPosition == RelativeInsertPosition.BeforeTargetItem))
+                     || (dropItem.EntryType == ListEntryType.Normal
+                     && !dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter)))
+            {
+                DragDrop.DefaultDropHandler.Drop(dropInfo);
+            }
+            else
             {
                 DragDrop.DefaultDropHandler.Drop(dropInfo);
             }
