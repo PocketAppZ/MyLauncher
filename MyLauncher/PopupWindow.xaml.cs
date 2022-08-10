@@ -279,4 +279,18 @@ public partial class PopupWindow : Window
         }
     }
     #endregion Keyboard Events
+
+    #region Mouse Enter/Leave Card (to change shadow)
+    private void Card_MouseEnter(object sender, MouseEventArgs e)
+    {
+        Card card = sender as Card;
+        ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth3);
+    }
+
+    private void Card_MouseLeave(object sender, MouseEventArgs e)
+    {
+        Card card = sender as Card;
+        ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth2);
+    }
+    #endregion Mouse Enter/Leave Card (to change shadow)
 }
