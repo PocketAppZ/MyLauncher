@@ -1,4 +1,4 @@
-﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
 
@@ -1001,6 +1001,7 @@ public partial class MainWindow : Window
                 else
                 {
                     // Ask user
+                    SystemSounds.Hand.Play();
                     MDCustMsgBox mbox = new("Do you want to exit My Launcher?",
                         "Exit My Launcher",
                         ButtonType.YesNo,
