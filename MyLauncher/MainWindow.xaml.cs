@@ -1,4 +1,4 @@
-// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
 
@@ -301,7 +301,8 @@ public partial class MainWindow : Window
                 FilePathOrURI = myMenuItem.FilePathOrURI,
                 Arguments = myMenuItem.Arguments,
                 Title = myMenuItem.Title,
-                WorkingDir = myMenuItem.WorkingDir
+                WorkingDir = myMenuItem.WorkingDir,
+                RunElevated = myMenuItem.RunElevated,
             };
             _ = LaunchApp(ch);
         }
@@ -351,6 +352,10 @@ public partial class MainWindow : Window
             launch.StartInfo.Arguments = Environment.ExpandEnvironmentVariables(item.Arguments);
             launch.StartInfo.WorkingDirectory = Environment.ExpandEnvironmentVariables(item.WorkingDir);
             launch.StartInfo.UseShellExecute = true;
+            if (item.RunElevated && item.FilePathOrURI.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+            {
+                launch.StartInfo.Verb = "runas";
+            }
             _ = launch.Start();
             if (UserSettings.Setting.PlaySound)
             {
@@ -360,7 +365,14 @@ public partial class MainWindow : Window
                 };
                 soundPlayer.Play();
             }
-            log.Info($"Opening \"{item.Title}\"");
+            if (item.RunElevated)
+            {
+                log.Info($"Opening \"{item.Title}\" as Administrator");
+            }
+            else
+            {
+                log.Info($"Opening \"{item.Title}\"");
+            }
             if (!UserSettings.Setting.MainWindowMinimizeOnLaunch)
             {
                 SnackbarMsg.QueueMessage($"{item.Title} launched", 2000);

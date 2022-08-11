@@ -421,6 +421,19 @@ public partial class Maintenance : Window
             (Application.Current.MainWindow as MainWindow)?.PopulateMainListBox();
         }
     }
+
+    private void AdminToggleButton_Click(object sender, RoutedEventArgs e)
+    {
+        System.Windows.Controls.Primitives.ToggleButton tb = sender as System.Windows.Controls.Primitives.ToggleButton;
+        if ((bool)tb.IsChecked)
+        {
+            ClearAndQueueMessage("Will run as Administrator", 2000);
+        }
+        else
+        {
+            ClearAndQueueMessage("Will not run as Administrator", 2000);
+        }
+    }
     #endregion Button events
 
     #region Move to next control on Enter

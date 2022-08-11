@@ -4,7 +4,6 @@ namespace MyLauncher
 {
     internal static class WindowHelpers
     {
-
         public static T FindParent<T>(DependencyObject child) where T : DependencyObject
         {
             //get parent item

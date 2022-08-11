@@ -18,6 +18,10 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto">
 
+    <Window.Resources>
+        <local:RunAsAdminConverter x:Key="AdminConv" />
+    </Window.Resources>
+
     <Grid x:Name="MaintGrid">
         <!--#region Row definitions-->
         <Grid.RowDefinitions>
@@ -346,6 +350,19 @@
                                                                                           Path=Foreground}"
                                                                      Kind="FolderOpenOutline" />
                                         </Button>
+                                        <ToggleButton x:Name="tgbAdmin"
+                                                      Margin="0,0,90,0"
+                                                      HorizontalAlignment="Right"
+                                                      materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=Security,
+                                                                                                                            Size=22}"
+                                                      Background="Transparent"
+                                                      Click="AdminToggleButton_Click"
+                                                      Content="{materialDesign:PackIcon Kind=ShieldOffOutline,
+                                                                                        Size=22}"
+                                                      IsChecked="{Binding RunElevated}"
+                                                      Style="{StaticResource MaterialDesignActionAccentToggleButton}"
+                                                      ToolTip="Click to toggle Run as Administrator"
+                                                      Visibility="{Binding Converter={StaticResource AdminConv}}" />
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbPath"

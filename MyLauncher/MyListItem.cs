@@ -124,6 +124,19 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
     }
 
     /// <summary>
+    /// Indicates if this item should run with elevated (administrator) permissions.
+    /// </summary>
+    public bool RunElevated
+    {
+        get => runElevated;
+        set
+        {
+            runElevated = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
     /// Pop-up window location
     /// </summary>
     public double PopupTop { get; set; }
@@ -190,6 +203,7 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
     private string iconSource = string.Empty;
     private bool isSelected;
     private string itemID;
+    private bool runElevated;
     private string title;
     private string workingDir = string.Empty;
     #endregion Private backing fields

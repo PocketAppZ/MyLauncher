@@ -122,6 +122,19 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     }
 
     /// <summary>
+    /// Indicates if this item should run with elevated (administrator) permissions.
+    /// </summary>
+    public bool RunElevated
+    {
+        get => runElevated;
+        set
+        {
+            runElevated = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
     /// ObservableCollection for the submenu items.
     /// </summary>
     [JsonPropertyName("MenuItems")]
@@ -145,6 +158,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
     private bool isSelected;
     private string itemID;
     private MenuItemType itemType = MenuItemType.MenuItem;
+    private bool runElevated;
     private string popupID = string.Empty;
     private string title;
     private string workingDir = string.Empty;

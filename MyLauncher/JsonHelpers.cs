@@ -153,6 +153,7 @@ internal static class JsonHelpers
                     PopupLeft = item.PopupLeft,
                     PopupTop = item.PopupTop,
                     PopupWidth = item.PopupWidth,
+                    RunElevated = item.RunElevated,
                 };
                 tempCollection.Add(ch);
             }
@@ -204,6 +205,7 @@ internal static class JsonHelpers
                     WorkingDir = item.WorkingDir?.TrimStart('"').TrimEnd('"').Trim(),
                     ItemID = item.ItemID,
                     PopupID = item.PopupID,
+                    RunElevated = item.RunElevated,
                 };
                 tempCollection.Add(mmi);
             }
