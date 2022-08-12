@@ -63,6 +63,13 @@ application, or website URL that you wish to open. For documents, folders and ap
 may use environmental variables in the path. For example %temp% for the temp folder. For website
 URLs, begin the URL with either http:\\ or preferably, https:\\.
 
+After an application has been entered in the Path or URL text box, a shield icon will appear.
+Clicking on the shield icon will toggle the setting to run the application as administrator
+(with elevated permissions). When run as administrator is disabled, the shield will have a
+diagonal line through it. When enabled, the shield changes appearance and the diagonal line
+isn't present. The option to set run as administrator is only available when the path ends
+with '.exe'.
+
 The Arguments text box is where you can specify optional arguments. For example, it you want to
 open Aunt Sally's Secret Buttermilk Biscuit Recipe in notepad, you would enter notepad.exe in the
 Path or URL text box and C:\Recipes\SecretBiscuits.txt in the Arguments textbox.
