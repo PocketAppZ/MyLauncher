@@ -63,8 +63,8 @@ application, or website URL that you wish to open. For documents, folders and ap
 may use environmental variables in the path. For example %temp% for the temp folder. For website
 URLs, begin the URL with either http:\\ or preferably, https:\\.
 
-After an application has been entered in the Path or URL text box, a shield icon will appear.
-Clicking on the shield icon will toggle the setting to run the application as administrator
+If the application specified in the Path or URL text box is an executable, a shield icon will
+appear. Clicking on the shield icon will toggle the setting to run the application as administrator
 (with elevated permissions). When run as administrator is disabled, the shield will have a
 diagonal line through it. When enabled, the shield changes appearance and the diagonal line
 isn't present. The option to set run as administrator is only available when the path ends
@@ -83,7 +83,7 @@ suitable icon, but if it can't or you would prefer a different icon, this is whe
 your own. Acceptable image file types are .ico, .png, .bmp, .jpg and .jpeg.
 
 To arrange list items, simply drag an entry to a new position in the list. Normal items and pop-up
-items can be dropped on pop-ups create the pop-up windows. When doing so, the drop indicator turns
+items can be dropped on pop-ups to create the pop-up windows. When doing so, the drop indicator turns
 into an outline. Once a pop-up has items in it a chevron will appear to its left. Use the chevron
 to expand the list as you would in File Explorer.
 
@@ -115,9 +115,9 @@ importing a list will replace the current list.
 
 Menu Maintenance
 ================
-The Menu Maintenance window is very similar to the List Maintenance window with a couple of
-exceptions. There isn't a text box for an icon file as icons are not available in the menu.
-Also, there isn't an option for Special Apps.
+The Menu Maintenance window is very similar to the List Maintenance window with a few exceptions.
+There isn't a text box for an icon file as icons are not available in the menu. Also, there isn't
+an option for Special Apps and there are also menu specific options.
 
 To add a new item, click the New Item button. You will see a pop-up menu with four item types.
 

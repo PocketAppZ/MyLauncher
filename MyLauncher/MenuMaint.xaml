@@ -367,9 +367,20 @@
                                                       Content="{materialDesign:PackIcon Kind=ShieldOffOutline,
                                                                                         Size=22}"
                                                       IsChecked="{Binding RunElevated}"
-                                                      Style="{StaticResource MaterialDesignActionAccentToggleButton}"
-                                                      ToolTip="Click to toggle Run as Administrator"
-                                                      Visibility="{Binding Converter={StaticResource AdminConv}}" />
+                                                      ToolTip="Click to toggle Run as Administrator">
+                                            <ToggleButton.Style>
+                                                <Style  TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionAccentToggleButton}">
+                                                    <Setter Property="Visibility">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource AdminConv}" >
+                                                                <Binding ElementName="TvMenuMaint" Path="SelectedItem" />
+                                                                <Binding ElementName="tbPath" Path="Text"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ToggleButton.Style>
+                                        </ToggleButton>
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbPath"

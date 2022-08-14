@@ -2,30 +2,39 @@
 
 namespace MyLauncher
 {
-    internal class RunAsAdminConverter : IValueConverter
+    /// <summary>
+    /// Converter that determines whether or not to show the button for run as administrator
+    /// </summary>
+    internal class RunAsAdminConverter : IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is MyListItem myListItem)
+            if (values[0] is not null and MyListItem listItem
+                && listItem.EntryType == ListEntryType.Normal
+                && !string.IsNullOrEmpty(values[1].ToString()))
             {
-                MyListItem item = myListItem;
-                return item?.EntryType == ListEntryType.Normal
-                       && item.FilePathOrURI.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
-                    ? Visibility.Visible
-                    : Visibility.Collapsed;
+                string text = values[1].ToString();
+                if (text.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Visibility.Visible;
+                }
             }
-            if (value is MyMenuItem myMenuItem)
+
+            if (values[0] is not null and MyMenuItem menuItem
+                && menuItem.ItemType == MenuItemType.MenuItem
+                && !string.IsNullOrEmpty(values[1].ToString()))
             {
-                MyMenuItem item = myMenuItem;
-                return item?.ItemType == MenuItemType.MenuItem
-                       && item.FilePathOrURI.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
-                    ? Visibility.Visible
-                    : Visibility.Collapsed;
+                string text = values[1].ToString();
+                if (text.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Visibility.Visible;
+                }
             }
-            return null;
+
+            return Visibility.Collapsed;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
