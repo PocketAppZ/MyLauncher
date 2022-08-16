@@ -190,6 +190,16 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
+                                        <Button Margin="0,0,80,0"
+                                                HorizontalAlignment="Right"
+                                                Click="BtnTest_Click"
+                                                Style="{StaticResource MaterialDesignFlatLightButton}"
+                                                ToolTip="Test this item">
+                                            <materialDesign:PackIcon Width="24" Height="24"
+                                                                     Foreground="{Binding ElementName=tbHeader,
+                                                                                          Path=Foreground}"
+                                                                     Kind="RocketLaunchOutline" />
+                                        </Button>
                                         <materialDesign:PopupBox x:Name="pbxInfo"
                                                                  Margin="0,0,60,0" Padding="0"
                                                                  HorizontalAlignment="Right"
@@ -362,12 +372,14 @@
                                                       IsChecked="{Binding RunElevated}"
                                                       ToolTip="Click to toggle Run as Administrator">
                                             <ToggleButton.Style>
-                                                <Style  TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionAccentToggleButton}">
+                                                <Style TargetType="ToggleButton"
+                                                       BasedOn="{StaticResource MaterialDesignActionAccentToggleButton}">
                                                     <Setter Property="Visibility">
                                                         <Setter.Value>
-                                                            <MultiBinding Converter="{StaticResource AdminConv}" >
-                                                                <Binding ElementName="TvMaint" Path="SelectedItem" />
-                                                                <Binding ElementName="tbPath" Path="Text"/>
+                                                            <MultiBinding Converter="{StaticResource AdminConv}">
+                                                                <Binding ElementName="TvMaint"
+                                                                         Path="SelectedItem" />
+                                                                <Binding ElementName="tbPath" Path="Text" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -377,13 +389,25 @@
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbPath"
-                                         materialDesign:HintAssist.Hint="Enter the complete path to the document, application, or URL"
-                                         materialDesign:TextBlockAssist.AutoToolTip="True"
                                          PreviewKeyDown="Textbox_KeyDown"
-                                         Style="{StaticResource EntryTextBox}"
                                          TabIndex="2"
                                          Text="{Binding FilePathOrURI,
-                                                        UpdateSourceTrigger=PropertyChanged}" />
+                                                        UpdateSourceTrigger=PropertyChanged}" >
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox"
+                                               BasedOn="{StaticResource EntryTextBox}">
+                                            <Setter Property="materialDesign:HintAssist.Hint"
+                                                    Value="N/A" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ItemType}"
+                                                             Value="0">
+                                                    <Setter Property="materialDesign:HintAssist.Hint"
+                                                            Value="Enter the complete path to the document, application, or URL" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
                             </Grid>
                         </materialDesign:Card>
                         <!--#endregion-->
@@ -401,12 +425,25 @@
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbArgs"
-                                         materialDesign:HintAssist.Hint="Enter any arguments here. "
                                          PreviewKeyDown="Textbox_KeyDown"
-                                         Style="{StaticResource EntryTextBox}"
                                          TabIndex="3"
                                          Text="{Binding Arguments,
-                                                        UpdateSourceTrigger=Default}" />
+                                                        UpdateSourceTrigger=Default}" >
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox"
+                                               BasedOn="{StaticResource EntryTextBox}">
+                                            <Setter Property="materialDesign:HintAssist.Hint"
+                                                    Value="N/A" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ItemType}"
+                                                             Value="0">
+                                                    <Setter Property="materialDesign:HintAssist.Hint"
+                                                            Value="Enter any arguments here." />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
                             </Grid>
                         </materialDesign:Card>
                         <!--#endregion-->
@@ -424,12 +461,25 @@
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbWorkDir"
-                                         materialDesign:HintAssist.Hint="Enter working directory here if needed. "
                                          PreviewKeyDown="Textbox_KeyDown"
-                                         Style="{StaticResource EntryTextBox}"
                                          TabIndex="3"
                                          Text="{Binding WorkingDir,
-                                                        UpdateSourceTrigger=Default}" />
+                                                        UpdateSourceTrigger=Default}" >
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox"
+                                               BasedOn="{StaticResource EntryTextBox}">
+                                            <Setter Property="materialDesign:HintAssist.Hint"
+                                                    Value="N/A" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ItemType}"
+                                                             Value="0">
+                                                    <Setter Property="materialDesign:HintAssist.Hint"
+                                                            Value="Enter working directory here if needed." />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
                                 <Button Margin="0,0,0,35"
                                         HorizontalAlignment="Right"
                                         Click="BtnWorkingDirPicker_Click"

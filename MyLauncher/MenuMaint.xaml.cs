@@ -577,6 +577,44 @@ public partial class MenuMaint : Window
             ClearAndQueueMessage("Will not run as Administrator", 2000);
         }
     }
+
+    private void BtnTest_Click(object sender, RoutedEventArgs e)
+    {
+        if (TvMenuMaint.SelectedItem is MyMenuItem menuItem)
+        {
+            if (menuItem is not null && (menuItem.ItemType == MenuItemType.MenuItem))
+            {
+                MyListItem item = new()
+                {
+                    FilePathOrURI = menuItem.FilePathOrURI,
+                    Arguments = menuItem.Arguments,
+                    Title = menuItem.Title,
+                    WorkingDir = menuItem.WorkingDir,
+                    RunElevated = menuItem.RunElevated,
+                };
+                _ = MainWindow.LaunchApp(item);
+            }
+            if (menuItem is not null && menuItem.ItemType == MenuItemType.Popup)
+            {
+                // Show Pop-up
+                if (menuItem.ItemType == MenuItemType.Popup)
+                {
+                    MyListItem pop = PopupHelpers.FindPopup(MyListItem.Children, menuItem.PopupID);
+                    if (pop == null)
+                    {
+                        log.Debug($"Couldn't find Pop-up with ID: {menuItem.PopupID}");
+                        return;
+                    }
+                    if (pop.EntryType != ListEntryType.Popup)
+                    {
+                        log.Debug($"{menuItem.PopupID} is not a Pop-up ID");
+                        return;
+                    }
+                    MainWindow.OpenPopup(pop);
+                }
+            }
+        }
+    }
     #endregion Button Events
 
     #region Clear message queue then queue a snackbar message and set duration

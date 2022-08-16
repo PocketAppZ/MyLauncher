@@ -56,7 +56,13 @@ text. That instructional text will be removed when you select that text box. Not
 only be one untitled entry.
 
 The Title text box is where you will enter the text that you want to see in the list in the main
-window. It can say anything you want, perhaps Aunt Sally's Secret Buttermilk Biscuit Recipe.
+window. It can say anything you want, perhaps Aunt Sally's Secret Buttermilk Biscuit Recipe. The
+heading for the Title text box will change depending on the type of entry currently selected.
+
+On the right side there are three icons. The first of these icons looks like a rocket and can be
+used to test launch the selected item. Note that this icon will be hidden when the selected item
+can't be launched. The "i" icon will open a pop-up that shows additional information about the
+selected item. The grid icon opens the Special Apps menu.
 
 The Path or URL text box is where you will enter the complete path to the file, folder
 application, or website URL that you wish to open. For documents, folders and applications, you
@@ -208,9 +214,6 @@ readme file and to view the log file.
 
 The three-dot icon in the upper right of the maintenance windows will open a menu that has options to
 open the data files and to open the app's folder.
-
-In the maintenance windows, the "i" icon will open a pop-up that shows additional information about the
-selected item.
 
 
 Known Issues

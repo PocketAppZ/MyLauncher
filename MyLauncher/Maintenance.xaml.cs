@@ -434,6 +434,21 @@ public partial class Maintenance : Window
             ClearAndQueueMessage("Will not run as Administrator", 2000);
         }
     }
+
+    private void BtnTest_Click(object sender, RoutedEventArgs e)
+    {
+        if (TvMaint.SelectedItem is MyListItem listItem)
+        {
+            if (listItem is not null && listItem.EntryType == ListEntryType.Normal)
+            {
+                MainWindow.LaunchApp(listItem);
+            }
+            if (listItem is not null && listItem.EntryType == ListEntryType.Popup)
+            {
+                MainWindow.OpenPopup(listItem);
+            }
+        }
+    }
     #endregion Button events
 
     #region Move to next control on Enter
