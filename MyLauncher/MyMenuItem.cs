@@ -57,7 +57,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
         {
             if (value != null)
             {
-                filePathOrURI = value;
+                filePathOrURI = value.Trim('"');
                 OnPropertyChanged();
             }
         }
@@ -89,7 +89,7 @@ public class MyMenuItem : INotifyPropertyChanged, IDropTarget
         {
             if (arguments != null)
             {
-                workingDir = value;
+                workingDir = value.Trim('"');
                 OnPropertyChanged();
             }
         }

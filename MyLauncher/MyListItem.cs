@@ -69,7 +69,7 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
         {
             if (value != null)
             {
-                filePathOrURI = value;
+                filePathOrURI = value.Trim('"');
                 OnPropertyChanged();
             }
         }
@@ -101,7 +101,7 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
         {
             if (arguments != null)
             {
-                workingDir = value;
+                workingDir = value.Trim('"');
                 OnPropertyChanged();
             }
         }
@@ -117,7 +117,7 @@ public class MyListItem : INotifyPropertyChanged, IDropTarget
         {
             if (value != null)
             {
-                iconSource = value;
+                iconSource = value.Trim('"');
                 OnPropertyChanged();
             }
         }
