@@ -107,7 +107,7 @@ public partial class MDCustMsgBox : Window
         #region Error message
         if (IsError)
         {
-            BorderBrush = System.Windows.Media.Brushes.Red;
+            BorderBrush = System.Windows.Media.Brushes.OrangeRed;
             BorderThickness = new Thickness(2);
             cardHeader.Background = BorderBrush;
             cardHeader.FontWeight = FontWeights.Bold;
