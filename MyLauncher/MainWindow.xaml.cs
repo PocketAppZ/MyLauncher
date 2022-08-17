@@ -390,21 +390,23 @@ public partial class MainWindow : Window
                                     true,
                                     null,
                                     true);
-            _ = mbox.ShowDialog();
+            mbox.Show();
+            ShowMainWindow();
             return false;
         }
         catch (Exception ex)
         {
             log.Error(ex, "Open failed for \"{0}\" - \"{1}\"", item.Title, item.FilePathOrURI);
             SystemSounds.Exclamation.Play();
-            MDCustMsgBox mbox = new($"Error launching \"{item.Title}\" {item.FilePathOrURI}\n\n{ex.Message}",
+            MDCustMsgBox mbox = new($"Error launching \"{item.Title}\" \n\n{ex.Message}",
                                     "My Launcher Error",
                                     ButtonType.Ok,
                                     true,
                                     true,
                                     null,
                                     true);
-            _ = mbox.ShowDialog();
+            mbox.Show();
+            ShowMainWindow();
             return false;
         }
     }
@@ -1019,7 +1021,7 @@ public partial class MainWindow : Window
                         ButtonType.YesNo,
                         true,
                         true,
-                        null,
+                        this,
                         false);
                     _ = mbox.ShowDialog();
                     if (MDCustMsgBox.CustResult == CustResultType.No)
@@ -1100,10 +1102,11 @@ public partial class MainWindow : Window
     /// <summary>
     /// Show the main window and set it's state to normal
     /// </summary>
-    private void ShowMainWindow()
+    private static void ShowMainWindow()
     {
-        Show();
-        WindowState = WindowState.Normal;
+        Application.Current.MainWindow.Show();
+        Application.Current.MainWindow.Visibility = Visibility.Visible;
+        Application.Current.MainWindow.WindowState = WindowState.Normal;
     }
     #endregion Show Main window
 
@@ -1131,6 +1134,7 @@ public partial class MainWindow : Window
                             null,
                             true);
         _ = mbox.ShowDialog();
+        ShowMainWindow();
     }
     #endregion Unhandled Exception Handler
 
