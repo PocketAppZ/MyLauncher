@@ -218,8 +218,6 @@ open the data files and to open the app's folder.
 
 Known Issues
 ============
-The system tray menu will not change theme until the app has been restarted.
-
 Changes to icons in the main or pop-up windows do not appear until the maintenance window is closed.
 
 

@@ -454,7 +454,7 @@ public partial class MainWindow : Window
     /// Sets the theme
     /// </summary>
     /// <param name="mode">Light, Dark or System</param>
-    private static void SetBaseTheme(ThemeType mode)
+    private void SetBaseTheme(ThemeType mode)
     {
         //Retrieve the app's existing theme
         PaletteHelper paletteHelper = new();
@@ -464,22 +464,27 @@ public partial class MainWindow : Window
         {
             case ThemeType.Light:
                 theme.SetBaseTheme(Theme.Light);
+                ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Light);
                 break;
             case ThemeType.Dark:
                 theme.SetBaseTheme(Theme.Dark);
+                ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Dark);
                 break;
             case ThemeType.System:
                 if (GetSystemTheme().Equals("light", StringComparison.OrdinalIgnoreCase))
                 {
                     theme.SetBaseTheme(Theme.Light);
+                    ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Light);
                 }
                 else
                 {
                     theme.SetBaseTheme(Theme.Dark);
+                    ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Dark);
                 }
                 break;
             default:
                 theme.SetBaseTheme(Theme.Light);
+                ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Light);
                 break;
         }
 
