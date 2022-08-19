@@ -399,7 +399,7 @@
                                             <Setter Property="materialDesign:HintAssist.Hint"
                                                     Value="N/A" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ItemType}"
+                                                <DataTrigger Binding="{Binding EntryType}"
                                                              Value="0">
                                                     <Setter Property="materialDesign:HintAssist.Hint"
                                                             Value="Enter the complete path to the document, application, or URL" />
@@ -435,7 +435,7 @@
                                             <Setter Property="materialDesign:HintAssist.Hint"
                                                     Value="N/A" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ItemType}"
+                                                <DataTrigger Binding="{Binding EntryType}"
                                                              Value="0">
                                                     <Setter Property="materialDesign:HintAssist.Hint"
                                                             Value="Enter any arguments here." />
@@ -471,7 +471,7 @@
                                             <Setter Property="materialDesign:HintAssist.Hint"
                                                     Value="N/A" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ItemType}"
+                                                <DataTrigger Binding="{Binding EntryType}"
                                                              Value="0">
                                                     <Setter Property="materialDesign:HintAssist.Hint"
                                                             Value="Enter working directory here if needed." />
