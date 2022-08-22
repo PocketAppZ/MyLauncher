@@ -30,7 +30,7 @@ public partial class PopupWindow : Window
         ThisPopup = popup;
         PopupID = ThisPopup.ItemID;
         PopupTitle = ThisPopup.Title;
-        Title = "My Launcher - Pop-Up List";
+        Title = $"{PopupTitle} - My Launcher";
 
         // UI size
         double size = MainWindow.UIScale((MySize)UserSettings.Setting.UISize);
