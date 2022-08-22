@@ -98,7 +98,7 @@ public partial class MainWindow : Window
         // Start minimized
         if (UserSettings.Setting.StartMinimized)
         {
-            Hide();
+            WindowState = WindowState.Minimized;
         }
 
         // ListBox event handlers
@@ -1112,6 +1112,7 @@ public partial class MainWindow : Window
         Application.Current.MainWindow.Show();
         Application.Current.MainWindow.Visibility = Visibility.Visible;
         Application.Current.MainWindow.WindowState = WindowState.Normal;
+        _ = Application.Current.MainWindow.Activate();
     }
     #endregion Show Main window
 
