@@ -99,6 +99,10 @@ public partial class MainWindow : Window
         if (UserSettings.Setting.StartMinimized)
         {
             WindowState = WindowState.Minimized;
+            if (UserSettings.Setting.MinimizeToTray)
+            {
+                Hide();
+            }
         }
 
         // ListBox event handlers
