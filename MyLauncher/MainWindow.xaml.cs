@@ -373,7 +373,7 @@ public partial class MainWindow : Window
             {
                 log.Info($"Opening \"{item.Title}\"");
             }
-            if (!UserSettings.Setting.MainWindowMinimizeOnLaunch)
+            if (Application.Current.MainWindow.Visibility == Visibility.Visible)
             {
                 SnackbarMsg.QueueMessage($"{item.Title} launched", 2000);
             }
