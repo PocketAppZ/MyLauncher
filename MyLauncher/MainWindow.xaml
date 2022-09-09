@@ -297,7 +297,7 @@
                     <!--#region ListBox in Card-->
                     <materialDesign:Card x:Name="MainCard"
                                          Grid.Row="0"
-                                         Margin="10,5" Padding="5,10"
+                                         Margin="11,5,9,5" Padding="0,12,8,12"
                                          HorizontalAlignment="Stretch"
                                          materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                          MouseEnter="Card_MouseEnter"
@@ -308,6 +308,7 @@
                                  d:ItemsSource="{d:SampleData ItemCount=5}"
                                  materialDesign:ListBoxItemAssist.ShowSelection="True"
                                  PreviewKeyUp="ListBox_KeyUp"
+                                 HorizontalAlignment="Center"
                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                  Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
