@@ -61,6 +61,7 @@
             <ListBox x:Name="PopupListBox"
                      Margin="0,5"
                      d:ItemsSource="{d:SampleData ItemCount=3}"
+                     HorizontalAlignment="Center"
                      materialDesign:ListBoxItemAssist.ShowSelection="True"
                      PreviewKeyUp="ListBox_KeyUp"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
