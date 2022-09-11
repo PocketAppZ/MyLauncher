@@ -44,7 +44,7 @@ public partial class PopupWindow : Window
 
         // Position & Size
         PopupPosition();
-        MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 100;
+        //MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 100;
 
         // Settings change event
         UserSettings.Setting.PropertyChanged += UserSettingChanged;
@@ -99,8 +99,11 @@ public partial class PopupWindow : Window
     /// <param name="e"></param>
     private void Window_SourceInitialized(object sender, EventArgs e)
     {
-        IntPtr windowHandle = new WindowInteropHelper(this).Handle;
-        NativeMethods.DisableMinMaxButtons(windowHandle);
+        if (UserSettings.Setting.RemoveMinMax)
+        {
+            IntPtr windowHandle = new WindowInteropHelper(this).Handle;
+            NativeMethods.DisableMinMaxButtons(windowHandle);
+        }
     }
 
     /// <summary>

@@ -556,6 +556,7 @@
                             <RowDefinition Height="31" />
                             <RowDefinition Height="31" />
                             <RowDefinition Height="31" />
+                            <RowDefinition Height="31" />
                         </Grid.RowDefinitions>
                         <!--#endregion-->
 
@@ -655,13 +656,13 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding MainWindowMinimizeOnLaunch,
+                                IsChecked="{Binding RemoveMinMax,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                 TabIndex="20" />
                             <Label
                                 Margin="10,-1,0,0"
-                                Content="Minimize main window after launch" />
+                                Content="Remove minimize and maximize buttons from pop-up windows" />
                         </StackPanel>
 
                         <StackPanel
@@ -670,13 +671,13 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding StartMinimized,
+                                IsChecked="{Binding MainWindowMinimizeOnLaunch,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                 TabIndex="21" />
                             <Label
                                 Margin="10,-1,0,0"
-                                Content="Start Minimized" />
+                                Content="Minimize main window after launch" />
                         </StackPanel>
 
                         <StackPanel
@@ -685,13 +686,13 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding StartWithWindows,
+                                IsChecked="{Binding StartMinimized,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                 TabIndex="22" />
                             <Label
                                 Margin="10,-1,0,0"
-                                Content="Start with Windows" />
+                                Content="Start minimized" />
                         </StackPanel>
 
                         <StackPanel
@@ -700,14 +701,30 @@
                             Orientation="Horizontal">
                             <ToggleButton
                                 HorizontalAlignment="Left"
-                                IsChecked="{Binding IncludeDebug,
+                                IsChecked="{Binding StartWithWindows,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                 TabIndex="23" />
                             <Label
                                 Margin="10,-1,0,0"
+                                Content="Start with Windows" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="10"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                            <ToggleButton
+                                HorizontalAlignment="Left"
+                                IsChecked="{Binding IncludeDebug,
+                                                    Source={x:Static local:UserSettings.Setting}}"
+                                Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                TabIndex="24" />
+                            <Label
+                                Margin="10,-1,0,0"
                                 Content="Include debug level messages in log file" />
                         </StackPanel>
+
                     </Grid>
                 </materialDesign:Card>
                 <!--#endregion-->
@@ -718,7 +735,7 @@
                     Grid.Column="1"
                     Width="475"
                     Height="auto"
-                    Margin="10,175,5,6"
+                    Margin="10,205,5,6"
                     Padding="10,20,10,10"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Stretch"

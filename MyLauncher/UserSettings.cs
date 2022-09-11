@@ -235,6 +235,16 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
         }
     }
 
+    public bool RemoveMinMax
+    {
+        get => removeMinMax;
+        set
+        {
+            removeMinMax = value;
+            OnPropertyChanged();
+        }
+    }
+
     public int SecondaryColor
     {
         get => secondaryColor;
@@ -479,6 +489,7 @@ public class UserSettings : SettingsManager<UserSettings>, INotifyPropertyChange
     private bool playSound = true;
     private bool popupCloseAfterLaunch = true;
     private int primaryColor = (int)AccentColor.Blue;
+    private bool removeMinMax = false;
     private int secondaryColor = (int)AccentColor.Red;
     private int sectionHeadOffset = 1;
     private int sectionHeadSize = 1;

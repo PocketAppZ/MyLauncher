@@ -14,6 +14,7 @@
 	<Copyright>Copyright © $([System.DateTime]::UtcNow.Year) Tim Kennedy</Copyright>
     <ApplicationIcon>Images\ML.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
