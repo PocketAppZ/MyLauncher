@@ -7,8 +7,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Menu Maintenance"
-        MinWidth="300" MinHeight="300"
+        Title="Menu Maintenance" MinWidth="300"
+        MinHeight="300"
         Background="{DynamicResource MaterialDesignPaper}"
         Closing="Window_Closing"
         Loaded="Window_Loaded"
@@ -32,8 +32,8 @@
         <!--#endregion-->
 
         <!--#region ColorZone for page header-->
-        <materialDesign:ColorZone Height="33"
-                                  Margin="10" Padding="0,0,0,3"
+        <materialDesign:ColorZone Height="33" Margin="10"
+                                  Padding="0,0,0,3"
                                   materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                   CornerRadius="4" Focusable="False"
                                   Mode="PrimaryMid"
@@ -51,8 +51,7 @@
                     <Border Padding="3"
                             BorderBrush="{DynamicResource SecondaryHueMidBrush}"
                             BorderThickness="2">
-                        <Grid Width="165"
-                              Margin="0"
+                        <Grid Width="165" Margin="0"
                               Background="{DynamicResource MaterialDesignPaper}">
                             <StackPanel Orientation="Vertical">
                                 <Button Click="BtnData_Click"
@@ -94,8 +93,7 @@
                     <RowDefinition Height="38" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <materialDesign:ColorZone Height="38"
-                                          Margin="5,6,4.5,0"
+                <materialDesign:ColorZone Height="38" Margin="5,6,4.5,0"
                                           CornerRadius="7,7,0,0" Mode="PrimaryMid"
                                           SnapsToDevicePixels="True">
                     <TextBlock Margin="10,5"
@@ -103,8 +101,7 @@
                                FontSize="14"
                                Text="Use drag &amp; drop to arrange items" />
                 </materialDesign:ColorZone>
-                <materialDesign:Card Grid.Row="1"
-                                     MinWidth="100"
+                <materialDesign:Card Grid.Row="1" MinWidth="100"
                                      Margin="5,0,5,5"
                                      materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                      MouseEnter="Card_MouseEnter"
@@ -139,10 +136,8 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ItemType}"
                                                  Value="5">
-                                        <Setter Property="FontWeight"
-                                                Value="SemiBold" />
-                                        <Setter Property="Margin"
-                                                Value="-15,0,0,2" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                        <Setter Property="Margin" Value="-15,0,0,2" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -188,28 +183,23 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock"
                                                        BasedOn="{StaticResource {x:Type TextBlock}}">
-                                                    <Setter Property="Text"
-                                                            Value="Menu Item Title" />
+                                                    <Setter Property="Text" Value="Menu Item Title" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding ItemType}"
                                                                      Value="0">
-                                                            <Setter Property="Text"
-                                                                    Value="SubMenu Item Title" />
+                                                            <Setter Property="Text" Value="SubMenu Item Title" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding ItemType}"
                                                                      Value="3">
-                                                            <Setter Property="Text"
-                                                                    Value="Separator" />
+                                                            <Setter Property="Text" Value="Separator" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding ItemType}"
                                                                      Value="5">
-                                                            <Setter Property="Text"
-                                                                    Value="Section Heading" />
+                                                            <Setter Property="Text" Value="Section Heading" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding ItemType}"
                                                                      Value="6">
-                                                            <Setter Property="Text"
-                                                                    Value="Pop-up" />
+                                                            <Setter Property="Text" Value="Pop-up" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -226,18 +216,15 @@
                                             <Button.Style>
                                                 <Style TargetType="Button"
                                                        BasedOn="{StaticResource MaterialDesignFlatLightButton}">
-                                                    <Setter Property="Visibility"
-                                                            Value="Collapsed" />
+                                                    <Setter Property="Visibility" Value="Collapsed" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding ItemType}"
                                                                      Value="1">
-                                                            <Setter Property="Visibility"
-                                                                    Value="Visible" />
+                                                            <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding ItemType}"
                                                                      Value="6">
-                                                            <Setter Property="Visibility"
-                                                                    Value="Visible" />
+                                                            <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -257,8 +244,7 @@
                                             <Border Padding="3"
                                                     BorderBrush="{DynamicResource PrimaryHueLightBrush}"
                                                     BorderThickness="2">
-                                                <Grid Width="410"
-                                                      Margin="0"
+                                                <Grid Width="410" Margin="0"
                                                       Background="{DynamicResource MaterialDesignPaper}">
                                                     <Grid.DataContext>
                                                         <Binding ElementName="TvMenuMaint"
@@ -290,13 +276,11 @@
                                                             <TextBlock.Style>
                                                                 <Style TargetType="TextBlock"
                                                                        BasedOn="{StaticResource {x:Type TextBlock}}">
-                                                                    <Setter Property="Visibility"
-                                                                            Value="Collapsed" />
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
                                                                     <Style.Triggers>
                                                                         <DataTrigger Binding="{Binding ItemType}"
                                                                                      Value="6">
-                                                                            <Setter Property="Visibility"
-                                                                                    Value="Visible" />
+                                                                            <Setter Property="Visibility" Value="Visible" />
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
                                                                 </Style>
@@ -318,13 +302,11 @@
                                     <TextBox.Style>
                                         <Style TargetType="TextBox"
                                                BasedOn="{StaticResource EntryTextBox}">
-                                            <Setter Property="Visibility"
-                                                    Value="Visible" />
+                                            <Setter Property="Visibility" Value="Visible" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ItemType}"
                                                              Value="6">
-                                                    <Setter Property="Visibility"
-                                                            Value="Collapsed" />
+                                                    <Setter Property="Visibility" Value="Collapsed" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -335,9 +317,8 @@
                                                                  Path=IsVisible,
                                                                  Converter={StaticResource BoolInv},
                                                                  ConverterParameter=Negate}">
-                                    <ComboBox Name="cbxPopups"
-                                              Margin="10,5,10,7" Padding="1"
-                                              HorizontalAlignment="Left"
+                                    <ComboBox Name="cbxPopups" Margin="10,5,10,7"
+                                              Padding="1" HorizontalAlignment="Left"
                                               VerticalAlignment="Bottom"
                                               VerticalContentAlignment="Bottom"
                                               materialDesign:ComboBoxAssist.ShowSelectedItem="True"
@@ -364,8 +345,7 @@
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock Margin="10,5"
-                                                   Text="Path or URL" />
+                                        <TextBlock Margin="10,5" Text="Path or URL" />
                                         <Button Margin="0" HorizontalAlignment="Right"
                                                 Click="BtnFilePicker_Click"
                                                 Style="{StaticResource MaterialDesignFlatLightButton}"
@@ -414,6 +394,9 @@
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbPath"
+                                         AllowDrop="True"
+                                         PreviewDragOver="TextBox_AnyType_PreviewDragOver"
+                                         PreviewDrop="TextBox_PreviewDrop"
                                          PreviewKeyDown="Textbox_KeyDown"
                                          TabIndex="2"
                                          Text="{Binding FilePathOrURI,
@@ -421,13 +404,11 @@
                                     <TextBox.Style>
                                         <Style TargetType="TextBox"
                                                BasedOn="{StaticResource EntryTextBox}">
-                                            <Setter Property="materialDesign:HintAssist.Hint"
-                                                    Value="N/A" />
+                                            <Setter Property="materialDesign:HintAssist.Hint" Value="N/A" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ItemType}"
                                                              Value="1">
-                                                    <Setter Property="materialDesign:HintAssist.Hint"
-                                                            Value="Enter the complete path to the document, application, or URL" />
+                                                    <Setter Property="materialDesign:HintAssist.Hint" Value="Enter (or drag &amp; drop) the complete path to the document, application, or URL" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -444,8 +425,7 @@
                                              Style="{StaticResource MaintCardStyle}">
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
-                                    <TextBlock Margin="10,5"
-                                               Text="Arguments" />
+                                    <TextBlock Margin="10,5" Text="Arguments" />
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbArgs"
                                          PreviewKeyDown="Textbox_KeyDown"
@@ -455,13 +435,11 @@
                                     <TextBox.Style>
                                         <Style TargetType="TextBox"
                                                BasedOn="{StaticResource EntryTextBox}">
-                                            <Setter Property="materialDesign:HintAssist.Hint"
-                                                    Value="N/A" />
+                                            <Setter Property="materialDesign:HintAssist.Hint" Value="N/A" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ItemType}"
                                                              Value="1">
-                                                    <Setter Property="materialDesign:HintAssist.Hint"
-                                                            Value="Enter any arguments here." />
+                                                    <Setter Property="materialDesign:HintAssist.Hint" Value="Enter any arguments here." />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -479,25 +457,25 @@
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock Margin="10,5"
-                                                   Text="Working Directory" />
+                                        <TextBlock Margin="10,5" Text="Working Directory" />
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbWorkDir"
+                                         AllowDrop="True"
+                                         PreviewDragOver="TextBox_OnlyDirectory_PreviewDragOver"
+                                         PreviewDrop="TextBox_PreviewDrop"
                                          PreviewKeyDown="Textbox_KeyDown"
                                          TabIndex="3"
                                          Text="{Binding WorkingDir,
-                                                        UpdateSourceTrigger=Default}" >
+                                                        UpdateSourceTrigger=Default}">
                                     <TextBox.Style>
                                         <Style TargetType="TextBox"
                                                BasedOn="{StaticResource EntryTextBox}">
-                                            <Setter Property="materialDesign:HintAssist.Hint"
-                                                    Value="N/A" />
+                                            <Setter Property="materialDesign:HintAssist.Hint" Value="N/A" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ItemType}"
                                                              Value="1">
-                                                    <Setter Property="materialDesign:HintAssist.Hint"
-                                                            Value="Enter working directory here if needed." />
+                                                    <Setter Property="materialDesign:HintAssist.Hint" Value="Enter working directory here if needed." />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -543,39 +521,32 @@
                                             <Border Padding="0"
                                                     BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                                                     BorderThickness="2">
-                                                <Grid Width="200"
-                                                      Margin="0"
+                                                <Grid Width="200" Margin="0"
                                                       Background="{DynamicResource MaterialDesignPaper}">
-                                                    <StackPanel Margin="5"
-                                                                Orientation="Vertical">
-                                                        <TextBlock Margin="15,10,0,10"
-                                                                   FontSize="16" FontWeight="SemiBold"
+                                                    <StackPanel Margin="5" Orientation="Vertical">
+                                                        <TextBlock Margin="15,10,0,10" FontSize="16"
+                                                                   FontWeight="SemiBold"
                                                                    Foreground="{DynamicResource SecondaryHueMidBrush}"
                                                                    Text="New Item Type"
                                                                    TextAlignment="Left" />
                                                         <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="NewMenuItem_Click"
                                                                 Content="Menu Item" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="NewSubMenu_Click"
                                                                 Content="Submenu" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="NewSectionHead_Click"
                                                                 Content="Section Heading" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="NewSeparator_Click"
                                                                 Content="Separator" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="Popup_Click"
                                                                 Content="Existing Pop-up" />
@@ -625,8 +596,7 @@
 
         <!--#region SnackBar-->
         <materialDesign:Snackbar x:Name="SnackBarMenuMaint"
-                                 Grid.Row="0"
-                                 HorizontalAlignment="Right"
+                                 Grid.Row="0" HorizontalAlignment="Right"
                                  VerticalAlignment="Top"
                                  Background="#FF303030"
                                  FontWeight="DemiBold" Foreground="White"

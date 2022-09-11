@@ -67,7 +67,8 @@ selected item. The grid icon opens the Special Apps menu.
 The Path or URL text box is where you will enter the complete path to the file, folder
 application, or website URL that you wish to open. For documents, folders and applications, you
 may use environmental variables in the path. For example %temp% for the temp folder. For website
-URLs, begin the URL with either http:\\ or preferably, https:\\.
+URLs, begin the URL with either http:\\ or preferably, https:\\. You may also drag and drop a
+file, directory or URL to this text box.
 
 If the application specified in the Path or URL text box is an executable, a shield icon will
 appear. Clicking on the shield icon will toggle the setting to run the application as administrator
@@ -214,6 +215,9 @@ readme file and to view the log file.
 
 The three-dot icon in the upper right of the maintenance windows will open a menu that has options to
 open the data files and to open the app's folder.
+
+The text boxes in the two maintenance windows that are for files, directories or URLs accept dropped
+items of the appropriate type.
 
 
 Known Issues

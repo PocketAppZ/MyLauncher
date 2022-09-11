@@ -7,8 +7,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="List Maintenance"
-        MinWidth="300" MinHeight="300"
+        Title="List Maintenance" MinWidth="300"
+        MinHeight="300"
         Background="{DynamicResource MaterialDesignPaper}"
         Closing="Window_Closing"
         Loaded="Window_Loaded"
@@ -31,8 +31,8 @@
         <!--#endregion-->
 
         <!--#region ColorZone for page header-->
-        <materialDesign:ColorZone Height="33"
-                                  Margin="10" Padding="0,0,0,3"
+        <materialDesign:ColorZone Height="33" Margin="10"
+                                  Padding="0,0,0,3"
                                   materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                   CornerRadius="4" Focusable="False"
                                   Mode="PrimaryMid"
@@ -50,8 +50,7 @@
                     <Border Padding="3"
                             BorderBrush="{DynamicResource SecondaryHueMidBrush}"
                             BorderThickness="2">
-                        <Grid Width="165"
-                              Margin="0"
+                        <Grid Width="165" Margin="0"
                               Background="{DynamicResource MaterialDesignPaper}">
                             <StackPanel Orientation="Vertical">
                                 <Button Click="BtnData_Click"
@@ -93,8 +92,7 @@
                     <RowDefinition Height="38" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <materialDesign:ColorZone Height="38"
-                                          Margin="5,6,4.5,0"
+                <materialDesign:ColorZone Height="38" Margin="5,6,4.5,0"
                                           CornerRadius="7,7,0,0" Mode="PrimaryMid"
                                           SnapsToDevicePixels="True">
                     <TextBlock Margin="10,5"
@@ -102,8 +100,7 @@
                                FontSize="14"
                                Text="Use drag &amp; drop to arrange items" />
                 </materialDesign:ColorZone>
-                <materialDesign:Card Grid.Row="1"
-                                     MinWidth="100"
+                <materialDesign:Card Grid.Row="1" MinWidth="100"
                                      Margin="5,0"
                                      materialDesign:ShadowAssist.ShadowDepth="Depth0"
                                      MouseEnter="Card_MouseEnter"
@@ -178,13 +175,11 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock"
                                                        BasedOn="{StaticResource {x:Type TextBlock}}">
-                                                    <Setter Property="Text"
-                                                            Value="Title" />
+                                                    <Setter Property="Text" Value="Title" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding EntryType}"
                                                                      Value="1">
-                                                            <Setter Property="Text"
-                                                                    Value="Pop-up List Title" />
+                                                            <Setter Property="Text" Value="Pop-up List Title" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -214,8 +209,7 @@
                                             <Border Padding="3"
                                                     BorderBrush="{DynamicResource PrimaryHueLightBrush}"
                                                     BorderThickness="2">
-                                                <Grid Width="410"
-                                                      Margin="0"
+                                                <Grid Width="410" Margin="0"
                                                       Background="{DynamicResource MaterialDesignPaper}">
                                                     <Grid.DataContext>
                                                         <Binding ElementName="TvMaint"
@@ -259,53 +253,44 @@
                                             <Border Padding="3"
                                                     BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                                                     BorderThickness="2">
-                                                <Grid Width="185"
-                                                      Margin="0"
+                                                <Grid Width="185" Margin="0"
                                                       Background="{DynamicResource MaterialDesignPaper}">
                                                     <StackPanel Orientation="Vertical">
-                                                        <TextBlock Margin="15,10,0,10"
-                                                                   FontSize="16" FontWeight="DemiBold"
+                                                        <TextBlock Margin="15,10,0,10" FontSize="16"
+                                                                   FontWeight="DemiBold"
                                                                    Foreground="{DynamicResource SecondaryHueMidBrush}"
                                                                    Text="Special Apps" TextAlignment="Left" />
                                                         <Separator Background="{DynamicResource PrimaryHueDarkBrush}" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="BtnSpecial_Click"
                                                                 Content="Calculator" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="BtnSpecial_Click"
                                                                 Content="Calendar" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="BtnSpecial_Click" Content="Email" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="BtnSpecial_Click"
                                                                 Content="Solitaire" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="BtnSpecial_Click"
                                                                 Content="Weather" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="BtnSpecial_Click"
                                                                 Content="Windows Settings" />
                                                         <Separator Margin="0" Padding="1"
                                                                    Background="{DynamicResource PrimaryHueDarkBrush}" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="BtnSpecial_Click"
                                                                 Content="Restart" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="BtnSpecial_Click"
                                                                 Content="Shutdown" />
@@ -321,6 +306,7 @@
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbTitle"
                                          materialDesign:HintAssist.Hint="The text you want to see in the list."
+                                         AllowDrop="False"
                                          PreviewKeyDown="Textbox_KeyDown"
                                          Style="{StaticResource EntryTextBox}"
                                          TabIndex="1"
@@ -339,8 +325,7 @@
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock Margin="10,5"
-                                                   Text="Path or URL" />
+                                        <TextBlock Margin="10,5" Text="Path or URL" />
                                         <Button Margin="0" HorizontalAlignment="Right"
                                                 Click="BtnFilePicker_Click"
                                                 Style="{StaticResource MaterialDesignFlatLightButton}"
@@ -389,20 +374,21 @@
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbPath"
+                                         AllowDrop="True"
+                                         PreviewDragOver="TextBox_AnyType_PreviewDragOver"
+                                         PreviewDrop="TextBox_PreviewDrop"
                                          PreviewKeyDown="Textbox_KeyDown"
                                          TabIndex="2"
                                          Text="{Binding FilePathOrURI,
-                                                        UpdateSourceTrigger=PropertyChanged}" >
+                                                        UpdateSourceTrigger=PropertyChanged}">
                                     <TextBox.Style>
                                         <Style TargetType="TextBox"
                                                BasedOn="{StaticResource EntryTextBox}">
-                                            <Setter Property="materialDesign:HintAssist.Hint"
-                                                    Value="N/A" />
+                                            <Setter Property="materialDesign:HintAssist.Hint" Value="N/A" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding EntryType}"
                                                              Value="0">
-                                                    <Setter Property="materialDesign:HintAssist.Hint"
-                                                            Value="Enter the complete path to the document, application, or URL" />
+                                                    <Setter Property="materialDesign:HintAssist.Hint" Value="Enter (or drag &amp; drop) the complete path to the document, application, or URL" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -420,25 +406,23 @@
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock Margin="10,5"
-                                                   Text="Arguments" />
+                                        <TextBlock Margin="10,5" Text="Arguments" />
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbArgs"
+                                         AllowDrop="False"
                                          PreviewKeyDown="Textbox_KeyDown"
                                          TabIndex="3"
                                          Text="{Binding Arguments,
-                                                        UpdateSourceTrigger=Default}" >
+                                                        UpdateSourceTrigger=Default}">
                                     <TextBox.Style>
                                         <Style TargetType="TextBox"
                                                BasedOn="{StaticResource EntryTextBox}">
-                                            <Setter Property="materialDesign:HintAssist.Hint"
-                                                    Value="N/A" />
+                                            <Setter Property="materialDesign:HintAssist.Hint" Value="N/A" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding EntryType}"
                                                              Value="0">
-                                                    <Setter Property="materialDesign:HintAssist.Hint"
-                                                            Value="Enter any arguments here." />
+                                                    <Setter Property="materialDesign:HintAssist.Hint" Value="Enter any arguments here." />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -456,25 +440,25 @@
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock Margin="10,5"
-                                                   Text="Working Directory" />
+                                        <TextBlock Margin="10,5" Text="Working Directory" />
                                     </Grid>
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbWorkDir"
+                                         AllowDrop="True"
+                                         PreviewDragOver="TextBox_OnlyDirectory_PreviewDragOver"
+                                         PreviewDrop="TextBox_PreviewDrop"
                                          PreviewKeyDown="Textbox_KeyDown"
                                          TabIndex="3"
                                          Text="{Binding WorkingDir,
-                                                        UpdateSourceTrigger=Default}" >
+                                                        UpdateSourceTrigger=Default}">
                                     <TextBox.Style>
                                         <Style TargetType="TextBox"
                                                BasedOn="{StaticResource EntryTextBox}">
-                                            <Setter Property="materialDesign:HintAssist.Hint"
-                                                    Value="N/A" />
+                                            <Setter Property="materialDesign:HintAssist.Hint" Value="N/A" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding EntryType}"
                                                              Value="0">
-                                                    <Setter Property="materialDesign:HintAssist.Hint"
-                                                            Value="Enter working directory here if needed." />
+                                                    <Setter Property="materialDesign:HintAssist.Hint" Value="Enter working directory here if needed." />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -502,8 +486,7 @@
                             <Grid>
                                 <materialDesign:ColorZone Style="{StaticResource SectionHeader}">
                                     <Grid>
-                                        <TextBlock Margin="10,5"
-                                                   Text="Icon File" />
+                                        <TextBlock Margin="10,5" Text="Icon File" />
                                         <Button Margin="0" HorizontalAlignment="Right"
                                                 Click="IconFile_Click"
                                                 Style="{StaticResource MaterialDesignFlatLightButton}"
@@ -517,6 +500,9 @@
                                 </materialDesign:ColorZone>
                                 <TextBox x:Name="tbIconFile"
                                          materialDesign:HintAssist.Hint="The name of the custom icon file. Leave blank to get the associated icon."
+                                         AllowDrop="True"
+                                         PreviewDragOver="TextBox_NoDirectory_PreviewDragOver"
+                                         PreviewDrop="TextBox_PreviewDrop"
                                          PreviewKeyDown="Textbox_KeyDown"
                                          Style="{StaticResource EntryTextBox}"
                                          TabIndex="4"
@@ -551,29 +537,24 @@
                                             <Border Padding="0"
                                                     BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                                                     BorderThickness="2">
-                                                <Grid Width="200"
-                                                      Margin="0"
+                                                <Grid Width="200" Margin="0"
                                                       Background="{DynamicResource MaterialDesignPaper}">
-                                                    <StackPanel Margin="5"
-                                                                Orientation="Vertical">
-                                                        <TextBlock Margin="15,10,0,10"
-                                                                   FontSize="16" FontWeight="SemiBold"
+                                                    <StackPanel Margin="5" Orientation="Vertical">
+                                                        <TextBlock Margin="15,10,0,10" FontSize="16"
+                                                                   FontWeight="SemiBold"
                                                                    Foreground="{DynamicResource SecondaryHueMidBrush}"
                                                                    Text="New Item Type"
                                                                    TextAlignment="Left" />
                                                         <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="NewNormalItem_Click"
                                                                 Content="Normal Item" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="NewPopupItem_Click"
                                                                 Content="Pop-Up List" />
-                                                        <Button Height="35"
-                                                                Padding="15,0,15,10"
+                                                        <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="NewSpecialApp_Click"
                                                                 Content="Special App" />
@@ -623,8 +604,7 @@
 
         <!--#region SnackBar-->
         <materialDesign:Snackbar x:Name="SnackBarMaint"
-                                 Grid.Row="0"
-                                 HorizontalAlignment="Right"
+                                 Grid.Row="0" HorizontalAlignment="Right"
                                  VerticalAlignment="Top"
                                  Background="#FF303030"
                                  FontWeight="DemiBold" Foreground="White"

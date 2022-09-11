@@ -648,4 +648,60 @@ public partial class MenuMaint : Window
         }
     }
     #endregion Pop-ups ComboBox selection changed
+
+    #region Drag and Drop handlers for TextBoxes
+    private void TextBox_AnyType_PreviewDragOver(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            List<string> dragfiles = ((DataObject)e.Data).GetFileDropList().Cast<string>().ToList();
+            e.Effects = dragfiles?.Count == 1 ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+        else if (e.Data.GetDataPresent(DataFormats.Text))
+        {
+            e.Effects = DragDropEffects.Copy;
+        }
+        else
+        {
+            e.Effects = DragDropEffects.None;
+        }
+        e.Handled = true;
+    }
+
+    private void TextBox_OnlyDirectory_PreviewDragOver(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            List<string> dragfiles = ((DataObject)e.Data).GetFileDropList().Cast<string>().ToList();
+            FileAttributes attr = File.GetAttributes(dragfiles.FirstOrDefault());
+            e.Effects = dragfiles?.Count == 1 && attr.HasFlag(FileAttributes.Directory) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+        else
+        {
+            e.Effects = DragDropEffects.None;
+        }
+        e.Handled = true;
+    }
+
+    private void TextBox_PreviewDrop(object sender, DragEventArgs e)
+    {
+        if (e.Data is not null && e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            TextBox tbox = sender as TextBox;
+            tbox.Text = string.Empty;
+            tbox.Text = ((DataObject)e.Data).GetFileDropList().Cast<string>().ToList().FirstOrDefault();
+            BindingExpression be = (sender as TextBox)?.GetBindingExpression(TextBox.TextProperty);
+            be.UpdateSource();
+        }
+        else if (e.Data is not null && e.Data.GetDataPresent(DataFormats.Text))
+        {
+            TextBox tbox = sender as TextBox;
+            tbox.Text = string.Empty;
+            tbox.Text = ((DataObject)e.Data).GetText();
+            BindingExpression be = (sender as TextBox)?.GetBindingExpression(TextBox.TextProperty);
+            be.UpdateSource();
+        }
+        e.Handled = true;
+    }
+    #endregion Drag and Drop handlers for TextBoxes
 }
