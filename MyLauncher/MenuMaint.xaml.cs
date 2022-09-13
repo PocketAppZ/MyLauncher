@@ -1,4 +1,4 @@
-﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
 
@@ -255,7 +255,7 @@ public partial class MenuMaint : Window
 
             if (itemToDelete?.SubMenuItems is not null && itemToDelete.SubMenuItems.Count > 0)
             {
-                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.SubMenuItems.Count} of its item items?",
+                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.SubMenuItems.Count} of its child items?",
                                         "Delete All?",
                                         ButtonType.YesNo,
                                         true,

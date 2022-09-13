@@ -1,4 +1,4 @@
-﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
 
@@ -204,7 +204,7 @@ public partial class Maintenance : Window
 
             if (itemToDelete?.MyListItems is not null && itemToDelete.MyListItems.Count > 0)
             {
-                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.MyListItems.Count} of its item items?",
+                MDCustMsgBox mbox = new($"Remove {itemToDelete.Title} and all {itemToDelete.MyListItems.Count} of its child items?",
                                         "Delete All?",
                                         ButtonType.YesNo,
                                         true,
