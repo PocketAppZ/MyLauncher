@@ -1058,7 +1058,9 @@ public partial class MainWindow : Window
         }
     }
 
+#pragma warning disable RCS1163 // Unused parameter.
     private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+#pragma warning restore RCS1163 // Unused parameter.
     {
         // e.NewValue - True is visible - False is not
         if ((bool)e.NewValue)
