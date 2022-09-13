@@ -464,27 +464,28 @@ public partial class MainWindow : Window
         PaletteHelper paletteHelper = new();
         ITheme theme = paletteHelper.GetTheme();
 
+        if (mode == ThemeType.System)
+        {
+            mode = GetSystemTheme().Equals("light") ? ThemeType.Light : ThemeType.Dark;
+        }
+
         switch (mode)
         {
             case ThemeType.Light:
                 theme.SetBaseTheme(Theme.Light);
+                theme.Paper = Colors.WhiteSmoke;
                 ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Light);
                 break;
             case ThemeType.Dark:
                 theme.SetBaseTheme(Theme.Dark);
                 ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Dark);
                 break;
-            case ThemeType.System:
-                if (GetSystemTheme().Equals("light", StringComparison.OrdinalIgnoreCase))
-                {
-                    theme.SetBaseTheme(Theme.Light);
-                    ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Light);
-                }
-                else
-                {
-                    theme.SetBaseTheme(Theme.Dark);
-                    ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Dark);
-                }
+            case ThemeType.Darker:
+                // Set card and paper background colors a bit darker
+                theme.SetBaseTheme(Theme.Dark);
+                theme.CardBackground = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FF141414");
+                theme.Paper = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FF202020");
+                ThemeAssist.SetTheme(tbIcon.ContextMenu, BaseTheme.Dark);
                 break;
             default:
                 theme.SetBaseTheme(Theme.Light);
@@ -499,11 +500,7 @@ public partial class MainWindow : Window
     private static string GetSystemTheme()
     {
         BaseTheme? sysTheme = Theme.GetSystemTheme();
-        if (sysTheme != null)
-        {
-            return sysTheme.ToString();
-        }
-        return string.Empty;
+        return (sysTheme != null) ? sysTheme.ToString().ToLower() : string.Empty;
     }
     #endregion Set light or dark theme
 
@@ -828,6 +825,9 @@ public partial class MainWindow : Window
                         UserSettings.Setting.DarkMode = (int)ThemeType.Dark;
                         break;
                     case (int)ThemeType.Dark:
+                        UserSettings.Setting.DarkMode = (int)ThemeType.Darker;
+                        break;
+                    case (int)ThemeType.Darker:
                         UserSettings.Setting.DarkMode = (int)ThemeType.System;
                         break;
                     case (int)ThemeType.System:
