@@ -510,6 +510,7 @@
                                         <materialDesign:PopupBox x:Name="pbxNewItem"
                                                                  Padding="0"
                                                                  PlacementMode="TopAndAlignCentres"
+                                                                 StaysOpen="True"
                                                                  PopupMode="Click"
                                                                  PopupVerticalOffset="-5">
                                             <materialDesign:PopupBox.ToggleContent>
@@ -521,16 +522,18 @@
                                             </materialDesign:PopupBox.ToggleContent>
                                             <Border Padding="0"
                                                     BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                                                    BorderThickness="2">
+                                                    BorderThickness="3">
                                                 <Grid Width="200" Margin="0"
                                                       Background="{DynamicResource MaterialDesignPaper}">
                                                     <StackPanel Margin="5" Orientation="Vertical">
                                                         <TextBlock Margin="15,10,0,10" FontSize="16"
                                                                    FontWeight="SemiBold"
-                                                                   Foreground="{DynamicResource SecondaryHueMidBrush}"
+                                                                   Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                                    Text="New Item Type"
                                                                    TextAlignment="Left" />
-                                                        <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
+                                                        <Rectangle Height="2" Margin="0,4"
+                                                                   HorizontalAlignment="Stretch"
+                                                                   Fill="{DynamicResource PrimaryHueMidBrush}" />
                                                         <Button Height="35" Padding="15,0,15,10"
                                                                 VerticalContentAlignment="Center"
                                                                 Click="NewMenuItem_Click"
@@ -551,7 +554,24 @@
                                                                 VerticalContentAlignment="Center"
                                                                 Click="Popup_Click"
                                                                 Content="Existing Pop-up" />
-                                                        <Separator Background="{DynamicResource PrimaryHueMidBrush}" />
+                                                        <Rectangle Height="2" Margin="0,4"
+                                                                   HorizontalAlignment="Stretch"
+                                                                   Fill="{DynamicResource PrimaryHueMidBrush}" />
+                                                        <RadioButton x:Name="rbNewAbove"
+                                                                     Height="35" Margin="10,0"
+                                                                      Style="{StaticResource MaterialDesignRadioButton}"
+                                                                     Content="Above Selected Item" />
+                                                        <RadioButton x:Name="rbNewBelow"
+                                                                     Height="35" Margin="10,0"
+                                                                      Style="{StaticResource MaterialDesignRadioButton}"
+                                                                     Content="Below Selected Item" />
+                                                        <RadioButton x:Name="rbNewBottom"
+                                                                     Height="35" Margin="10,0"
+                                                                      Style="{StaticResource MaterialDesignRadioButton}"
+                                                                     Content="At the bottom" IsChecked="True" />
+                                                        <Rectangle Height="2" Margin="0,4"
+                                                                   HorizontalAlignment="Stretch"
+                                                                   Fill="{DynamicResource PrimaryHueMidBrush}" />
                                                         <Button Height="35"
                                                                 HorizontalContentAlignment="Left"
                                                                 VerticalContentAlignment="Center"

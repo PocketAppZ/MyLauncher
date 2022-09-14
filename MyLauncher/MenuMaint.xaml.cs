@@ -1,4 +1,4 @@
-// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
 
@@ -50,12 +50,8 @@ public partial class MenuMaint : Window
         // Settings change event
         UserSettings.Setting.PropertyChanged += UserSettingChanged;
 
+        // Menu items collection changed
         MyMenuItem.MLMenuItems.CollectionChanged += MLMenuItems_CollectionChanged;
-    }
-
-    private void MLMenuItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        Debug.WriteLine($"List changed, action was: {e.Action} {e.OldStartingIndex} {e.NewStartingIndex}");
     }
     #endregion Settings
 
@@ -142,11 +138,10 @@ public partial class MenuMaint : Window
             ItemID = Guid.NewGuid().ToString(),
             IsSelected = true
         };
-        MyMenuItem.MLMenuItems.Add(newitem);
-        _ = tbTitle.Focus();
+        AddNewItem(newitem);
         ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
     }
-    #endregion Add new normal item
+        #endregion Add new normal item
 
     #region Add new submenu
     /// <summary>
@@ -163,12 +158,7 @@ public partial class MenuMaint : Window
             IsSelected = true,
             SubMenuItems = new ObservableCollection<MyMenuItem>()
         };
-        MyMenuItem.MLMenuItems.Add(newitem);
-        if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
-        {
-            tvi.IsSelected = true;
-        }
-        _ = tbTitle.Focus();
+        AddNewItem(newitem);
         ClearAndQueueMessage("New \"untitled\" submenu was created.", 3000);
     }
     #endregion Add new submenu
@@ -188,12 +178,7 @@ public partial class MenuMaint : Window
             IsSelected = true,
             SubMenuItems = null
         };
-        MyMenuItem.MLMenuItems.Add(newitem);
-        if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
-        {
-            tvi.IsSelected = true;
-        }
-        _ = tbTitle.Focus();
+        AddNewItem(newitem);
         ClearAndQueueMessage("New \"untitled\" section heading was created.", 3000);
     }
     #endregion Add new section heading
@@ -213,13 +198,15 @@ public partial class MenuMaint : Window
             IsSelected = true,
             SubMenuItems = null
         };
-        MyMenuItem.MLMenuItems.Add(newitem);
-        _ = tbTitle.Focus();
+        AddNewItem(newitem);
         ClearAndQueueMessage("New Separator item was created.", 3000);
     }
     #endregion Add new separator
 
     #region Add Existing Pop-up
+    /// <summary>
+    /// Adds a new pop-up item
+    /// </summary>
     private void AddPopup()
     {
         MyMenuItem newitem = new()
@@ -233,15 +220,44 @@ public partial class MenuMaint : Window
             IsSelected = true,
             SubMenuItems = null
         };
-        MyMenuItem.MLMenuItems.Add(newitem);
-        if (TvMenuMaint.ItemContainerGenerator.ContainerFromItem(newitem) is TreeViewItem tvi)
-        {
-            tvi.IsSelected = true;
-        }
-        _ = tbTitle.Focus();
+        AddNewItem(newitem);
         ClearAndQueueMessage("New \"untitled\" pop-up was created.", 3000);
     }
     #endregion Add Existing Pop-up
+
+    #region Add the new item to the list
+    /// <summary>
+    /// Adds the new item to the desired position in the list
+    /// </summary>
+    /// <param name="newitem">The new item</param>
+    private void AddNewItem(MyMenuItem newitem)
+    {
+        if (TvMenuMaint.SelectedItem is not null)
+        {
+            int x = TvMenuMaint.Items.IndexOf(TvMenuMaint.SelectedItem);
+            if (rbNewAbove.IsChecked == true)
+            {
+                MyMenuItem.MLMenuItems.Insert(x, newitem);
+            }
+            else if (rbNewBelow.IsChecked == true)
+            {
+                MyMenuItem.MLMenuItems.Insert(x + 1, newitem);
+            }
+            else
+            {
+                MyMenuItem.MLMenuItems.Add(newitem);
+            }
+        }
+        else
+        {
+            MyMenuItem.MLMenuItems.Add(newitem);
+        }
+        if (newitem.ItemType != MenuItemType.Separator)
+        {
+            _ = tbTitle.Focus();
+        }
+    }
+    #endregion Add the new item to the list
 
     #region Delete an item
     /// <summary>
@@ -251,7 +267,7 @@ public partial class MenuMaint : Window
     {
         if (TvMenuMaint.SelectedItem != null)
         {
-            MyMenuItem itemToDelete = (TvMenuMaint.SelectedItem as MyMenuItem);
+            MyMenuItem itemToDelete = TvMenuMaint.SelectedItem as MyMenuItem;
 
             if (itemToDelete?.SubMenuItems is not null && itemToDelete.SubMenuItems.Count > 0)
             {
@@ -478,30 +494,35 @@ public partial class MenuMaint : Window
     private void NewMenuItem_Click(object sender, RoutedEventArgs e)
     {
         e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
         NewMenuItem();
     }
 
     private void NewSubMenu_Click(object sender, RoutedEventArgs e)
     {
         e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
         NewSubMenu();
     }
 
     private void NewSectionHead_Click(object sender, RoutedEventArgs e)
     {
         e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
         NewSectionHead();
     }
 
     private void NewSeparator_Click(object sender, RoutedEventArgs e)
     {
         e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
         NewSeparator();
     }
 
     private void Popup_Click(object sender, RoutedEventArgs e)
     {
         e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
         cbxPopups.IsDropDownOpen = true;
         AddPopup();
     }
@@ -509,6 +530,7 @@ public partial class MenuMaint : Window
     private void CancelNewItem_Click(object sender, RoutedEventArgs e)
     {
         e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
     }
     #endregion New items
 
@@ -648,6 +670,18 @@ public partial class MenuMaint : Window
         }
     }
     #endregion Pop-ups ComboBox selection changed
+
+    #region Menu items collection changed
+    /// <summary>
+    /// Handles the CollectionChanged event of the MLMenuItems control.
+    /// </summary>
+    /// <param name="sender">The source of the event</param>
+    /// <param name="e">instance containing the event data</param>
+    private void MLMenuItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        Debug.WriteLine($"List changed, action was: {e.Action} {e.OldStartingIndex} {e.NewStartingIndex}");
+    }
+    #endregion Menu items collection changed
 
     #region Drag and Drop handlers for TextBoxes
     private void TextBox_AnyType_PreviewDragOver(object sender, DragEventArgs e)

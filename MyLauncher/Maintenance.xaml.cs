@@ -1,4 +1,4 @@
-// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
+﻿// Copyright(c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
 namespace MyLauncher;
 
@@ -164,8 +164,7 @@ public partial class Maintenance : Window
             ItemID = Guid.NewGuid().ToString(),
             IsSelected = true,
         };
-        MyListItem.Children.Add(newitem);
-        _ = tbTitle.Focus();
+        AddNewItem(newitem);
         ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
     }
     #endregion Add New item
@@ -186,11 +185,117 @@ public partial class Maintenance : Window
             ItemID = Guid.NewGuid().ToString(),
             IsSelected = true,
         };
-        MyListItem.Children.Add(newitem);
-        _ = tbTitle.Focus();
+        AddNewItem(newitem);
         ClearAndQueueMessage("New \"untitled\" pop-up list was created.", 3000);
     }
     #endregion Add New Pop-Up
+
+    #region Add "Special" apps
+    /// <summary>
+    /// Add predefined "special" app as normal item
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void BtnSpecial_Click(object sender, RoutedEventArgs e)
+    {
+        if (CheckForUntitled())
+        {
+            MyListItem newitem = new();
+            Button btn = sender as Button;
+            switch (btn.Content.ToString())
+            {
+                case "Calculator":
+                    newitem.Title = "Calculator";
+                    newitem.FilePathOrURI = "calculator:";
+                    newitem.IconSource = "calc.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Calendar":
+                    newitem.Title = "Calendar";
+                    newitem.FilePathOrURI = "outlookcal:";
+                    newitem.IconSource = "calendar.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Email":
+                    newitem.Title = "Email";
+                    newitem.FilePathOrURI = "outlookmail:";
+                    newitem.IconSource = "mail.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Solitaire":
+                    newitem.Title = "Solitaire Collection";
+                    newitem.FilePathOrURI = "xboxliveapp-1297287741:";
+                    newitem.IconSource = "cards.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Weather":
+                    newitem.Title = "Weather";
+                    newitem.FilePathOrURI = "bingweather:";
+                    newitem.IconSource = "weather.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Windows Settings":
+                    newitem.Title = "Windows Settings";
+                    newitem.FilePathOrURI = "ms-settings:";
+                    newitem.IconSource = "gear.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Restart":
+                    newitem.Title = "Restart (Immediate)";
+                    newitem.FilePathOrURI = "shutdown.exe";
+                    newitem.Arguments = "/r /t 0";
+                    newitem.IconSource = "restart.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+                case "Shutdown":
+                    newitem.Title = "Shutdown (Immediate)";
+                    newitem.FilePathOrURI = "shutdown.exe";
+                    newitem.Arguments = "/s /t 0";
+                    newitem.IconSource = "shutdown.png";
+                    newitem.EntryType = (int)ListEntryType.Normal;
+                    break;
+            }
+            if (newitem.Title != string.Empty)
+            {
+                newitem.ItemID = Guid.NewGuid().ToString();
+                newitem.IsSelected = true;
+                AddNewItem(newitem);
+                ClearAndQueueMessage($"New \"{newitem.Title}\" item was created.", 3000);
+            }
+        }
+    }
+    #endregion Add "Special" apps
+
+    #region Add the new item to the list
+    /// <summary>
+    /// Adds the new item to the desired position in the list
+    /// </summary>
+    /// <param name="newitem">The new item</param>
+    private void AddNewItem(MyListItem newitem)
+    {
+        if (TvMaint.SelectedItem is not null)
+        {
+            int x = TvMaint.Items.IndexOf(TvMaint.SelectedItem);
+            if (rbNewAbove.IsChecked == true)
+            {
+                MyListItem.Children.Insert(x, newitem);
+            }
+            else if (rbNewBelow.IsChecked == true)
+            {
+                MyListItem.Children.Insert(x + 1, newitem);
+            }
+            else
+            {
+                MyListItem.Children.Add(newitem);
+            }
+        }
+        else
+        {
+            MyListItem.Children.Add(newitem);
+        }
+        _ = tbTitle.Focus();
+    }
+    #endregion Add the new item to the list
 
     #region Delete an item
     /// <summary>
@@ -200,7 +305,7 @@ public partial class Maintenance : Window
     {
         if (TvMaint.SelectedItem != null)
         {
-            MyListItem itemToDelete = (TvMaint.SelectedItem as MyListItem);
+            MyListItem itemToDelete = TvMaint.SelectedItem as MyListItem;
 
             if (itemToDelete?.MyListItems is not null && itemToDelete.MyListItems.Count > 0)
             {
@@ -371,6 +476,7 @@ public partial class Maintenance : Window
     private void NewSpecialApp_Click(object sender, RoutedEventArgs e)
     {
         e.Handled = true;
+        pbxNewItem.IsPopupOpen = false;
         pbxSpecialApps.IsPopupOpen = true;
     }
 
@@ -478,83 +584,6 @@ public partial class Maintenance : Window
         ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth2);
     }
     #endregion Mouse Enter/Leave Card (to change shadow)
-
-    #region Add "Special" apps
-    /// <summary>
-    /// Add predefined "special" app as normal item
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void BtnSpecial_Click(object sender, RoutedEventArgs e)
-    {
-        if (CheckForUntitled())
-        {
-            MyListItem newitem = new();
-            Button btn = sender as Button;
-            switch (btn.Content.ToString())
-            {
-                case "Calculator":
-                    newitem.Title = "Calculator";
-                    newitem.FilePathOrURI = "calculator:";
-                    newitem.IconSource = "calc.png";
-                    newitem.EntryType = (int)ListEntryType.Normal;
-                    break;
-                case "Calendar":
-                    newitem.Title = "Calendar";
-                    newitem.FilePathOrURI = "outlookcal:";
-                    newitem.IconSource = "calendar.png";
-                    newitem.EntryType = (int)ListEntryType.Normal;
-                    break;
-                case "Email":
-                    newitem.Title = "Email";
-                    newitem.FilePathOrURI = "outlookmail:";
-                    newitem.IconSource = "mail.png";
-                    newitem.EntryType = (int)ListEntryType.Normal;
-                    break;
-                case "Solitaire":
-                    newitem.Title = "Solitaire Collection";
-                    newitem.FilePathOrURI = "xboxliveapp-1297287741:";
-                    newitem.IconSource = "cards.png";
-                    newitem.EntryType = (int)ListEntryType.Normal;
-                    break;
-                case "Weather":
-                    newitem.Title = "Weather";
-                    newitem.FilePathOrURI = "bingweather:";
-                    newitem.IconSource = "weather.png";
-                    newitem.EntryType = (int)ListEntryType.Normal;
-                    break;
-                case "Windows Settings":
-                    newitem.Title = "Windows Settings";
-                    newitem.FilePathOrURI = "ms-settings:";
-                    newitem.IconSource = "gear.png";
-                    newitem.EntryType = (int)ListEntryType.Normal;
-                    break;
-                case "Restart":
-                    newitem.Title = "Restart (Immediate)";
-                    newitem.FilePathOrURI = "shutdown.exe";
-                    newitem.Arguments = "/r /t 0";
-                    newitem.IconSource = "restart.png";
-                    newitem.EntryType = (int)ListEntryType.Normal;
-                    break;
-                case "Shutdown":
-                    newitem.Title = "Shutdown (Immediate)";
-                    newitem.FilePathOrURI = "shutdown.exe";
-                    newitem.Arguments = "/s /t 0";
-                    newitem.IconSource = "shutdown.png";
-                    newitem.EntryType = (int)ListEntryType.Normal;
-                    break;
-            }
-            if (newitem.Title != string.Empty)
-            {
-                newitem.ItemID = Guid.NewGuid().ToString();
-                newitem.IsSelected = true;
-                MyListItem.Children.Add(newitem);
-                _ = tbTitle.Focus();
-                ClearAndQueueMessage($"New \"{newitem.Title}\" item was created.", 3000);
-            }
-        }
-    }
-    #endregion Add "Special" apps
 
     #region Get an image for the selected item
     /// <summary>
