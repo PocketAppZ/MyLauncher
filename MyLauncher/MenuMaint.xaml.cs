@@ -2,9 +2,6 @@
 
 namespace MyLauncher;
 
-/// <summary>
-/// Interaction logic for MenuMaint.xaml
-/// </summary>
 public partial class MenuMaint : Window
 {
     #region NLog
@@ -111,12 +108,12 @@ public partial class MenuMaint : Window
         {
             log.Error("New item prohibited, \"untitled\" entry in list");
             MDCustMsgBox mbox = new("Please update or delete the \"untitled\" entry before adding another new entry.",
-                                    "ERROR",
-                                    ButtonType.Ok,
-                                    true,
-                                    true,
-                                    this,
-                                    true);
+                                        "ERROR",
+                                        ButtonType.Ok,
+                                        true,
+                                        true,
+                                        this,
+                                        true);
             mbox.ShowDialog();
             return false;
         }
@@ -141,7 +138,7 @@ public partial class MenuMaint : Window
         AddNewItem(newitem);
         ClearAndQueueMessage("New \"untitled\" item was created.", 3000);
     }
-        #endregion Add new normal item
+    #endregion Add new normal item
 
     #region Add new submenu
     /// <summary>
@@ -234,14 +231,15 @@ public partial class MenuMaint : Window
     {
         if (TvMenuMaint.SelectedItem is not null)
         {
-            int x = TvMenuMaint.Items.IndexOf(TvMenuMaint.SelectedItem);
+            MyMenuItem selectedItem = TvMenuMaint.SelectedItem as MyMenuItem;
+            Debug.WriteLine($"Selected item is: {selectedItem.Title}");
             if (rbNewAbove.IsChecked == true)
             {
-                MyMenuItem.MLMenuItems.Insert(x, newitem);
+                InsertInList(MyMenuItem.MLMenuItems, selectedItem, newitem, true);
             }
             else if (rbNewBelow.IsChecked == true)
             {
-                MyMenuItem.MLMenuItems.Insert(x + 1, newitem);
+                InsertInList(MyMenuItem.MLMenuItems, selectedItem, newitem, false);
             }
             else
             {
@@ -258,6 +256,40 @@ public partial class MenuMaint : Window
         }
     }
     #endregion Add the new item to the list
+
+    #region Insert new item into the list
+    /// <summary>
+    /// Inserts a new menu item the in list of menu items.
+    /// </summary>
+    /// <param name="menuItems">The ObservableCollection of menu items.</param>
+    /// <param name="selectedItem">The TreeView item that is selected.</param>
+    /// <param name="newItem">The new item.</param>
+    /// <param name="above">if set to <c>true</c> insert new item above the selected item. Otherwise insert the new item below the selected item</param>
+    private void InsertInList(ObservableCollection<MyMenuItem> menuItems, MyMenuItem selectedItem, MyMenuItem newItem, bool above)
+    {
+        for (int i = 0; i < menuItems.Count; i++)
+        {
+            MyMenuItem item = menuItems[i];
+
+            if (item.ItemID == selectedItem.ItemID)
+            {
+                if (above)
+                {
+                    menuItems.Insert(i, newItem);
+                }
+                else
+                {
+                    menuItems.Insert(i + 1, newItem);
+                }
+                break;
+            }
+            else if (item.SubMenuItems != null)
+            {
+                InsertInList(item.SubMenuItems, selectedItem, newItem, above);
+            }
+        }
+    }
+    #endregion Insert new item into the list
 
     #region Delete an item
     /// <summary>
@@ -350,6 +382,11 @@ public partial class MenuMaint : Window
     #endregion Window events
 
     #region TreeView events
+    /// <summary>
+    /// TreeView item selected event
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void TvMenuMaint_Selected(object sender, RoutedEventArgs e)
     {
         TreeViewItem tvi = e.OriginalSource as TreeViewItem;
@@ -659,6 +696,11 @@ public partial class MenuMaint : Window
     #endregion Clear message queue then queue a snackbar message and set duration
 
     #region Pop-ups ComboBox selection changed
+    /// <summary>
+    /// ComboBox selection changed
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void CbxPopups_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (cbxPopups.SelectedItem != null
@@ -684,6 +726,11 @@ public partial class MenuMaint : Window
     #endregion Menu items collection changed
 
     #region Drag and Drop handlers for TextBoxes
+    /// <summary>
+    /// Handles the PreviewDragOver event of the TextBox_AnyType control.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The instance containing the event data.</param>
     private void TextBox_AnyType_PreviewDragOver(object sender, DragEventArgs e)
     {
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -702,6 +749,11 @@ public partial class MenuMaint : Window
         e.Handled = true;
     }
 
+    /// <summary>
+    /// Handles the PreviewDragOver event of the TextBox_OnlyDirectory control.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The instance containing the event data.</param>
     private void TextBox_OnlyDirectory_PreviewDragOver(object sender, DragEventArgs e)
     {
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -717,6 +769,11 @@ public partial class MenuMaint : Window
         e.Handled = true;
     }
 
+    /// <summary>
+    /// Handles the PreviewDrop event of the TextBox controls.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The instance containing the event data.</param>
     private void TextBox_PreviewDrop(object sender, DragEventArgs e)
     {
         if (e.Data is not null && e.Data.GetDataPresent(DataFormats.FileDrop))

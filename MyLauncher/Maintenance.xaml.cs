@@ -275,14 +275,15 @@ public partial class Maintenance : Window
     {
         if (TvMaint.SelectedItem is not null)
         {
-            int x = TvMaint.Items.IndexOf(TvMaint.SelectedItem);
+            MyListItem selectedItem = TvMaint.SelectedItem as MyListItem;
+
             if (rbNewAbove.IsChecked == true)
             {
-                MyListItem.Children.Insert(x, newitem);
+                InsertInList(MyListItem.Children, selectedItem, newitem, true);
             }
             else if (rbNewBelow.IsChecked == true)
             {
-                MyListItem.Children.Insert(x + 1, newitem);
+                InsertInList(MyListItem.Children, selectedItem, newitem, false);
             }
             else
             {
@@ -296,6 +297,40 @@ public partial class Maintenance : Window
         _ = tbTitle.Focus();
     }
     #endregion Add the new item to the list
+
+    #region Insert new item into the list
+    /// <summary>
+    /// Inserts a new menu item the in list of list items.
+    /// </summary>
+    /// <param name="listItems">The ObservableCollection of list items.</param>
+    /// <param name="selectedItem">The TreeView item that is selected.</param>
+    /// <param name="newItem">The new item.</param>
+    /// <param name="above">if set to <c>true</c> insert new item above the selected item. Otherwise insert the new item below the selected item</param>
+    private void InsertInList(ObservableCollection<MyListItem> listItems, MyListItem selectedItem, MyListItem newItem, bool above)
+    {
+        for (int i = 0; i < listItems.Count; i++)
+        {
+            MyListItem item = listItems[i];
+
+            if (item.ItemID == selectedItem.ItemID)
+            {
+                if (above)
+                {
+                    listItems.Insert(i, newItem);
+                }
+                else
+                {
+                    listItems.Insert(i + 1, newItem);
+                }
+                break;
+            }
+            else if (item.MyListItems != null)
+            {
+                InsertInList(item.MyListItems, selectedItem, newItem, above);
+            }
+        }
+    }
+    #endregion Insert new item into the list
 
     #region Delete an item
     /// <summary>
