@@ -505,7 +505,7 @@
                                 <Button Click="NewItem_Click"
                                         Style="{StaticResource BottomButtonRow}"
                                         TabIndex="5"
-                                        ToolTip="Add a new item to the bottom of the list">
+                                        ToolTip="Add a new item to the list">
                                     <Grid>
                                         <materialDesign:PopupBox x:Name="pbxNewItem"
                                                                  Padding="0"

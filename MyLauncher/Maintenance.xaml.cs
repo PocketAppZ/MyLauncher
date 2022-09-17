@@ -8,6 +8,10 @@ public partial class Maintenance : Window
     private static readonly Logger log = LogManager.GetCurrentClassLogger();
     #endregion NLog
 
+    #region Static fields
+    private static bool untitledFound;
+    #endregion Static fields
+
     public Maintenance()
     {
         InitializeComponent();
@@ -125,30 +129,38 @@ public partial class Maintenance : Window
     }
     #endregion Load the TreeView
 
-    #region Check for "untitled" entries in the list box
+    #region Check for "untitled" entries
     /// <summary>
     /// Checks the observable collection for any Title equal to "untitled"
     /// </summary>
     /// <returns>True if not found. False if found.</returns>
-    private bool CheckForUntitled()
+    private bool CheckForUntitled(ObservableCollection<MyListItem> listItems)
     {
-        // Loop through the list backwards checking for "untitled" entries
-        if (MyListItem.Children.Any(x => string.Equals(x.Title, "untitled", StringComparison.OrdinalIgnoreCase)))
+        for (int i = 0; i < listItems.Count; i++)
         {
-            log.Error("New item prohibited, \"untitled\" entry in list");
-            MDCustMsgBox mbox = new("Please update or delete the \"untitled\" entry before adding another new entry.",
-                                    "ERROR",
-                                    ButtonType.Ok,
-                                    true,
-                                    true,
-                                    this,
-                                    true);
-            mbox.ShowDialog();
-            return false;
+            MyListItem item = listItems[i];
+            if (item.Title == "untitled")
+            {
+                untitledFound = true;
+                log.Error($"New item prohibited, \"untitled\" entry in list. Item ID: {item.ItemID}");
+                MDCustMsgBox mbox = new("Please update or delete the \"untitled\" entry before adding another new entry.",
+                                        "ERROR",
+                                        ButtonType.Ok,
+                                        true,
+                                        true,
+                                        this,
+                                        true);
+                _ = mbox.ShowDialog();
+                break;
+            }
+            if (item.MyListItems is not null)
+            {
+                CheckForUntitled(item.MyListItems);
+            }
         }
-        return true;
+        return untitledFound;
     }
-    #endregion Check for "untitled" entries in the list box
+    #endregion Check for "untitled" entries
 
     #region Add new normal item
     /// <summary>
@@ -198,7 +210,7 @@ public partial class Maintenance : Window
     /// <param name="e"></param>
     private void BtnSpecial_Click(object sender, RoutedEventArgs e)
     {
-        if (CheckForUntitled())
+        if (CheckForUntitled(MyListItem.Children))
         {
             MyListItem newitem = new();
             Button btn = sender as Button;
@@ -488,10 +500,8 @@ public partial class Maintenance : Window
 
     private void NewItem_Click(object sender, RoutedEventArgs e)
     {
-        if (CheckForUntitled())
-        {
-            pbxNewItem.IsPopupOpen = true;
-        }
+        pbxNewItem.IsPopupOpen = !CheckForUntitled(MyListItem.Children);
+        untitledFound = false;
     }
 
     private void NewNormalItem_Click(object sender, RoutedEventArgs e)

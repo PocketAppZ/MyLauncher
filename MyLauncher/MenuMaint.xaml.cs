@@ -8,6 +8,10 @@ public partial class MenuMaint : Window
     private static readonly Logger log = LogManager.GetCurrentClassLogger();
     #endregion NLog
 
+    #region Static fields
+    private static bool untitledFound;
+    #endregion Static fields
+
     public MenuMaint()
     {
         InitializeComponent();
@@ -96,30 +100,38 @@ public partial class MenuMaint : Window
     }
     #endregion Load the ComboBox
 
-    #region Check for "untitled" entries in the list box
+    #region Check for "untitled" entries
     /// <summary>
     /// Checks the observable collection for any Title equal to "untitled"
     /// </summary>
-    /// <returns>True if not found. False if found.</returns>
-    private bool CheckForUntitled()
+    /// <returns>True if found. False if not found.</returns>
+    private bool CheckForUntitled(ObservableCollection<MyMenuItem> menuItems)
     {
-        // Loop through the list backwards checking for "untitled" entries
-        if (MyMenuItem.MLMenuItems.Any(x => string.Equals(x.Title, "untitled", StringComparison.OrdinalIgnoreCase)))
+        for (int i = 0; i < menuItems.Count; i++)
         {
-            log.Error("New item prohibited, \"untitled\" entry in list");
-            MDCustMsgBox mbox = new("Please update or delete the \"untitled\" entry before adding another new entry.",
+            MyMenuItem item = menuItems[i];
+            if (item.Title == "untitled")
+            {
+                untitledFound = true;
+                log.Error($"New item prohibited, \"untitled\" entry in list. Item ID: {item.ItemID}");
+                MDCustMsgBox mbox = new("Please update or delete the \"untitled\" entry before adding another new entry.",
                                         "ERROR",
                                         ButtonType.Ok,
                                         true,
                                         true,
                                         this,
                                         true);
-            mbox.ShowDialog();
-            return false;
+                _ = mbox.ShowDialog();
+                break;
+            }
+            if (item.SubMenuItems is not null)
+            {
+                CheckForUntitled(item.SubMenuItems);
+            }
         }
-        return true;
+        return untitledFound;
     }
-    #endregion Check for "untitled" entries in the list box
+    #endregion Check for "untitled" entries
 
     #region Add new normal item
     /// <summary>
@@ -232,7 +244,6 @@ public partial class MenuMaint : Window
         if (TvMenuMaint.SelectedItem is not null)
         {
             MyMenuItem selectedItem = TvMenuMaint.SelectedItem as MyMenuItem;
-            Debug.WriteLine($"Selected item is: {selectedItem.Title}");
             if (rbNewAbove.IsChecked == true)
             {
                 InsertInList(MyMenuItem.MLMenuItems, selectedItem, newitem, true);
@@ -522,10 +533,8 @@ public partial class MenuMaint : Window
     #region New items
     private void NewItem_Click(object sender, RoutedEventArgs e)
     {
-        if (CheckForUntitled())
-        {
-            pbxNewItem.IsPopupOpen = true;
-        }
+        pbxNewItem.IsPopupOpen = !CheckForUntitled(MyMenuItem.MLMenuItems);
+        untitledFound = false;
     }
 
     private void NewMenuItem_Click(object sender, RoutedEventArgs e)
