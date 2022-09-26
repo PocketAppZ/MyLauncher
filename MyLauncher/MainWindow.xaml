@@ -162,6 +162,7 @@
                                           Margin="10" Padding="0,0,0,3"
                                           materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                           CornerRadius="4" Mode="PrimaryMid"
+                                          MouseLeftButtonDown="ColorZone_MouseLeftButtonDown"
                                           MouseDoubleClick="ColorZone_MouseDoubleClick">
                     <Grid>
                         <StackPanel Orientation="Horizontal">

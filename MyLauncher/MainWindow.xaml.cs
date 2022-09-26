@@ -1227,7 +1227,7 @@ public partial class MainWindow : Window
     }
     #endregion Show a single instance of a window
 
-    #region Double click ColorZone
+    #region ColorZone mouse events
     /// <summary>
     /// Double click the ColorZone to set optimal width
     /// </summary>
@@ -1241,5 +1241,15 @@ public partial class MainWindow : Window
         SizeToContent = SizeToContent.Manual;
         Width = width + 1;
     }
-    #endregion Double click ColorZone
+
+    /// <summary>
+    /// Allow mouse to drag window with left button down in ColorZone
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The instance containing the event data.</param>
+    private void ColorZone_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        DragMove();
+    }
+    #endregion ColorZone mouse events
 }
