@@ -372,6 +372,7 @@
             <Style TargetType="ListBoxItem"
                    x:Key="ListBoxComfortable"
                    BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="BorderBrush"
                         Value="{DynamicResource PrimaryHueMidBrush}" />
                 <Setter Property="BorderThickness"
