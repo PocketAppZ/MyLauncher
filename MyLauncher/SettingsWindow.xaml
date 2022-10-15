@@ -345,6 +345,7 @@
                                 IsChecked="{Binding MinimizeToTray,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="7" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -363,6 +364,7 @@
                                 IsEnabled="{Binding MinimizeToTray,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="8" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -570,6 +572,7 @@
                                 IsChecked="{Binding ShowFileIcons,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="14" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -585,6 +588,7 @@
                                 IsChecked="{Binding ShowExitButton,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="15" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -600,6 +604,7 @@
                                 IsChecked="{Binding AllowRightButton,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="16" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -615,6 +620,7 @@
                                 IsChecked="{Binding PlaySound,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="17" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -630,6 +636,7 @@
                                 IsChecked="{Binding KeepOnTop,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="18" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -645,6 +652,7 @@
                                 IsChecked="{Binding PopupCloseAfterLaunch,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="19" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -660,6 +668,7 @@
                                 IsChecked="{Binding RemoveMinMax,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="20" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -675,6 +684,7 @@
                                 IsChecked="{Binding MainWindowMinimizeOnLaunch,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="21" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -690,6 +700,7 @@
                                 IsChecked="{Binding StartMinimized,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="22" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -705,6 +716,7 @@
                                 IsChecked="{Binding StartWithWindows,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="23" />
                             <Label
                                 Margin="10,-1,0,0"
@@ -720,6 +732,7 @@
                                 IsChecked="{Binding IncludeDebug,
                                                     Source={x:Static local:UserSettings.Setting}}"
                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=CheckBold, Size=20}"
                                 TabIndex="24" />
                             <Label
                                 Margin="10,-1,0,0"
