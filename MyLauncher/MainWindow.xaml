@@ -160,7 +160,7 @@
                        LastChildFill="True">
                 <materialDesign:ColorZone Height="33"
                                           Margin="10" Padding="0,0,0,3"
-                                          materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                          materialDesign:ElevationAssist.Elevation="Dp3"
                                           CornerRadius="4" Mode="PrimaryMid"
                                           MouseLeftButtonDown="ColorZone_MouseLeftButtonDown"
                                           MouseDoubleClick="ColorZone_MouseDoubleClick">
@@ -300,7 +300,7 @@
                                          Grid.Row="0"
                                          Margin="11,5,9,5" Padding="0,12,8,12"
                                          HorizontalAlignment="Stretch"
-                                         materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                         materialDesign:ElevationAssist.Elevation="Dp3"
                                          MouseEnter="Card_MouseEnter"
                                          MouseLeave="Card_MouseLeave"
                                          UniformCornerRadius="7">

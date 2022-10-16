@@ -84,8 +84,8 @@
                         Value="5,0" />
                 <Setter Property="UniformCornerRadius"
                         Value="7" />
-                <Setter Property="materialDesign:ShadowAssist.ShadowDepth"
-                        Value="Depth2" />
+                <Setter Property="materialDesign:ElevationAssist.Elevation"
+                        Value="Dp3" />
             </Style>
             <!--#endregion-->
 

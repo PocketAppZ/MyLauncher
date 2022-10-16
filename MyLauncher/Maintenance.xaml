@@ -33,7 +33,7 @@
         <!--#region ColorZone for page header-->
         <materialDesign:ColorZone Height="33" Margin="10"
                                   Padding="0,0,0,3"
-                                  materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                  materialDesign:ElevationAssist.Elevation="Dp3"
                                   CornerRadius="4" Focusable="False"
                                   Mode="PrimaryMid"
                                   MouseDoubleClick="ColorZone_MouseDoubleClick">

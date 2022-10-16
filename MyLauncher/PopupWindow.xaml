@@ -37,7 +37,7 @@
         <materialDesign:ColorZone Grid.Row="0"
                                   Height="35"
                                   Margin="8,10,8,5"
-                                  materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                  materialDesign:ElevationAssist.Elevation="Dp3"
                                   CornerRadius="4,4,4,4" Mode="PrimaryMid"
                                   MouseDoubleClick="ColorZone_MouseDoubleClick">
             <TextBlock x:Name="PageTitle"
@@ -54,7 +54,7 @@
         <materialDesign:Card Grid.Row="1"
                              Margin="8" Padding="2,5,8,5"
                              HorizontalAlignment="Stretch"
-                             materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                             materialDesign:ElevationAssist.Elevation="Dp3"
                              MouseEnter="Card_MouseEnter"
                              MouseLeave="Card_MouseLeave"
                              UniformCornerRadius="7">

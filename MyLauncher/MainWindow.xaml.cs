@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Tim Kennedy. All Rights Reserved. Licensed under the MIT License.
 
+using System.Windows.Shell;
+
 namespace MyLauncher;
 
 public partial class MainWindow : Window
@@ -1092,13 +1094,13 @@ public partial class MainWindow : Window
     private void Card_MouseEnter(object sender, MouseEventArgs e)
     {
         Card card = sender as Card;
-        ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth3);
+        ElevationAssist.SetElevation(card, Elevation.Dp6);
     }
 
     private void Card_MouseLeave(object sender, MouseEventArgs e)
     {
         Card card = sender as Card;
-        ShadowAssist.SetShadowDepth(card, ShadowDepth.Depth2);
+        ElevationAssist.SetElevation(card, Elevation.Dp3);
     }
     #endregion Mouse enter/leave shadow effect
 
