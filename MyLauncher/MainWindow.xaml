@@ -49,10 +49,11 @@
             <!--#endregion-->
 
             <!--#region Icon with Context menu in system tray-->
+                            <!-- MenuActivation="RightClick" -->
             <tb:TaskbarIcon x:Name="tbIcon"
                             IconSource="/Images/ML.ico"
-                            MenuActivation="RightClick"
                             ToolTipText="My Launcher"
+                            TrayRightMouseDown="TbIcon_TrayRightMouseDown"
                             TrayLeftMouseDown="TbIconShowMainWindow_Click"
                             TrayMouseDoubleClick="TbIconShowMainWindow_Click"
                             Visibility="Collapsed">

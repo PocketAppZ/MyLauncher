@@ -1086,6 +1086,11 @@ public partial class MainWindow : Window
     {
         ShowMainWindow();
     }
+
+    private void TbIcon_TrayRightMouseDown(object sender, RoutedEventArgs e)
+    {
+        tbIcon.ContextMenu.IsOpen = true;
+    }
     #endregion Tray icon menu events
 
     #region Mouse enter/leave shadow effect
