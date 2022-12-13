@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:MyLauncher"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:tb="clr-namespace:H.NotifyIcon;assembly=H.NotifyIcon.Wpf"
         mc:Ignorable="d"
         MinWidth="200" MinHeight="200"
         Activated="Window_Activated"
@@ -49,11 +49,14 @@
             <!--#endregion-->
 
             <!--#region Icon with Context menu in system tray-->
-                            <!-- MenuActivation="RightClick" -->
+            <!--
+                               MenuActivation="RightClick"
+                               TrayRightMouseDown="TbIcon_TrayRightMouseDown"
+             -->
             <tb:TaskbarIcon x:Name="tbIcon"
                             IconSource="/Images/ML.ico"
                             ToolTipText="My Launcher"
-                            TrayRightMouseDown="TbIcon_TrayRightMouseDown"
+                            MenuActivation="RightClick"
                             TrayLeftMouseDown="TbIconShowMainWindow_Click"
                             TrayMouseDoubleClick="TbIconShowMainWindow_Click"
                             Visibility="Collapsed">

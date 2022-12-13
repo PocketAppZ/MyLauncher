@@ -47,8 +47,8 @@ To add a new item, click the New Item button. You will see a pop-up menu with th
   - Pop-Up List. This item type is a window that can contain normal items and other pop-up lists.
 
   - Special Apps. This is a small set of predefined	apps that can added quickly to My Launcher.
-	In addition to being commonly used apps, they can also serve as guides to launching apps by
-	URI, specifying a custom icon, and using arguments, which are covered later.
+    In addition to being commonly used apps, they can also serve as guides to launching apps by
+    URI, specifying a custom icon, and using arguments, which are covered later.
 
 An new entry, temporarily named "untitled", except in the case of Special Apps, is added to the
 bottom of the list in the tree view. The text boxes on the right will have some instructional
@@ -134,7 +134,7 @@ To add a new item, click the New Item button. You will see a pop-up menu with fo
 
   - Section Heading. This item type can be used to describe the contents of a section of the menu.
     Section heading can be styled to make them visually distinct in then menu. Section headings
-	don't do anything if they are clicked.
+    don't do anything if they are clicked.
 
   - Separator. This is a horizontal line that can be used to delineate sections in the menu.
 
@@ -186,19 +186,19 @@ Keys
 ====
 These keyboard shortcuts are available in the main window:
 
-	Ctrl + 1 through Ctrl + 9 = will open the corresponding entry in the main window (or a pop-up window).
-	* The 1-9 keys are those located above the QWERTY row and not those located in the number pad.
-	Ctrl + Comma =  Shows the Settings dialog.
-	Ctrl + L = Opens the List Maintenance window.
-	Ctrl + M = Opens the Menu Maintenance window.
-	Ctrl + Numpad Plus = Increases size.
-	Ctrl + Numpad Minus = Decreases size.
-	Ctrl + Shift + M = Changes the theme.
-	Ctrl + Shift + P = Changes the primary accent color.
-	Ctrl + Shift + S = Changes the secondary accent color.
-	Enter = Launches the selected entry.
-	Escape = Clears the selection.
-	F1 = Shows the About dialog.
+    Ctrl + 1 through Ctrl + 9 = will open the corresponding entry in the main window (or a pop-up window).
+    * The 1-9 keys are those located above the QWERTY row and not those located in the number pad.
+    Ctrl + Comma =  Shows the Settings dialog.
+    Ctrl + L = Opens the List Maintenance window.
+    Ctrl + M = Opens the Menu Maintenance window.
+    Ctrl + Numpad Plus = Increases size.
+    Ctrl + Numpad Minus = Decreases size.
+    Ctrl + Shift + M = Changes the theme.
+    Ctrl + Shift + P = Changes the primary accent color.
+    Ctrl + Shift + S = Changes the secondary accent color.
+    Enter = Launches the selected entry.
+    Escape = Clears the selection.
+    F1 = Shows the About dialog.
 
 
 Miscellaneous
@@ -237,6 +237,8 @@ My Launcher was written in C# by Tim Kennedy and requires .Net 6.
 My Launcher uses the following icons & packages:
 
 * Material Design in XAML Toolkit https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit
+
+* H.NotifyIcon https://github.com/HavenDV/H.NotifyIcon
 
 * NLog https://nlog-project.org/
 
